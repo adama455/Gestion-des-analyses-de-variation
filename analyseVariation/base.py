@@ -1,4 +1,4 @@
-""" #import sys
+#import sys
 #sys.path.append('.')
 #sys.path.append('..')
 from app import app
@@ -17,4 +17,3 @@ db = SQLAlchemy(app)
 def init_base():
     with app.app_context():
         db.create_all()
- """

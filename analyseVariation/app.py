@@ -10,7 +10,7 @@ def login():
     
     return render_template('login.html')    
 
-""" #La page acceuil de notre application
+#La page acceuil de notre application
 @app.route("/home")
 def home():
    
@@ -62,7 +62,7 @@ def signup():
 def connexion():
    
     return render_template('page-connections.html')    
- """
+
 
 
 if __name__=='__main__':
