@@ -6703,7 +6703,7 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #4209a0; }
     .btn-indigo:not(:disabled):not(.disabled):active:focus, .btn-indigo:not(:disabled):not(.disabled).active:focus,
     .show > .btn-indigo.dropdown-toggle:focus {
-      box-shadow: 0 0 0 0.2rem rgba(238, 117, 19, 0.5)) }
+      box-shadow: 0 0 0 0.2rem rgba(238, 117, 19, 0.5) }
 
 .btn-purple {
   color: #fff;
@@ -9713,7 +9713,11 @@ textarea.parsley-success:focus {
 
 .az-header-message,
 .az-header-notification {
-  position: relative; }
+  width: 60px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  justify-content: space-between; }
   .az-header-message > a,
   .az-header-notification > a {
     display: block;

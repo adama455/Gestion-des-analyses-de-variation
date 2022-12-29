@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, Column,String,Integer
 import base
+#import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
 
 db= base.db
@@ -16,5 +17,5 @@ class User(db.Model):
         self.name=name
         self.username=username
         self.email=email
-               
+
 base.init_base()
