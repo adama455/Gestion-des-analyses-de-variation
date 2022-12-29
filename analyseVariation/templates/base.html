@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Meta -->
+    <meta name="description" content="Outil d'analyse et de suivi de la variation">
+    <meta name="author" content="SONATEL">
+
+    <title>SO'VAR - Outil d'analyse et de suivi de la variation</title>
+    {% block css %}{% endblock css %}
+    <!-- vendor css -->
+    <link href="{{ url_for('static', filename='lib/@fortawesome/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/typicons.font/typicons.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/jqvmap/jqvmap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/spectrum-colorpicker/spectrum.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/ion-rangeslider/css/ion.rangeSlider.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/ion-rangeslider/css/ion.rangeSlider.skinFlat.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/datatables.net-dt/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/spectrum-colorpicker/spectrum.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/select2/css/select2.min.css') }}" rel="stylesheet">
+
+    <!-- azia CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/azia.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/orange.png') }}" rel="stylesheet">
+
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script>
+    // Resize Parent Window's Corresponding iFrame.
+    $(window).on('resize', function () {
+      if (window.self != window.top) {
+        $(parent.document).find('iframe').each(function () {
+          if (this.contentWindow.document == window.document) {
+            $(this).css({ height: $('body').height() + 'px', width: '100%' });
+          }
+        });
+      }
+    });
+  </script>
+
+  <script language="javascript" type='text/javascript'>
+    function session() {
+    }
+    setTimeout("session()", 3000000); //ça fait bien 5min??? c'est pour le test
+  </script>
+
+
+  </head>
+
+<body class="az-body az-body-sidebar az-body-dashboard-nine bg-white"  >
+
+    <div class="az-sidebar az-sidebar-sticky bg-gray-300">
+ <br>
+      <div class="az-sidebar-loggedin">
+        <div class="az-img-user online"  data-toggle="tooltip" data-placement="top" title="{{session.matricule}} "><img src="/static/img/perso.PNG" alt=""></div>
+        <div class="media-body" >
+          <h6>Moussa Dembele</h6>
+          <span>GROUP1</span>
+        </div><!-- media-body -->
+      </div><!-- az-sidebar-loggedin -->
+      <div class="az-sidebar-body">
+        <ul class="nav">
+          <li class="nav-label">Menu Principal</li>
+          <li class="nav-item">
+            <a href="" class="nav-link with-sub"><i class="typcn typcn-th-large"></i>Analyses</a>
+            <nav class="nav-sub">
+
+              <a href="" class="nav-sub-link">Importer des données</a>
+              <a href="" class="nav-sub-link" >Analyser les données</a>
+            
+              <a href="" class="nav-sub-link" >Suivi plans d'actions</a>
+
+            </nav>
+          </li><!-- nav-item -->
+
+
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
+              <nav class="nav-sub">
+
+                <a href="" class="nav-sub-link">Causes</a>
+                <a href="" class="nav-sub-link" >Métriques</a>
+                <a href="">Plateaux</a>
+              </nav>
+            </li><!-- nav-item -->
+
+
+
+          <li class="nav-item">
+            <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
+            <nav class="nav-sub">
+
+                  <a href="" class="nav-sub-link" >Comptes</a>
+
+      <a href="" class="nav-sub-link" >Profils</a>
+
+
+      <a href="Logs utilisateurs" class="nav-sub-link" onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
+
+            </nav>
+          </li><!-- nav-item -->
+
+
+              <li class="nav-item"><a href="" class="nav-link with-sub"><i class="typcn typcn-clipboard"></i>Documentation</a>
+                <nav class="nav-sub">
+
+                  <a href="Documentation" class="nav-sub-link" onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
+
+                  <a href="Documentation" class="nav-sub-link"
+                    onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
+
+                </nav>
+              </li><!-- nav-item -->
+
+        </ul><!-- nav -->
+      </div><!-- az-sidebar-body -->
+    </div><!-- az-sidebar -->
+    <div class="az-content az-content-dashboard-nine">
+      <div class="az-header az-header-dashboard-nine">
+        <div class="container-fluid bg-primary">
+
+
+
+            <div class="az-header-center">
+              <form action="/rechercher/event" method="POST" target="cadre2">
+                <input type="search" class="form-control bg-white" placeholder="Rechercher..." name="data">
+                <button type="submit" class="btn"><i class="fas fa-search text-dark"></i></button>
+              </form>
+            </div><!-- az-header-center -->
+
+          <div class="az-header-right">
+            <div class="az-header-message">
+
+
+          <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="typcn typcn-power-outline text-dark"></i></a>
+
+            </div><!-- az-header-message -->
+            <div class="dropdown az-header-notification">
+              <a href="" class="new" data-toggle="tooltip" data-placement="top" title="Notifications"><i class="typcn typcn-bell text-dark"></i></a>
+              <div class="dropdown-menu">
+                <div class="az-dropdown-header mg-b-20 d-sm-none">
+                  <a href="" class="az-header-arrow" ><i class="icon ion-md-arrow-back text-dark"></i></a>
+                </div>
+                <h6 class="az-notification-title">Notifications</h6>
+                <p class="az-notification-text">Plans d'actions encours hors délai</p>
+                <div class="az-notification-list">
+
+                    {% for ele in pa%}
+                  <div class="media new">
+
+                    <div class="media-body">
+                      <p>{{ele.action}}</p>
+                      <span>{{ele.delai}} - {{ele.porteur}}</span>
+                    </div><!-- media-body -->
+                  </div><!-- media -->
+                    {% endfor %}
+                </div><!-- az-notification-list -->
+                <div class="dropdown-footer"><a href="/pa_horsdelay" target="cadre2">View All Notifications</a></div>
+              </div><!-- dropdown-menu -->
+            </div><!-- az-header-notification -->
+
+          </div><!-- az-header-right -->
+        </div><!-- container -->
+      </div><!-- az-header -->
+      <div class="az-content-header bg-gray-400" style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 40;" >
+        <div class="az-content-header-top">
+          <div >
+
+
+                 <h2 class="az-content-title mg-b-5 mg-b-lg-8"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-primary"> SO</span>' <span style="color: #009088;">VAR</span></h2>
+
+            <p class="mg-b-20 text-dark">Outil d'analyse et de suivi de la variation.</p>
+          </div>
+              <div class="pd-20 mg-t-20" style="background-color: #009088;">
+
+
+                <nav class="nav az-nav">
+                  <a href="/" class="nav-link  text-white"  data-placement="top"
+                    title="Dashboard"> <i class="fas fa-home"></i> Dashboard</a>
+
+                    <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-database"></i>
+                      <strong>Données</strong></a>
+                  
+
+                    <a href="" class="nav-link text-white" 
+                      data-toggle="tooltip" data-placement="top" title="Importer Données"> <i class="fas fa-upload"></i>
+                      Importer</a>
+
+                      
+                  <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-user"></i>
+                   <strong>Mon Profil</strong></a>
+                </nav>
+
+              </div><!-- nav-wrapper -->
+          <div class="az-dashboard-date">
+            
+            
+          </div><!-- az-dashboard-date -->
+        </div><!-- az-content-body-title -->
+
+
+
+      </div><!-- az-content-header -->
+
+      <div class="az-content-body">
+      {% block content %}{% endblock content %}
+
+
+      </div><!-- az-content-body -->
+
+
+
+      <div class="az-footer bg-light">
+        <div class="container-fluid text-dark">
+          <span>&copy; 2022 SO'VAR : Contrôle des KCRP au niveau le plus près de l’activité avec un dispositif de pilotage</span>
+          <span><img src="/static/img/orange_logo.svg" width="20" height="20" alt=""  title="SONATEL"> SONATEL - DESC/DIS/ISCC</span>
+        </div><!-- container -->
+      </div><!-- az-footer -->
+    </div><!-- az-content -->
+
+
+
+    <!-- PROFIL MODAL -->
+    <div id="profil" class="modal fade effect-flip-vertical">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+
+          <div class="modal-body bg-light">
+
+            <p>
+
+                <div class="row">
+                  <div class="col-md-7 col-xl-7">
+                    <div class="az-content-label tx-13 mg-b-25">Mes Informations</div>
+                    <div class="az-profile-work-list">
+                      <div class="media">
+                        <div class="media-logo bg-success"><i class="fas fa-user"></i></div>
+                        <div class="media-body">
+                          <h6>{{session.prenom}} <a href="">{{session.nom}}</a></h6>
+                          <span>{{session.profil}} - {{session.depart}}</span>
+
+                        </div><!-- media-body -->
+                      </div><!-- media -->
+                      <div class="media">
+                        <div class="media-logo bg-primary"><i class="fa fa-lock"></i></div>
+                        <div class="media-body">
+                          <h6>{{session.log}} </h6>
+                          <span>{{session.password}}</span>
+
+                        </div><!-- media-body -->
+                      </div><!-- media -->
+                    </div><!-- az-profile-work-list -->
+
+
+                  </div><!-- col -->
+                  <div class="col-md-5 col-xl-5 mg-t-40 mg-md-t-0">
+                    <div class="az-content-label tx-13 mg-b-25">Contact Information</div>
+                    <div class="az-profile-contact-list">
+                      <div class="media">
+                        <div class="media-icon"><i class="icon ion-md-phone-portrait"></i></div>
+                        <div class="media-body">
+                          <span>Contact</span>
+                          <div>{{session.contac}}</div>
+                        </div><!-- media-body -->
+                      </div><!-- media -->
+                      <div class="media">
+                        <div class="media-icon"><i class="fas fa-at"></i></div>
+                        <div class="media-body">
+                          <span>Email</span>
+                          <div>{{session.mail}}</div>
+                        </div><!-- media-body -->
+                      </div><!-- media -->
+                      <div class="media">
+                        <div class="media-icon"><i class="icon ion-md-locate"></i></div>
+                        <div class="media-body">
+                          <span>Fonction</span>
+                          <div>{{session.font}}</div>
+                        </div><!-- media-body -->
+                      </div><!-- media -->
+                    </div><!-- az-profile-contact-list -->
+                  </div><!-- col -->
+                </div><!-- row -->
+                <br>
+  <div class="az-content-label tx-13">Modifier Informations</div>
+                <hr class="col-12">
+
+
+          <form action="/update_profil" method="POST">
+            <div class="row row-sm mg-b-0">
+              <div class="col-lg-6">
+                <br>
+                <label class="form-label mg-b-10">Email <span class="tx-danger">*</span> :</label>
+
+                <input type="text" name="email" class="form-control wd-380" value="{{session.maile}}" required>
+
+    <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
+              </div><!-- col-4 -->
+
+
+              <div class="col-lg-6">
+                <br>
+                <label class="form-label mg-b-10">Mot de passe <span class="tx-danger">*</span> :</label>
+              <input type="password" name="password" class="form-control wd-380" value="{{session.password}}" required>
+
+
+              </div><!-- col-4 -->
+
+            </div>
+
+
+            <div class="row row-sm mg-b-0">
+              <div class="col-lg-6">
+                <br>
+                <label class="form-label mg-b-10">Fonction :</label>
+                <select class="form-control select2" value="{{session.font}}"  name="fonction">
+                  <option value="{{session.font}}">{{session.font}}</option>
+
+                  {% for ele in fonction %}
+                  <option value="{{ele.fonction}}">{{ele.fonction}}</option>
+                  {% endfor %}
+
+                </select>
+
+              </div><!-- col-4 -->
+
+
+              <div class="col-lg-6">
+                <br>
+                <label class="form-label mg-b-10">Contact :</label>
+                <input type="text" name="contact" class="form-control wd-380" value="{{session.contac}} " required>
+
+
+              </div><!-- col-4 -->
+
+            </div>
+
+
+            </p>
+          </div><!-- modal-body -->
+          <div class="modal-footer bg-white">
+            <button type="submit" class="btn btn-primary">Modifier</button>
+            <button type="button" data-dismiss="modal" class="btn btn-outline-light">Fermer</button>
+          </div>
+        </div>
+      </div><!-- modal-dialog -->
+    </form>
+    </div><!-- modal -->
+
+
+    <!-- ACCOUNT LOGS MODAL -->
+    <div id="logs" class="modal fade effect-flip-vertical">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+
+          <div class="modal-body bg-white">
+              <div class="az-content-label tx-13 mg-b-25">Activity Logs</div>
+
+            <p>
+
+          <div class="card bg-gray-100 bd-10">
+            <div class="card-body">
+
+
+                  <table id="datatable1" class="display responsive nowrap " width="100%">
+
+                <thead class="bg-primary">
+                      <tr>
+                        <th>Prénoms</th>
+                        <th>Nom</th>
+                        <th>Login</th>
+
+                        <th>Transaction</th>
+
+                        <th>Horaire</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for ele in logs%}
+                      <tr>
+                        <td>{{ele.prenom}}</td>
+                        <td>{{ele.nom}} </td>
+                        <td>{{ele.users_transac}}</td>
+
+                        <td>{{ele.nom_transac}}</td>
+
+                        <td>{{ele.heure}}</td>
+
+
+
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+
+
+          </div></div>
+
+
+
+
+
+
+            </p>
+          </div><!-- modal-body -->
+
+        </div>
+      </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+{% if session.stat == "NOK"%}
+<script type="text/javascript">
+  $(window).on('load', function () {
+    $('#modaldemo8').modal('show');
+    $('#modaldemo8').modal({ backdrop: '/static', keyboard: false });
+  });
+</script>
+
+
+
+
+    <form action="/update_password" method="POST" target="_self">
+      <!-- LARGE MODAL -->
+      <div id="modaldemo8" class="modal fade effect-just-me  bg-dark" data-keyboard="false" data-backdrop="/static">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+              <h6 class="modal-title">Informations Sécurité</h6>
+
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <h6>Sécurisation de vos données</h6>
+              <p>Bonjour cher utilisateur {{session.prenom}} {{session.nom}} ,c'est votre première connexion à l'application
+                RocZilla ;
+                pour des raisons de sécurité merci de modifier votre mot de passe pour pouvoir continuer !</p>
+              <br>
+
+              <div class="row row-sm mg-b-0">
+                <div class="col-lg-6">
+                  <br>
+                  <label class="form-label mg-b-10 text-primary">Mot de passe actuel :</label>
+
+                  <input type="text" class="form-control wd-380" value="{{session.passw}}" readonly>
+
+                  <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
+                  <input type="text" name="pass_statut" class="form-control wd-380" value="OK" hidden>
+                </div><!-- col-4 -->
+
+
+                <div class="col-lg-6">
+                  <br>
+                  <label class="form-label mg-b-10 text-primary">saisir nouveau mot de passe <span
+                      class="tx-danger">*</span> :</label>
+                  <input type="text" name="password" class="form-control wd-380" placeholder="Nouveau mot de passe"
+                    required>
+
+
+                </div><!-- col-4 -->
+
+              </div>
+            </div><!-- modal-body -->
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-sm btn-az-primary pd-x-20"><i class="fas fa-edit"></i>
+                Valider</button>
+
+            </div>
+          </div>
+
+        </div><!-- modal-dialog -->
+      </div><!-- modal -->
+    </form>
+
+
+    {% endif%}
+
+  {% block javascript %}  
+
+<script src="{{ url_for('static', filename='lib/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/ionicons/ionicons.js') }}"></script>
+
+<script src="{{ url_for('static', filename='lib/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='lib/select2/js/select2.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/datatables.net-dt/js/dataTables.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/select2/js/select2.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/azia.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.sampledata.js') }}"></script>
+
+<script>
+  $(document).ready(function () {
+    'use strict';
+
+    $('#datatable1').DataTable({
+      responsive: true,
+      language: {
+        searchPlaceholder: 'Rechercher...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+      }
+    });
+    
+
+
+
+    // Select2
+    $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+  });
+</script>
+<script>
+  $(function(){
+    'use strict'
+
+    $('.az-sidebar .with-sub').on('click', function(e){
+      e.preventDefault();
+      $(this).parent().toggleClass('show');
+      $(this).parent().siblings().removeClass('show');
+    })
+
+    $(document).on('click touchstart', function(e){
+      e.stopPropagation();
+
+      // closing of sidebar menu when clicking outside of it
+      if(!$(e.target).closest('.az-header-menu-icon').length) {
+        var sidebarTarg = $(e.target).closest('.az-sidebar').length;
+        if(!sidebarTarg) {
+          $('body').removeClass('az-sidebar-show');
+        }
+      }
+    });
+
+
+    $('#azSidebarToggle').on('click', function(e){
+      e.preventDefault();
+
+      if(window.matchMedia('(min-width: 992px)').matches) {
+        $('body').toggleClass('az-sidebar-hide');
+      } else {
+        $('body').toggleClass('az-sidebar-show');
+      }
+    });
+
+    new PerfectScrollbar('.az-sidebar-body', {
+      suppressScrollX: true
+    });
+
+    /* ----------------------------------- */
+    /* Dashboard content */
+
+
+    $.plot('#flotChart1', [{
+        data: dashData1,
+        color: '#6f42c1'
+      }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [ { opacity: 0 }, { opacity: 1 } ] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 100
+      },
+      xaxis: { show: false }
+    });
+
+    $.plot('#flotChart2', [{
+        data: dashData2,
+        color: '#007bff'
+      }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [ { opacity: 0 }, { opacity: 1 } ] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 100
+      },
+      xaxis: { show: false }
+    });
+
+    $.plot('#flotChart3', [{
+        data: dashData3,
+        color: '#f10075'
+      }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [ { opacity: 0 }, { opacity: 1 } ] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 100
+      },
+      xaxis: { show: false }
+    });
+
+    $.plot('#flotChart4', [{
+        data: dashData4,
+        color: '#00cccc'
+      }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [ { opacity: 0 }, { opacity: 1 } ] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 100
+      },
+      xaxis: { show: false }
+    });
+
+    $.plot('#flotChart5', [{
+        data: dashData2,
+        color: '#00cccc'
+      },{
+        data: dashData3,
+        color: '#007bff'
+      },{
+        data: dashData4,
+        color: '#f10075'
+      }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: false,
+          fillColor: { colors: [ { opacity: 0 }, { opacity: 1 } ] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 20
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 100
+      },
+      xaxis: {
+        show: true,
+        color: 'rgba(0,0,0,.16)',
+        ticks: [
+          [0, ''],
+          [10, '<span>Nov</span><span>05</span>'],
+          [20, '<span>Nov</span><span>10</span>'],
+          [30, '<span>Nov</span><span>15</span>'],
+          [40, '<span>Nov</span><span>18</span>'],
+          [50, '<span>Nov</span><span>22</span>'],
+          [60, '<span>Nov</span><span>26</span>'],
+          [70, '<span>Nov</span><span>30</span>'],
+        ]
+      }
+    });
+
+    $.plot('#flotChart6', [{
+        data: dashData2,
+        color: '#6f42c1'
+      },{
+        data: dashData3,
+        color: '#007bff'
+      },{
+        data: dashData4,
+        color: '#00cccc'
+      }], {
+      series: {
+        shadowSize: 0,
+        stack: true,
+        bars: {
+          show: true,
+          lineWidth: 0,
+          fill: 0.85
+          //fillColor: { colors: [ { opacity: 0 }, { opacity: 1 } ] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 20
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 100
+      },
+      xaxis: {
+        show: true,
+        color: 'rgba(0,0,0,.16)',
+        ticks: [
+          [0, ''],
+          [10, '<span>Nov</span><span>05</span>'],
+          [20, '<span>Nov</span><span>10</span>'],
+          [30, '<span>Nov</span><span>15</span>'],
+          [40, '<span>Nov</span><span>18</span>'],
+          [50, '<span>Nov</span><span>22</span>'],
+          [60, '<span>Nov</span><span>26</span>'],
+          [70, '<span>Nov</span><span>30</span>'],
+        ]
+      }
+    });
+
+    $('#vmap').vectorMap({
+      map: 'world_en',
+      showTooltip: true,
+      backgroundColor: '#f8f9fa',
+      color: '#ced4da',
+      colors: {
+        us: '#6610f2',
+        gb: '#8b4bf3',
+        ru: '#aa7df3',
+        cn: '#c8aef4',
+        au: '#dfd3f2'
+      },
+      hoverColor: '#222',
+      enableZoom: false,
+      borderOpacity: .3,
+      borderWidth: 3,
+      borderColor: '#fff',
+      hoverOpacity: .85
+    });
+
+  });
+</script>
+
+<script>
+  $(function () {
+    'use strict'
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // colored tooltip
+    $('[data-toggle="tooltip-primary"]').tooltip({
+      template: '<div class="tooltip tooltip-primary" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+    });
+
+    $('[data-toggle="tooltip-secondary"]').tooltip({
+      template: '<div class="tooltip tooltip-secondary" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+    });
+
+  });
+</script>
+
+{% endblock javascript %}
+  </body>
+
+
+</html>

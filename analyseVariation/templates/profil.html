@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="az-content-label mg-b-5"> MON PROFIL  - Moussa Dembele</div>
+    <p class="mg-b-20">Informations données utilisateurs.</p>
+        <div class="card bd-10 bg-white">
+        <div class="card-body">
+    <p>
+    
+    <div class="row">
+      <div class="col-md-7 col-xl-7">
+        <div class="az-content-label tx-13 mg-b-25">Mes Informations</div>
+        <div class="az-profile-work-list">
+          <div class="media">
+            <div class="media-logo bg-success"><i class="fas fa-user"></i></div>
+            <div class="media-body">
+              <h6>Prénom & Nom</h6>
+              <span>Moussa Dembele</span>
+    
+            </div><!-- media-body -->
+          </div><!-- media -->
+          <div class="media">
+            <div class="media-logo bg-primary"><i class="fa fa-lock"></i></div>
+            <div class="media-body">
+              <h6>Login </h6>
+              <span>moussa</span>
+    
+            </div><!-- media-body -->
+          </div><!-- media -->
+        </div><!-- az-profile-work-list -->
+    
+    
+      </div><!-- col -->
+      <div class="col-md-5 col-xl-5 mg-t-40 mg-md-t-0">
+        <div class="az-content-label tx-13 mg-b-25">Contact Information</div>
+        <div class="az-profile-contact-list">
+          
+          <div class="media">
+            <div class="media-icon"><i class="fas fa-at"></i></div>
+            <div class="media-body">
+              <span>Email</span>
+              <div>moussa@orange.sn</div>
+            </div><!-- media-body -->
+          </div><!-- media -->
+          <div class="media">
+            <div class="media-icon"><i class="fas fa-user-tie"></i></div>
+            <div class="media-body">
+              <span>Fonction</span>
+              <div>Groupe1</div>
+            </div><!-- media-body -->
+          </div><!-- media -->
+        </div><!-- az-profile-contact-list -->
+      </div><!-- col -->
+    </div><!-- row -->
+    <br>
+    <div class="az-content-label tx-13 "><a href="" class="text-dark">Modifier mon Mot de passe</a></div>
+    <hr class="col-12">
+    
+    {% block password_change %}
+    {% endblock password_change %}
+    
+    
+     
+    </div></div>
+    
+     
+{% endblock content %}

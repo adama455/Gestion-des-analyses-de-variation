@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="az-content-label mg-b-5">ANALYSE VARIATION </div>
+<p class="mg-b-20 "><span class="text-primary"></span></p>
+
+<form method="POST">
+    <div style="white-space: nowrap;overflow-x: auto; width: 950px;" class="position-relative container ">
+
+        <div class="d-inline-block px-2">
+            <div style="height:250px"></div>
+            <div class="form-group ">
+                <label class="form-label">Pourquoi 1: <span class="tx-danger">*</span></label>
+                <input type="text" name="pourquoi_1" class="form-control wd-350" placeholder="Pourquoi 1" required>
+            </div><!-- form-group -->
+        </div>
+
+        <div class="d-inline-block px-2">
+            <div style="height:120px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 2: <span class="tx-danger">*</span></label>
+                <input type="text" name="pourquoi_21" class="form-control wd-350" placeholder="Pourquoi 2" required>
+            </div><!-- form-group -->
+            <div style="height:220px"></div>
+            <div class="form-group ">
+                <label class="form-label">Pourquoi 2: <span class="tx-danger">*</span></label>
+                <input type="text" name="pourquoi_22" class="form-control wd-350" placeholder="Pourquoi 2" required>
+            </div><!-- form-group -->
+        </div>
+
+
+        <div class="d-inline-block px-2">
+            <div style="height:40px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 3:  </label>
+                <input type="text" name="pourquoi_31" class="form-control wd-350" placeholder="Pourquoi 3" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 3:  </label>
+                <input type="text" name="pourquoi_32" class="form-control wd-350" placeholder="Pourquoi 3" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group ">
+                <label class="form-label">Pourquoi 3:  </label>
+                <input type="text" name="pourquoi_33" class="form-control wd-350" placeholder="Pourquoi 3" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 3:  </label>
+                <input type="text" name="pourquoi_34" class="form-control wd-350" placeholder="Pourquoi 3" >
+            </div><!-- form-group -->
+        </div>
+
+
+        <div class="d-inline-block px-2">
+            <div style="height:40px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 4:  </label>
+                <input type="text" name="pourquoi_41" class="form-control wd-350" placeholder="Pourquoi 4" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 4:  </label>
+                <input type="text" name="pourquoi_42" class="form-control wd-350" placeholder="Pourquoi 4" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 4:  </label>
+                <input type="text" name="pourquoi_43" class="form-control wd-350" placeholder="Pourquoi 4" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 4:  </label>
+                <input type="text" name="pourquoi_44" class="form-control wd-350" placeholder="Pourquoi 4" >
+            </div><!-- form-group -->
+            
+        </div>
+
+        
+        <div class="d-inline-block px-2">
+            <div style="height:40px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 5:  </label>
+                <input type="text" name="pourquoi_51" class="form-control wd-350" placeholder="Pourquoi 5" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 5:  </label>
+                <input type="text" name="pourquoi_52" class="form-control wd-350" placeholder="Pourquoi 5" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 5:  </label>
+                <input type="text" name="pourquoi_53" class="form-control wd-350" placeholder="Pourquoi 5" >
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Pourquoi 5:  </label>
+                <input type="text" name="pourquoi_54" class="form-control wd-350" placeholder="Pourquoi 5" >
+            </div><!-- form-group -->
+            
+        </div>
+
+        <div class="d-inline-block px-2">
+            <div style="height:40px"></div>
+            <div class="form-group">
+                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
+                <select class="form-control wd-350 " name="cause_1" data-placeholder="Choose one" >
+                    {% for cause in causes %}
+                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
+                    {% endfor%}
+                    </select>
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
+                <select class="form-control select2" data-placeholder="Choose one" name="cause_2" >
+                    {% for cause in causes %}
+                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
+                    {% endfor%}
+                    </select>
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
+                <select class="form-control select2" name="cause_3" data-placeholder="Choose one" >
+                    {% for cause in causes %}
+                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
+                    {% endfor%}
+                    </select>
+            </div><!-- form-group -->
+            <div style="height:80px"></div>
+            <div class="form-group">
+                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
+                <select class="form-control select2" name="cause_4" data-placeholder="Choose one" >
+                    {% for cause in causes %}
+                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
+                    {% endfor%}
+                    </select>
+            </div><!-- form-group -->
+            
+        </div>
+        
+        <div class="d-inline-block px-2">
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_1" placeholder="Action"  class="form-control wd-350 "
+                >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_2" class="form-control wd-350" placeholder="Action" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_3" class="form-control wd-350" placeholder="Action" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_4" class="form-control wd-350" placeholder="Action" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_5" placeholder="Action"  class="form-control wd-350 "
+                  placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_6" class="form-control wd-350" placeholder="Action" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_7" class="form-control wd-350" placeholder="Action" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Actions:  </label>
+                <input type="text" name="action_8" class="form-control wd-350" placeholder="Action" >
+            </div><!-- form-group -->
+            
+        </div>
+
+        <div class="d-inline-block px-2">
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_1" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_2" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_3" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_4" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_5" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_6" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_7" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Porteurs:  </label>
+                <input type="text" name="porteur_8" class="form-control wd-350" placeholder="Porteurs" >
+            </div><!-- form-group -->
+    
+        </div>
+
+        <div class="d-inline-block px-2">
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_1" placeholder="Échéance"  class="form-control wd-350 fc-datepicker"
+                  placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_2" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_3" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_4" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_5" placeholder="Échéance"  class="form-control wd-350 fc-datepicker"
+                  placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_6" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_7" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
+            </div><!-- form-group -->
+            <div class="form-group">
+                <label class="form-label">Échéance:  </label>
+                <input type="text" name="echeance_8" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
+            </div><!-- form-group -->
+            
+        </div>
+       
+        
+        
+    </div>
+    <div class="">
+        <div class="d-flex flex-row-reverse mt-5">
+            <input type="submit" value="Valider" class="btn btn-primary px-5">
+        </div><!-- form-group -->
+    </div>
+    
+</form>
+
+
+
+{% endblock content %}
+{% block javascript %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( ".fc-datepicker" ).datepicker();
+    $( ".fc-datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    
+  } );
+
+  </script>
+{% endblock javascript %}

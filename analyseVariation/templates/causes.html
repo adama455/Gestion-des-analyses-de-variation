@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+  <div class="az-content-label mg-b-5">Gestion des familles de causes</div>
+  <p class="mg-b-20">Suivi des plans d'action par famille de causes.</p>
+
+  <div class="card bg-gray-100 bd-10">
+    <div class="card-body">
+    <table id="datatable1" class="display  responsive">
+      <thead>
+        <tr class="bg-primary">
+          <th class="wd-20p text-dark">Libelle</th>
+          <th class="wd-70p text-dark">Description</th>
+          <th class="wd-10p text-dark">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ele in causes%}
+          <tr>
+            <td>{{ele.libelle}}</td>
+            <td>{{ele.description}}</td>
+            <td >
+              <a href="" 
+                title="Détails">
+                Supprimer</a>
+            </td>
+          </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+<br>
+<div class="btn-icon-list">
+  <a href=" " ><button class="btn btn-icon btn-az-secondary pd-x-20" title="Ajouter"><i class="typcn typcn-plus"></i></button></a>
+</div>
+</div></div>
+
+{% endblock content %}
