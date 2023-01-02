@@ -1,0 +1,49 @@
+.az-menu{
+    position: relative;
+    font-size: 1.5em;
+    width: 65%;
+    display: flex;
+    justify-content: center;
+}
+
+.div-logo {
+    color: rgb(28, 146, 7); 
+    display: flex;
+    font-size: 3em;
+    width: 12%;
+    flex-direction: row;
+}
+
+.bouton-menu{
+    width: 100%;
+    height: 100%;
+}
+
+.menu-burger {
+    width: 7%;
+    color: rgb(28, 146, 7); 
+}
+
+.modif-header {
+    width: 100%;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    color: rgb(236, 243, 242);
+}
+
+.div-menu {
+   display: flex;
+   flex-direction: row;
+   width: 100%;
+}
+
+
+.az-content-body{
+    display: 100%;
+}
+
+.az-body{
+    border: 2px solid black;
+    width: 1830px;
+}

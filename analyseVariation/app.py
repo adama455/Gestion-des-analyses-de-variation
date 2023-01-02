@@ -48,10 +48,10 @@ def cause():
 
 
 
-@app.route("/page-signin")
-def signin():
+@app.route("/index")
+def index():
    
-    return render_template('page-signin.html')    
+    return render_template('index.html')    
 
 @app.route("/page-signup")
 def signup():

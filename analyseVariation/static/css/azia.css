@@ -3013,9 +3013,7 @@ input[type="button"].btn-block {
   .navbar > .container,
   .navbar > .container-fluid {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between; }
+    flex-wrap: wrap; }
 
 .navbar-brand {
   display: inline-block;
@@ -4474,7 +4472,8 @@ button.close {
   vertical-align: text-top !important; }
 
 .bg-primary {
-  background-color: #FF7900 !important; }
+  background-color: #FF7900 !important;
+  justify-content: space-between; }
 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
@@ -9574,6 +9573,7 @@ textarea.parsley-success:focus {
 .az-header {
   height: 60px;
   position: relative;
+  display: flex;
   z-index: 100; }
   @media (min-width: 992px) {
     .az-header {

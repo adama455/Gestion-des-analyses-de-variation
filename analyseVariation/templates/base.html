@@ -4,8 +4,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
     <!-- Meta -->
     <meta name="description" content="Outil d'analyse et de suivi de la variation">
     <meta name="author" content="SONATEL">
@@ -26,9 +24,9 @@
     <link href="{{ url_for('static', filename='lib/select2/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='lib/spectrum-colorpicker/spectrum.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='lib/select2/css/select2.min.css') }}" rel="stylesheet">
-
     <!-- azia CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/azia.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modificationcss.css') }}" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/orange.png') }}" rel="stylesheet">
 
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -50,14 +48,11 @@
     }
     setTimeout("session()", 3000000); //ça fait bien 5min??? c'est pour le test
   </script>
-
-
   </head>
 
-<body class="az-body az-body-sidebar az-body-dashboard-nine bg-white"  >
-
+<body class="az-body az-body-sidebar az-body-dashboard-nine bg-white">
     <div class="az-sidebar az-sidebar-sticky bg-gray-300">
- <br>
+      <br>
       <div class="az-sidebar-loggedin">
         <div class="az-img-user online"  data-toggle="tooltip" data-placement="top" title="{{session.matricule}} "><img src="/static/img/perso.PNG" alt=""></div>
         <div class="media-body" >
@@ -71,89 +66,62 @@
           <li class="nav-item">
             <a href="" class="nav-link with-sub"><i class="typcn typcn-th-large"></i>Analyses</a>
             <nav class="nav-sub">
-
               <a href="" class="nav-sub-link">Importer des données</a>
               <a href="" class="nav-sub-link" >Analyser les données</a>
-            
               <a href="" class="nav-sub-link" >Suivi plans d'actions</a>
-
             </nav>
           </li><!-- nav-item -->
-
-
-            <li class="nav-item">
-              <a href="" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
-              <nav class="nav-sub">
-
-                <a href="" class="nav-sub-link">Causes</a>
-                <a href="" class="nav-sub-link" >Métriques</a>
-                <a href="">Plateaux</a>
-              </nav>
-            </li><!-- nav-item -->
-
-
-
+          <li class="nav-item">
+            <a href="" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
+            <nav class="nav-sub">
+              <a href="" class="nav-sub-link">Causes</a>
+              <a href="" class="nav-sub-link" >Métriques</a>
+              <a href="">Plateaux</a>
+            </nav>
+          </li><!-- nav-item -->
           <li class="nav-item">
             <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
             <nav class="nav-sub">
-
-                  <a href="" class="nav-sub-link" >Comptes</a>
-
-      <a href="" class="nav-sub-link" >Profils</a>
-
-
-      <a href="Logs utilisateurs" class="nav-sub-link" onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
-
+              <a href="" class="nav-sub-link" >Comptes</a>
+              <a href="" class="nav-sub-link" >Profils</a>
+              <a href="Logs utilisateurs" class="nav-sub-link" onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
             </nav>
           </li><!-- nav-item -->
-
-
-              <li class="nav-item"><a href="" class="nav-link with-sub"><i class="typcn typcn-clipboard"></i>Documentation</a>
-                <nav class="nav-sub">
-
-                  <a href="Documentation" class="nav-sub-link" onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
-
-                  <a href="Documentation" class="nav-sub-link"
-                    onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
-
-                </nav>
-              </li><!-- nav-item -->
-
+          <li class="nav-item"><a href="" class="nav-link with-sub"><i class="typcn typcn-clipboard"></i>Documentation</a>
+            <nav class="nav-sub">
+              <a href="Documentation" class="nav-sub-link" onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
+              <a href="Documentation" class="nav-sub-link"
+                onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
+            </nav>
+          </li><!-- nav-item -->
         </ul><!-- nav -->
       </div><!-- az-sidebar-body -->
     </div><!-- az-sidebar -->
-    <div class="az-content az-content-dashboard-nine">
-      <div class="az-header az-header-dashboard-nine">
-        <div class="container-fluid bg-primary">
 
+    <div class="az-content az-content-dashboard-nine col-xl-12">
 
+      <!-- debut block logo menu et icone de l'entete -->
 
-             <div class="az-header-center">
-
-                  <nav class="nav az-nav">
-                    <a href="/" class="nav-link  text-white"  data-placement="top"
-                      title="Dashboard"> <i class="fas fa-home"></i> Dashboard</a>
-  
-                      <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-database"></i>
-                        <strong>Données</strong></a>
-                    
-  
-                      <a href="" class="nav-link text-white" 
-                        data-toggle="tooltip" data-placement="top" title="Importer Données"> <i class="fas fa-upload"></i>
-                        Importer</a>
-  
-                        
-                    <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-user"></i>
-                     <strong>Mon Profil</strong></a>
-                  </nav>
-  
-            </div><!-- az-header-center -->
-
+      <div class="az-header az-header-dashboard-nine col-xl-11">
+        <div class="div-menu bg-primary">
+          <div class="menu-burger">
+            <a class="bouton-menu nav-link with-sub" href=""><i class="typcn typcn-th-large text-dark"></i></a>
+          </div>
+          <div class="div-logo">SONATEL</div>
+          <div class="az-menu">
+            <nav class="nav az-nav">
+              <a href="/" class="nav-link  text-white"  data-placement="top"
+                title="Dashboard"> <i class="fas fa-home"></i><strong>Dashboard</strong></a>
+              <a href="" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-database"></i><strong>Données</strong></a>
+              <a href="" class="nav-link text-white" 
+                data-toggle="tooltip" data-placement="top" title="Importer Données"> <i class="fas fa-upload"><strong>Importer</strong></i></a>
+              <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-user"></i><strong>Mon Profil</strong></a>
+            </nav>
+          </div><!-- az-header-center -->
           <div class="az-header-right">
             <div class="az-header-message">
               <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="typcn typcn-power-outline text-dark"></i></a>
               <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="typcn typcn-power-outline text-dark"></i></a>
-
             </div><!-- az-header-message -->
             <div class="dropdown az-header-notification">
               <a href="" class="new" data-toggle="tooltip" data-placement="top" title="Notifications"><i class="typcn typcn-bell text-dark"></i></a>
@@ -164,72 +132,37 @@
                 <h6 class="az-notification-title">Notifications</h6>
                 <p class="az-notification-text">Plans d'actions encours hors délai</p>
                 <div class="az-notification-list">
-
-                    {% for ele in pa%}
-                  <div class="media new">
-
-                    <div class="media-body">
-                      <p>{{ele.action}}</p>
-                      <span>{{ele.delai}} - {{ele.porteur}}</span>
-                    </div><!-- media-body -->
-                  </div><!-- media -->
-                    {% endfor %}
+                  {% for ele in pa%}
+                    <div class="media new">
+                      <div class="media-body">
+                        <p>{{ele.action}}</p>
+                        <span>{{ele.delai}} - {{ele.porteur}}</span>
+                      </div><!-- media-body -->
+                    </div><!-- media -->
+                  {% endfor %}
                 </div><!-- az-notification-list -->
                 <div class="dropdown-footer"><a href="/pa_horsdelay" target="cadre2">View All Notifications</a></div>
               </div><!-- dropdown-menu -->
             </div><!-- az-header-notification -->
-
           </div><!-- az-header-right -->
         </div><!-- container -->
       </div><!-- az-header -->
+
+       <!-- fin block logo menu et icone de l'entete -->
+
       <div class="az-content-header bg-gray-400" style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 40;" >
         <div class="az-content-header-top">
           <div >
-
-
-                 <h2 class="az-content-title mg-b-5 mg-b-lg-8"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-primary"> SO</span>' <span style="color: #009088;">VAR</span></h2>
-
+            <h2 class="az-content-title mg-b-5 mg-b-lg-8"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-primary"> SO</span>' <span style="color: #009088;">VAR</span></h2>
             <p class="mg-b-20 text-dark">Outil d'analyse et de suivi de la variation.</p>
           </div>
-              <div class="pd-20 mg-t-20" style="background-color: #009088;">
-
-
-                <nav class="nav az-nav">
-                  <a href="/" class="nav-link  text-white"  data-placement="top"
-                    title="Dashboard"> <i class="fas fa-home"></i> Dashboard</a>
-
-                    <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-database"></i>
-                      <strong>Données</strong></a>
-                  
-
-                    <a href="" class="nav-link text-white" 
-                      data-toggle="tooltip" data-placement="top" title="Importer Données"> <i class="fas fa-upload"></i>
-                      Importer</a>
-
-                      
-                  <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-user"></i>
-                   <strong>Mon Profil</strong></a>
-                </nav>
-
-              </div><!-- nav-wrapper -->
           <div class="az-dashboard-date">
-            
-            
           </div><!-- az-dashboard-date -->
         </div><!-- az-content-body-title -->
-
-
-
       </div><!-- az-content-header -->
-
       <div class="az-content-body">
       {% block content %}{% endblock content %}
-
-
       </div><!-- az-content-body -->
-
-
-
       <div class="az-footer bg-light">
         <div class="container-fluid text-dark">
           <span>&copy; 2022 SO'VAR : Contrôle des KCRP au niveau le plus près de l’activité avec un dispositif de pilotage</span>
@@ -238,17 +171,13 @@
       </div><!-- az-footer -->
     </div><!-- az-content -->
 
-
-
     <!-- PROFIL MODAL -->
+
     <div id="profil" class="modal fade effect-flip-vertical">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
-
           <div class="modal-body bg-light">
-
             <p>
-
                 <div class="row">
                   <div class="col-md-7 col-xl-7">
                     <div class="az-content-label tx-13 mg-b-25">Mes Informations</div>
@@ -258,7 +187,6 @@
                         <div class="media-body">
                           <h6>{{session.prenom}} <a href="">{{session.nom}}</a></h6>
                           <span>{{session.profil}} - {{session.depart}}</span>
-
                         </div><!-- media-body -->
                       </div><!-- media -->
                       <div class="media">
@@ -266,12 +194,9 @@
                         <div class="media-body">
                           <h6>{{session.log}} </h6>
                           <span>{{session.password}}</span>
-
                         </div><!-- media-body -->
                       </div><!-- media -->
                     </div><!-- az-profile-work-list -->
-
-
                   </div><!-- col -->
                   <div class="col-md-5 col-xl-5 mg-t-40 mg-md-t-0">
                     <div class="az-content-label tx-13 mg-b-25">Contact Information</div>
@@ -303,8 +228,6 @@
                 <br>
   <div class="az-content-label tx-13">Modifier Informations</div>
                 <hr class="col-12">
-
-
           <form action="/update_profil" method="POST">
             <div class="row row-sm mg-b-0">
               <div class="col-lg-6">
