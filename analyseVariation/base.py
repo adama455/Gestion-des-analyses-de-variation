@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app.config.update(
     SECRET_KEY='topsecret',
-    SQLALCHEMY_DATABASE_URI = 'mysql://analyse:test123@localhost/analyse',
+    SQLALCHEMY_DATABASE_URI = 'mysql://analysevariation:anvar123@localhost/analysevariation',
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
 

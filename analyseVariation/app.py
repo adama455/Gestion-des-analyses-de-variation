@@ -1,14 +1,17 @@
 from flask import Flask, render_template, url_for, request
 from flask_sqlalchemy import SQLAlchemy
+from analyseVariation.forms import  RegistrationForm, LoginForm
 
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] = '7540d096a1af7602423becbadf2f2df8'
 
 #la racine ou page connexion des utilisateurs
 @app.route('/')
 @app.route("/login")
 def login():
-    
-    return render_template('login.html')    
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)    
 
 #La page acceuil de notre application
 @app.route("/home")
@@ -19,8 +22,8 @@ def home():
 #Cette page permet a l'administrateur d'ajouter de users
 @app.route("/addUser")
 def addUser():
-    
-    return render_template('add-user.html')    
+    form = RegistrationForm()
+    return render_template('add-user.html', title='Régister', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
 @app.route("/change-password")
@@ -28,10 +31,14 @@ def changepassword():
     
     return render_template('changepassword.html')    
 
+#Permet a l'admin de visualiser la liste des Utilisateurs
+@app.route("/compte")
+def compte():
+     return render_template('comptes.html')  
+
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil")
 def profil():
-    
     return render_template('profil.html')    
 
 #enregistrement d'une AV par le MO
