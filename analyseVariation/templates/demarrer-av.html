@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="az-content-body ">
+  <div class="content-header mx-auto text-center mb-4 ">
+    <div class="az-content-label mg-b-5">Nouvel Utilisateur</div>
+    <p class="mg-b-20">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.</p>
+    <small class="">Le mot de passe par default est <span class="text-primary">Sovar@2022, </span> l'utilisateur devra
+      le modifier lors de sa première connexion.</small>
+  </div>
+
+  <div class="card bg-white bd-10 w-50 mx-auto rounded">
+    <div class="card-body">
+      <form method="POST" target="cadre2">
+        <div class="row row-sm mg-b-0 mb-3 d-flex justify-content-center">
+          <h3 class="text-center text-white bg-primary mg-b-0 col-10">Enregistrement des syntheses d'analyse de variation</h3>
+        </div>
+        <div class="row row-sm mg-b-0">
+          <div class="col-12">
+            <br>
+            <label class="form-label mg-b-10">Profil : <span class="tx-danger">*</span></label>
+            <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
+              <option label="Choisir le profil"></option>
+              <option value="">Admin</option>
+              <option value="">Responsable</option>
+              <option value="">SO</option>
+            </select>
+          </div><!-- col-4 -->
+        </div>
+
+        <div class="row row-sm mg-b-0">
+          
+
+        </div>
+        <div class="mg-t-30">
+          <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
+            Valider</button>
+        </div>
+      </form>
+    </div>
+  </div><!-- az-content-body -->
+</div><!-- az-content-body -->
+
+{% endblock content %}

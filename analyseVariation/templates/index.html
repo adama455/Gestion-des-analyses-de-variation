@@ -34,10 +34,13 @@
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
   <!-- link home  -->
-
   </head>
+
   <body>
 		<div class="wrapper d-flex align-items-stretch ">
+
+      <!-- Le menu sidebar -->
+
 			<nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
 				<div class="p-4 pt-4">
 		  		<div class="az-sidebar-loggedin">
@@ -87,15 +90,20 @@
 						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
 						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
 	        </div>
-
 	      </div>
     	</nav>
 
-        <!-- Page Content  -->
+      <!-- Page Content  -->
+      
       <div id="content" class="p-2">
+
+        <!-- le menu entete  -->
+
         <div class="sticky-top">
         <nav class=" navbar-expand-lg navbar-light bg-primary py-2">
           <div class="d-flex flex-row col-12">
+            
+            <!-- notre bouton toggle du menu sidebar -->
 
             <button type="button" id="sidebarCollapse" class="btn btn-primary">
               <i class="fa fa-bars"></i>
@@ -104,6 +112,9 @@
             <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
+
+            <!-- le logo SO'VAR -->
+
             <div class="div-logo col-2 d-flex align-items-center ">
               <h1 class="az-content-title mg-b-0 mg-b-lg-4 text-center" style="font-size: 0.7em;">
                 <i class="typcn typcn-chart-bar text-dark"></i>&nbsp;
@@ -111,6 +122,8 @@
                 <span style="color: #009088; ">VAR</span>
               </h1>
             </div>
+
+            <!-- le menu -->
 
             <div class="collapse navbar-collapse col-8 d-flex  justify-content-center mg-r-100" id="navbarSupportedContent">
               <nav class="nav az-nav fs-4">
@@ -123,8 +136,9 @@
               </nav>
             </div>
 
+            <!-- les icones recherche deconnexion et notificqtion  -->
+
             <div class="col-1" style="margin-right: 0; margin-top: 8px;">
-              
                 <div class="az-header-message d-flex justify-content-end" style="width:100%">
                   <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="fa fa-search text-white me-3"></i></a>
                   <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="fa fa-sign-out text-white me-3"></i></a>
@@ -150,19 +164,11 @@
                     <div class="dropdown-footer"><a href="/pa_horsdelay" target="cadre2">View All Notifications</a></div>
                   </div><!-- dropdown-menu -->
                 </div><!-- az-header-notification -->
-              <!-- az-header-right -->
             </div>
           </div>
         </nav>
 
-        <!--<div class="bg-image">
-          <img src="https://mdbootstrap.com/img/new/standard/city/053.jpg" width="20" height="20" />
-          <div class="mask" style="background-color: rgba(0, 0, 0, 0.6)">
-            <div class="text">
-              <p>Hello There!</p>
-            </div>
-          </div>
-        </div> -->
+        <!-- l'image de fond contsnant le titre -->
 
         <div class="col-12 border bg-image p-0 pb-0 baniere" style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 40; position: relative;">
           <div>
@@ -171,14 +177,19 @@
           </div>
         </div>
       </div>
-        <div class="az-content-body">
-          {% block content %}{% endblock content %}
-        </div><!-- az-content-body -->
+
+      <!-- CONTENU DES DIFFERENTES PAGES DE L'APPLICATION  -->
+
+      <div class="az-content-body">
+        {% block content %}{% endblock content %}
+      </div><!-- az-content-body -->
+
       </div>
 		</div>
     
-    <div class="az-footer bg-light">
+    <!-- LE FOOTER DE L'APPLICATION -->
 
+    <div class="az-footer bg-light">
        <div class="container-fluid text-dark" >
         <span>
           <img src="/static/img/orange_logo.svg" width="20" height="20" alt=""  title="SONATEL"> SONATEL - DESC/DIS/ISCC</span>
@@ -241,7 +252,7 @@
                   </div><!-- col -->
                 </div><!-- row -->
                 <br>
-  <div class="az-content-label tx-13">Modifier Informations</div>
+                <div class="az-content-label tx-13">Modifier Informations</div>
                 <hr class="col-12">
           <form action="/update_profil" method="POST">
             <div class="row row-sm mg-b-0">
@@ -251,21 +262,14 @@
 
                 <input type="text" name="email" class="form-control wd-380" value="{{session.maile}}" required>
 
-    <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
+                <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
               </div><!-- col-4 -->
-
-
               <div class="col-lg-6">
                 <br>
                 <label class="form-label mg-b-10">Mot de passe <span class="tx-danger">*</span> :</label>
               <input type="password" name="password" class="form-control wd-380" value="{{session.password}}" required>
-
-
               </div><!-- col-4 -->
-
             </div>
-
-
             <div class="row row-sm mg-b-0">
               <div class="col-lg-6">
                 <br>
@@ -295,6 +299,7 @@
     </div><!-- modal -->
 
     <!-- ACCOUNT LOGS MODAL -->
+    
     <div id="logs" class="modal fade effect-flip-vertical">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">

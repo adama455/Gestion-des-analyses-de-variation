@@ -54,11 +54,10 @@ def cause():
     return render_template('causes.html')    
 
 
-
-@app.route("/page-signin")
-def signin():
+@app.route("/demarrer-av")
+def demarrerav():
    
-    return render_template('page-signin.html')    
+    return render_template('demarrer-av.html')    
 
 @app.route("/page-signup")
 def signup():
