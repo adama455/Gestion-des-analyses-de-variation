@@ -117,7 +117,7 @@
                 <a href="/" class="nav-link  text-white"  data-placement="top"
                   title="Dashboard"> <i class="fas fa-home me-1 fs-5"></i><strong>Dashboard</strong></a>
                 <a href="" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
-                <a href="" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-list me-1 fs-5"></i><strong>Liste AV</strong></a>
+                <a href="{{ url_for('listeAv') }}" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-list me-1 fs-5" ></i><strong>Liste AV</strong></a>
                 
                 <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-user me-1 fs-5"></i><strong>Mon Profil</strong></a>
               </nav>
@@ -126,8 +126,8 @@
             <div class="col-1" style="margin-right: 0; margin-top: 8px;">
               
                 <div class="az-header-message d-flex justify-content-end" style="width:100%">
-                  <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="fa fa-search text-white me-3"></i></a>
-                  <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"  ><i class="fa fa-sign-out text-white me-3"></i></a>
+                  <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"><i class="fa fa-search text-white me-3"></i></a>
+                  <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"><i class="fa fa-sign-out text-white me-3"></i></a>
                   <a href="" class="new" data-toggle="tooltip" data-placement="top" title="Notifications"><i class="fas fa-bell text-white "></i></a>
                 </div><!-- az-header-message -->
                 <div class="dropdown az-header-notification">
@@ -164,10 +164,10 @@
           </div>
         </div> -->
 
-        <div class="col-12 border bg-image p-0 pb-0 baniere" style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 40; position: relative;">
+        <div class="col-12 border bg-image p-0 pb-0 baniere mb-4 " style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 20vh; position: relative;">
           <div>
-            <h2 class="az-content-title mg-b-5 mg-b-lg-8"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-primary"> SO</span>' <span style="color: #009088;">VAR</span></h2>
-            <div class="mg-b-20 col-3 text-center mx-auto text-white" style="z-index:2;"><h1 >GESTION DES ANALYSES DE VARIATION</h1></div>
+            {# <h2 class="az-content-title mg-b-5 mg-b-lg-8"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-primary"> SO</span>' <span style="color: #009088;">VAR</span></h2> #}
+            <div class="mg-b-20 col-12  " style="z-index:2; height: 20vh;"><h1 style="height: 20vh;" class="d-flex align-items-center justify-content-center text-white">GESTION DES ANALYSES DE VARIATION</h1></div>
           </div>
         </div>
       </div>
@@ -241,17 +241,17 @@
                   </div><!-- col -->
                 </div><!-- row -->
                 <br>
-  <div class="az-content-label tx-13">Modifier Informations</div>
+                <div class="az-content-label tx-13">Modifier Informations</div>
                 <hr class="col-12">
-          <form action="/update_profil" method="POST">
-            <div class="row row-sm mg-b-0">
+                <form action="/update_profil" method="POST">
+                <div class="row row-sm mg-b-0">
               <div class="col-lg-6">
                 <br>
                 <label class="form-label mg-b-10">Email <span class="tx-danger">*</span> :</label>
 
                 <input type="text" name="email" class="form-control wd-380" value="{{session.maile}}" required>
 
-    <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
+                <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
               </div><!-- col-4 -->
 
 

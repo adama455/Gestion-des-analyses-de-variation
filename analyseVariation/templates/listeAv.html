@@ -1,0 +1,99 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container">
+
+    <h1 class="text-dark d-flex justify-content-center align-items-center py-1 my-4">LISTE DES ANALYSES DE VARIATION</h1>
+    {# <div class="row w-100  recherche mx-0  my-3">
+        <div class="col-8 d-flex">
+            <input type="search" name="recherche" id="" placeholder="Rechercher une AV"
+                class="w-50  border border-1 p-3 shadow-lg rounded">
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+            <button class="btn btn-info" class="">Lancer</button>
+        </div>
+    </div> #}
+    <div class="card bg-gray-100 bd-10">
+        <div class="card-body">
+
+            <table id="datatable1" class="display responsive nowrap" width="100%">
+                <thead class="bg-primary">
+                    <tr>
+                        <th class="wd-20p text-dark">Rechercher une AV</th>
+                        <th class="wd-10p text-dark">Libelle AV</th>
+                        <th class="wd-15p text-dark">Responsable AV</th>
+                        <th class="wd-15p text-dark">Date AV</th>
+                        <th class="wd-5p text-dark">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AD004</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAME</td>
+                        <td>2023-01-04</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AD007</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAME</td>
+                        <td>2023-01-04</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>AD008</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAME</td>
+                        <td>2023-01-04</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AD009</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAME</td>
+                        <td>2023-01-04</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+
+            <div class="btn-icon-list">
+
+                <a href="{{ url_for('home') }}">
+                    <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button></a>
+                &nbsp;&nbsp;
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

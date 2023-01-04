@@ -34,7 +34,26 @@ def changepassword():
 #Permet a l'admin de visualiser la liste des Utilisateurs
 @app.route("/compte")
 def compte():
-     return render_template('comptes.html')  
+     return render_template('comptes.html') 
+ 
+ 
+#Permet de visualiser la liste des Analyses de Variation
+@app.route("/listeAv")
+def listeAv():
+     return render_template('listeAv.html')  
+ 
+ 
+#Permet de visualiser la liste des Valeurs Aberantes
+@app.route("/listeVa")
+def listeVa():
+     return render_template('listeVa.html')  
+ 
+ 
+#Permet d'enregistrer une cause
+@app.route("/analyseCause")
+def analyseCause():
+     return render_template('analyse-cause.html')  
+ 
 
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil")

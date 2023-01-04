@@ -1,0 +1,76 @@
+{% extends 'index.html' %}
+{% block content %}
+
+
+
+    <div class="az-content-label mg-b-5">Gestion des Utilisateurs</div>
+    <p class="mg-b-20">Monitoring et gestion des utilisateurs.</p>
+    
+    <div class="card bg-gray-100 bd-10">
+      <div class="card-body">
+
+        <table id="datatable1" class="display responsive nowrap" width="100%">
+          <thead class="bg-primary">
+            <tr>
+              <th class="wd-20p text-dark">Prénoms</th>
+              <th class="wd-10p text-dark">Nom</th>
+              <th class="wd-15p text-dark">Matricule</th>        
+              <th class="wd-15p text-dark">Email</th>
+              <th class="wd-15p text-dark">Profil</th>
+              <th class="wd-10p text-dark">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Adama</td>
+              <td>NDIAYE</td>
+              <td>nd0023</td>
+              <td>ndiaye@gmail.com</td>
+              <td>Admin</td>              
+              <td>
+                <a href="" class="text-center"
+                   title="Détails">
+                  Détails</a>
+              </td>
+            </tr>
+            <tr>
+              <td>Adama</td>
+              <td>NDIAYE</td>
+              <td>nd0023</td>
+              <td>ndiaye@gmail.com</td>
+              <td>Admin</td>              
+              <td>
+                <a href="" class="text-center"
+                   title="Détails">
+                  Détails</a>
+              </td>
+            </tr>
+            <tr>
+              <td>Adama</td>
+              <td>NDIAYE</td>
+              <td>nd0023</td>
+              <td>ndiaye@gmail.com</td>
+              <td>Admin</td>              
+              <td>
+                <a href="" class="text-center"
+                   title="Détails">
+                  Détails</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        
+        <div class="btn-icon-list">
+          
+          <a href="{{ url_for('addUser')}}" >
+            <button class="btn btn-icon btn-success pd-x-20" title="Ajouter"><i
+                class="typcn typcn-plus"></i></button></a> &nbsp;&nbsp;
+
+
+        </div>
+      </div>
+    </div>
+
+
+{% endblock content %}

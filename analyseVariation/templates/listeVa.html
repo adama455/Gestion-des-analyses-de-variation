@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container">
+
+    <h1 class="text-dark d-flex justify-content-center align-items-center py-1 my-4">LISTE DES VALEURS AVERANTES</h1>
+    <div class="card bg-gray-100 bd-10">
+        <div class="card-body">
+
+            <table id="datatable1" class="display responsive nowrap" width="100%">
+                <thead class="bg-primary">
+                    <tr>
+                        <th class="wd-20p text-dark">Identifiant</th>
+                        <th class="wd-10p text-dark">Valeur</th>
+                        <th class="wd-5p text-dark">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AD004</td>
+                        <td>100</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AD002</td>
+                        <td>120</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>AD005</td>
+                        <td>130</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AD011</td>
+                        <td>90</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+
+            <div class="btn-icon-list">
+
+                <a href="{{ url_for('home') }}">
+                    <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button></a>
+                &nbsp;&nbsp;
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
