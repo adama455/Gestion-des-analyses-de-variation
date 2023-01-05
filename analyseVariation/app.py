@@ -49,13 +49,15 @@ def listeAv():
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa")
 def listeVa():
-     return render_template('listeVa.html')  
+    form = RegistrationForm()
+    return render_template('listeVa.html',title='liste VA', form=form)  
  
  
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
 def analyseCause():
-     return render_template('analyse-cause.html')  
+    form = RegistrationForm()
+    return render_template('analyse-cause.html',title='Analyse Cause', form=form)  
  
 
 #Permet a tout utilisateur de verifier son profil
