@@ -24,7 +24,7 @@ def home():
 @app.route("/addUser")
 def addUser():
     form = RegistrationForm()
-    return render_template('add-user.html', title='Régister', form=form)    
+    return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
 @app.route("/change-password")
@@ -35,13 +35,15 @@ def changepassword():
 #Permet a l'admin de visualiser la liste des Utilisateurs
 @app.route("/compte")
 def compte():
-     return render_template('comptes.html') 
+    form = RegistrationForm()
+    return render_template('comptes.html', title='Register', form=form) 
  
  
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
 def listeAv():
-     return render_template('listeAv.html')  
+    form = LoginForm()
+    return render_template('listeAv.html', title='Register', form=form)  
  
  
 #Permet de visualiser la liste des Valeurs Aberantes
