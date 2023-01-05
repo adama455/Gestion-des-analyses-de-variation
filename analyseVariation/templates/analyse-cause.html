@@ -34,15 +34,16 @@
                 </div>
 
                 <div class="btn-icon-list">
-                    <a href="{{ url_for('home') }}">
+                    <a href="#" id="add-analyse">
                         <button class="btn btn-primary  border-0 rounded" title="analyse">Ajouter
                             Analyse</i></button></a>
                     &nbsp;&nbsp;
                 </div>
             </div>
+
             {# ------------------------------------          ------------------------------------------- #}
 
-            <div class="analyse-cause section2">
+            <div class="analyse-cause section2 " id="section2">
                 <div class="row mb-2">
                     <div class="col-3 d-flex flex-column">
                         <label for="identifiant" class="tx-center">Identifient</label>
@@ -64,17 +65,21 @@
                             <input type="text" name="probleme" id="probleme" class="col-12 border border-primary">
                         </div>
                     </div>
-                    <div class="row pourquoi1 mb-2 d-flex align items-center">
-                        <label for="pourquoi1" class="col-3">Pourquoi1</label>
-                        <div class="col-8">
-                            <input type="text" name="pourquoi1" id="pourquoi1" class="col-12">
+                    <div id="div-pourquoi" class="d-flex flex-column">
+
+                        <div class="row pourquoi mb-2 d-flex align-items-center border py-3">
+                            <label for="pourquoi1" class="col-3 fs-3">Pourquoi1</label>
+                            <div class="col-8" id="pourquoi1">
+                                <input type="text" name="pourquoi1" id="pourquoi1" class="col-12">
+                            </div>
+                            <div class="icon-add col-1 d-flex justify-content-end">
+                                <i class="fa-solid fa-circle-plus fs-4" style="cursor: pointer;" id="pourquoi"></i>
+                            </div>
                         </div>
-                        <div class="icon-add col-1 d-flex justify-content-end">
-                            <i class="fa-solid fa-circle-plus fs-4 " style="cursor: pointer;"></i>
-                        </div>
+
                     </div>
                     <div class="icon-add-line">
-                        <i class="fa-solid fa-plus fs-4 " style="cursor: pointer;"></i>
+                        <i class="fa-solid fa-plus fs-4 " style="cursor: pointer;" id="pourquoi-suivant"></i>
                     </div>
                 </div>
                 {# <div class="row pourquoi2 mb-2">
@@ -85,14 +90,16 @@
                 </div> #}
 
                 <div class="btn-icon-list mb-3">
-                    <a href="{{ url_for('home') }}">
+                    <a href="#" id="definir-action">
                         <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
                             Action</i></button></a>
                     &nbsp;&nbsp;
                 </div>
+            </div>
+
             {# ------------------------------------          ------------------------------------------- #}
 
-            <div class="analyse-cause section3">
+            <div class="analyse-cause section3" id="section3">
                 <div class="row mb-3">
                     <div class="col-3 d-flex flex-column">
                         <label for="reference_ac">Ref action</label>
@@ -127,8 +134,6 @@
                 </div>
             </div>
 
-
-            </div>
 
         </div>
 
