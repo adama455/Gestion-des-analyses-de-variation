@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="az-content-body ">
-  <div class="content-header mx-auto text-center mb-4 ">
+  <div class="content-header mg-x-auto text-center mb-4 ">
     <div class="az-content-label mg-b-5">Nouvel Utilisateur</div>
     <p class="mg-b-20">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.</p>
     <small class="">Le mot de passe par default est <span class="text-primary">Sovar@2022, </span> l'utilisateur devra
@@ -30,11 +30,11 @@
             {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
             {% endif %}
           </div>
+
           <div class="col-6">
             {# <label class="form-label mg-b-10">Prénoms : <span class="tx-danger">*</span></label>
             <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> #}
             {{ form.prenom.label(class="form-label mg-b-10") }}
-
             {% if form.prenom.errors %}
             {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
             <div class="invalid-feedback">
@@ -45,7 +45,6 @@
             {% else %}
             {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
             {% endif %}
-
           </div>
         </div>
 
@@ -54,9 +53,7 @@
             {# <label class="form-label mg-b-10">Nom : <span class="tx-danger">*</span></label>
             <input type="text" name="nom" class="form-control wd-380" placeholder="saisir nom" required>
            #}
-
             {{ form.nom.label(class="form-label mg-b-10") }}
-
             {% if form.nom.errors %}
             {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
             <div class="invalid-feedback">
@@ -67,15 +64,12 @@
             {% else %}
             {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
             {% endif %}
-
           </div>
           <div class="col-6">
             {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
             <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
            #}
-
             {{ form.email.label(class="form-label mg-b-10") }}
-
             {% if form.email.errors %}
             {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
             <div class="invalid-feedback">
@@ -86,7 +80,6 @@
             {% else %}
             {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
             {% endif %}
-
           </div>
         </div>
 
@@ -102,7 +95,6 @@
             </select>
           </div><!-- col-4 -->
         </div>
-
         </br>
         <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
         <div class="row row-sm mg-b-0">
@@ -116,17 +108,138 @@
             <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
           </div>
           {% endfor %}
-
           <br>
         </div><br>
         <div class="mg-t-30">
           <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
             Valider</button>
         </div>
+      </form>
     </div>
-    </form>
   </div><!-- az-content-body -->
-
 </div><!-- az-content-body -->
 
+<div class="modal fade" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered az-content-body" role="document">
+    <div class="modal-content card bg-gray-300 bd-10 w-50 mx-auto rounded col-12">
+      <div class="modal-header border-bottom-0 d-flex justify-content-end">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ">
+        <div class="az-content-label mg-b-2 d-flex justify-content-center">Nouvel Utilisateur</div>
+  <p class="d-flex justify-content-center">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.</p>
+  <small class="">Le mot de passe par default est <span class="text-primary">Sovar@2022, </span> l'utilisateur devra
+    le modifier lors de sa première connexion.</small>
+        <div class="d-flex flex-column text-center card-body">
+          <form method="POST" target="cadre2">
+            <div class="row row-sm mg-b-0 mb-3">
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Matricule : <span class="tx-danger">*</span></label>
+                <input type="text" name="matricule" class="form-control wd-380" placeholder="saisir prenom" required>
+               #}
+                {{ form.username.label(class="form-label mg-b-10") }}
+    
+                {% if form.username.errors %}
+                {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
+                <div class="invalid-feedback">
+                  {% for error in form.username.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
+                {% endif %}
+              </div>
+    
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Prénoms : <span class="tx-danger">*</span></label>
+                <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> #}
+                {{ form.prenom.label(class="form-label mg-b-10") }}
+                {% if form.prenom.errors %}
+                {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
+                <div class="invalid-feedback">
+                  {% for error in form.prenom.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="row row-sm mg-b-0 mb-3">
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Nom : <span class="tx-danger">*</span></label>
+                <input type="text" name="nom" class="form-control wd-380" placeholder="saisir nom" required>
+               #}
+                {{ form.nom.label(class="form-label mg-b-10") }}
+                {% if form.nom.errors %}
+                {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
+                <div class="invalid-feedback">
+                  {% for error in form.nom.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
+                {% endif %}
+              </div>
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
+                <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
+               #}
+                {{ form.email.label(class="form-label mg-b-10") }}
+                {% if form.email.errors %}
+                {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
+                <div class="invalid-feedback">
+                  {% for error in form.email.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
+                {% endif %}
+              </div>
+            </div>
+    
+            <div class="row row-sm mg-b-0">
+              <div class="col-12">
+                <br>
+                <label class="form-label mg-b-10">Profil : <span class="tx-danger">*</span></label>
+                <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
+                  <option label="Choisir le profil"></option>
+                  <option value="">Admin</option>
+                  <option value="">Responsable</option>
+                  <option value="">SO</option>
+                </select>
+              </div><!-- col-4 -->
+            </div>
+            </br>
+            <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
+            <div class="row row-sm mg-b-0">
+              <!-- <div class="col-3 form-inline">
+                    <input type="checkbox" value="all" name="plateaux"/>
+                    <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
+                  </div>-->
+              {% for ele in plateaux %}
+              <div class="col-3 form-inline">
+                <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />
+                <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
+              </div>
+              {% endfor %}
+              <br>
+            </div><br>
+            <div class="mg-t-30">
+              <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
+                Valider</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 {% endblock content %}

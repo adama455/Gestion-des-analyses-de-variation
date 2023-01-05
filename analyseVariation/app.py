@@ -16,8 +16,9 @@ def login():
 #La page acceuil de notre application
 @app.route("/home")
 def home():
+    form = RegistrationForm()
    
-    return render_template('home.html')    
+    return render_template('home.html', title='Régister', form=form)    
 
 #Cette page permet a l'administrateur d'ajouter de users
 @app.route("/addUser")

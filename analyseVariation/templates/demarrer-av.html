@@ -3,38 +3,114 @@
 
 <div class="az-content-body ">
   <div class="content-header mx-auto text-center mb-4 ">
-    <div class="az-content-label mg-b-5">Nouvel Utilisateur</div>
-    <p class="mg-b-20">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.</p>
-    <small class="">Le mot de passe par default est <span class="text-primary">Sovar@2022, </span> l'utilisateur devra
-      le modifier lors de sa première connexion.</small>
+    <div class="az-content-label mg-b-5"></div>
+    <p class="mg-b-20"></p>
+    <small class=""> <span class="text-primary"></span></small>
   </div>
 
   <div class="card bg-white bd-10 w-50 mx-auto rounded">
     <div class="card-body">
       <form method="POST" target="cadre2">
+        
+        <!-- Entete du tableau -->
+
         <div class="row row-sm mg-b-0 mb-3 d-flex justify-content-center">
-          <h3 class="text-center text-white bg-primary mg-b-0 col-10">Enregistrement des syntheses d'analyse de variation</h3>
+          <h3 class="text-center text-white bg-primary mg-b-0 col-10 p-2">Enregistrement des syntheses d'analyse de variation</h3>
         </div>
-        <div class="row row-sm mg-b-0">
+        <!-- //////// -->
+        <div class="col-12  d-flex justify-content-between mt-3">
+          <div class="col-2  " style="background-color: #D9D9D9;">
+            <div class="p-2 fs-5">Reference</div>
+          </div>
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Date creation</div>
+          </div>
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Auteur</div>
+          </div>
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Statut</div>
+          </div>
+        </div>
+        <!-- ////// -->
+        <div class="col-12 mt-3" >
+          <div class="p-2 text-center fs-5 col-12" style="background-color: #D9D9D9;">Libelle</div>
+        </div>
+        <!-- ////// -->
+        <!-- //////// -->
+        <div class="col-12  d-flex justify-content-between mt-3">
+          
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">KPI analyse</div>
+          </div>
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Periode</div>
+          </div>
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Equipe</div>
+          </div>
+        </div>
+        <!-- ////// -->
+        <div class="col-12 mt-3" >
+          <div class="p-2 text-center fs-5 col-12" style="background-color: #D9D9D9;">Synthese des resultats</div>
+        </div>
+        <!-- ////// -->
+        <div class="col-12  d-flex justify-content-between mt-3">
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Nbr de mesures</div>
+          </div>
+          <div class="col-2  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Objectif</div>
+          </div>
+          <div class="col-2  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">VSF</div>
+          </div>
+          <div class="col-3  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Mesure a l'objectif</div>
+          </div>
+        </div>
+        <!-- ////// -->
+        <div class="col-12  d-flex justify-content-between mt-3">
+          
+          <div class="col-5 " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Limite de controle superieure</div>
+          </div>
+          <div class="col-4  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Nbr de VA en sur-perf</div>
+          </div>
+        </div>
+        <!-- ////// -->
+        <div class="col-12  d-flex justify-content-between mt-3">
+          
+          <div class="col-5 " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Limite de controle inferieure</div>
+          </div>
+          <div class="col-4  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Nbr de VA en sous-perf</div>
+          </div>
+        </div>
+        <!-- ////// -->
+        
+        <!--<div class="row row-sm mg-b-0">
           <div class="col-12">
             <br>
-            <label class="form-label mg-b-10">Profil : <span class="tx-danger">*</span></label>
             <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
               <option label="Choisir le profil"></option>
               <option value="">Admin</option>
               <option value="">Responsable</option>
               <option value="">SO</option>
             </select>
-          </div><!-- col-4 -->
-        </div>
+          </div>
+        </div>-->
 
-        <div class="row row-sm mg-b-0">
-          
-
-        </div>
-        <div class="mg-t-30">
-          <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
-            Valider</button>
+        <div class="mg-t-30 col-12 d-flex flex-row justify-content-between">
+          <div class="col-2  " style="background-color: #D9D9D9;">
+            <div class="p-2 text-center fs-5">Fichier</div>
+          </div>
+          <div class="col-6 d-flex flex-row justify-content-between">
+            <button type="submit" class="btn btn-az-primary fs-5 rounded-pill"><a class="text-white" href="{{ url_for('home')}}">Sortir</a></button>
+            <button type="submit" class="btn btn-az-primary fs-5 rounded-pill"><i class="fas fa-save"></i><a class="text-white" href="{{ url_for('home')}}">Analyser les causes</a></button>
+          </div>
         </div>
       </form>
     </div>
