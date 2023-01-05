@@ -12,7 +12,6 @@ app.config.update(
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
 
-
 db = SQLAlchemy(app)
 
 def init_base():

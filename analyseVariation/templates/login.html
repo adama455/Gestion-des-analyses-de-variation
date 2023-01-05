@@ -153,7 +153,6 @@
   <script src="/static/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/static/lib/ionicons/ionicons.js"></script>
 
-
   <script src="/static/js/azia.js"></script>
 
   <script>
@@ -165,6 +164,15 @@
         $(this).parent().toggleClass('show');
         $(this).parent().siblings().removeClass('show');
       })
+    })
+<script>
+  $(function () {
+    'use strict'
+    $('.az-sidebar .with-sub').on('click', function (e) {
+      e.preventDefault();
+      $(this).parent().toggleClass('show');
+      $(this).parent().siblings().removeClass('show');
+    })
 
       $(document).on('click touchstart', function (e) {
         e.stopPropagation();

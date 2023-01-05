@@ -34,10 +34,13 @@
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
   <!-- link home  -->
-
   </head>
+
   <body>
 		<div class="wrapper d-flex align-items-stretch ">
+
+      <!-- Le menu sidebar -->
+
 			<nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
 				<div class="p-4 pt-4">
 		  		<div class="az-sidebar-loggedin">
@@ -68,7 +71,7 @@
             <li class="nav-item">
               <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
               <nav class="nav-sub">
-                <a href="" class="nav-sub-link" >Comptes</a>
+                <a href="" id="adduser" class="nav-sub-link" >Comptes</a>
                 <a href="" class="nav-sub-link" >Profils</a>
                 <a href="Logs utilisateurs" class="nav-sub-link" onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
               </nav>
@@ -87,15 +90,20 @@
 						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
 						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
 	        </div>
-
 	      </div>
     	</nav>
 
-        <!-- Page Content  -->
+      <!-- Page Content  -->
+      
       <div id="content" class="p-2">
+
+        <!-- le menu entete  -->
+
         <div class="sticky-top">
         <nav class=" navbar-expand-lg navbar-light bg-primary py-2">
           <div class="d-flex flex-row col-12">
+            
+            <!-- notre bouton toggle du menu sidebar -->
 
             <button type="button" id="sidebarCollapse" class="btn btn-primary">
               <i class="fa fa-bars"></i>
@@ -104,6 +112,9 @@
             <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
+
+            <!-- le logo SO'VAR -->
+
             <div class="div-logo col-2 d-flex align-items-center ">
               <h1 class="az-content-title mg-b-0 mg-b-lg-4 text-center" style="font-size: 0.7em;">
                 <i class="typcn typcn-chart-bar text-dark"></i>&nbsp;
@@ -112,19 +123,21 @@
               </h1>
             </div>
 
+            <!-- le menu -->
+
             <div class="collapse navbar-collapse col-8 d-flex  justify-content-center mg-r-100" id="navbarSupportedContent">
               <nav class="nav az-nav fs-4">
                 <a href="/" class="nav-link  text-white"  data-placement="top"
                   title="Dashboard"> <i class="fas fa-home me-1 fs-5"></i><strong>Dashboard</strong></a>
-                <a href="" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
+                <a href="" id="demarrav" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
                 <a href="{{ url_for('listeAv') }}" class="nav-link text-white"  title="Mes Donnees"><i class="fas fa-list me-1 fs-5" ></i><strong>Liste AV</strong></a>
-                
                 <a href="" class="nav-link text-white"  title="Mon Profil"><i class="fas fa-user me-1 fs-5"></i><strong>Mon Profil</strong></a>
               </nav>
             </div>
 
+            <!-- les icones recherche deconnexion et notificqtion  -->
+
             <div class="col-1" style="margin-right: 0; margin-top: 8px;">
-              
                 <div class="az-header-message d-flex justify-content-end" style="width:100%">
                   <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"><i class="fa fa-search text-white me-3"></i></a>
                   <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="Déconnexion"><i class="fa fa-sign-out text-white me-3"></i></a>
@@ -150,19 +163,11 @@
                     <div class="dropdown-footer"><a href="/pa_horsdelay" target="cadre2">View All Notifications</a></div>
                   </div><!-- dropdown-menu -->
                 </div><!-- az-header-notification -->
-              <!-- az-header-right -->
             </div>
           </div>
         </nav>
 
-        <!--<div class="bg-image">
-          <img src="https://mdbootstrap.com/img/new/standard/city/053.jpg" width="20" height="20" />
-          <div class="mask" style="background-color: rgba(0, 0, 0, 0.6)">
-            <div class="text">
-              <p>Hello There!</p>
-            </div>
-          </div>
-        </div> -->
+        <!-- l'image de fond contsnant le titre -->
 
         <div class="col-12 border bg-image p-0 pb-0 baniere mb-4 " style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 20vh; position: relative;">
           <div>
@@ -171,20 +176,59 @@
           </div>
         </div>
       </div>
-        <div class="az-content-body">
-          {% block content %}{% endblock content %}
-        </div><!-- az-content-body -->
+
+      <!-- CONTENU DES DIFFERENTES PAGES DE L'APPLICATION  -->
+
+      <div class="az-content-body">
+        {% block content %}{% endblock content %}
+      </div><!-- az-content-body -->
+
       </div>
 		</div>
     
-    <div class="az-footer bg-light">
+    <!-- LE FOOTER DE L'APPLICATION -->
 
+    <div class="az-footer bg-light">
        <div class="container-fluid text-dark" >
         <span>
           <img src="/static/img/orange_logo.svg" width="20" height="20" alt=""  title="SONATEL"> SONATEL - DESC/DIS/ISCC</span>
           <span class="mask" style="background-color: rgba(0, 0, 0, 0.6)">&copy; 2022 SO'VAR : Contrôle des KCRP au niveau le plus près de l’activité avec un dispositif de pilotage</span>
       </div>  <!--container -->
     </div> <!-- az-footer -->
+
+    <!-- POPUP DE CHARGEMENT DU FICHIER -->
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0 d-flex justify-content-end">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-title text-center">
+              <h4>Saisir le libelle et charger le fichier</h4>
+            </div>
+            <div class="d-flex flex-column text-center">
+              <form>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="" placeholder="Libelle analyse">
+                </div>
+                <button type="button" class="btn btn-info btn-block btn-round">Fichier</button>
+                <!--<div class="col-12 d-flex flex-row justify-content-between">
+                  <button type="button" class="btn btn-info btn-block btn-round col-3 mg-r-10">
+                  Fichier
+                  </button>
+                  <button type="button" class="btn btn-info btn-block btn-round col-3 rounded-pill btn-az-primary text-white">
+                    <a class="text-white" href="{{ url_for('demarrerav')}}">Valider</a>
+                  </button>
+                </div>-->
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
      <!-- PROFIL MODAL -->
 
@@ -241,7 +285,7 @@
                   </div><!-- col -->
                 </div><!-- row -->
                 <br>
-                <div class="az-content-label tx-13">Modifier Informations</div>
+                              <div class="az-content-label tx-13">Modifier Informations</div>
                 <hr class="col-12">
                 <form action="/update_profil" method="POST">
                 <div class="row row-sm mg-b-0">
@@ -251,21 +295,14 @@
 
                 <input type="text" name="email" class="form-control wd-380" value="{{session.maile}}" required>
 
-                <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
+                            <input type="text" name="matricule" class="form-control wd-380" value="{{session.log}}" hidden>
               </div><!-- col-4 -->
-
-
               <div class="col-lg-6">
                 <br>
                 <label class="form-label mg-b-10">Mot de passe <span class="tx-danger">*</span> :</label>
               <input type="password" name="password" class="form-control wd-380" value="{{session.password}}" required>
-
-
               </div><!-- col-4 -->
-
             </div>
-
-
             <div class="row row-sm mg-b-0">
               <div class="col-lg-6">
                 <br>
@@ -294,7 +331,132 @@
     </form>
     </div><!-- modal -->
 
+    <div class="modal fade" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered az-content-body" role="document">
+        <div class="modal-content card bg-gray-300 bd-10 w-50 mx-auto rounded col-12">
+          <div class="modal-header border-bottom-0 d-flex justify-content-end">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body ">
+            <div class="az-content-label mg-b-2 d-flex justify-content-center">Nouvel Utilisateur</div>
+      <p class="d-flex justify-content-center">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.</p>
+      <small class="">Le mot de passe par default est <span class="text-primary">Sovar@2022, </span> l'utilisateur devra
+        le modifier lors de sa première connexion.</small>
+            <div class="d-flex flex-column text-center card-body">
+              <form method="POST" target="cadre2">
+                <div class="row row-sm mg-b-0 mb-3">
+                  <div class="col-6">
+                    {# <label class="form-label mg-b-10">Matricule : <span class="tx-danger">*</span></label>
+                    <input type="text" name="matricule" class="form-control wd-380" placeholder="saisir prenom" required>
+                   #}
+                    {{ form.username.label(class="form-label mg-b-10") }}
+        
+                    {% if form.username.errors %}
+                    {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.username.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
+                    {% endif %}
+                  </div>
+        
+                  <div class="col-6">
+                    {# <label class="form-label mg-b-10">Prénoms : <span class="tx-danger">*</span></label>
+                    <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> #}
+                    {{ form.prenom.label(class="form-label mg-b-10") }}
+                    {% if form.prenom.errors %}
+                    {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.prenom.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
+                    {% endif %}
+                  </div>
+                </div>
+        
+                <div class="row row-sm mg-b-0 mb-3">
+                  <div class="col-6">
+                    {# <label class="form-label mg-b-10">Nom : <span class="tx-danger">*</span></label>
+                    <input type="text" name="nom" class="form-control wd-380" placeholder="saisir nom" required>
+                   #}
+                    {{ form.nom.label(class="form-label mg-b-10") }}
+                    {% if form.nom.errors %}
+                    {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.nom.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
+                    {% endif %}
+                  </div>
+                  <div class="col-6">
+                    {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
+                    <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
+                   #}
+                    {{ form.email.label(class="form-label mg-b-10") }}
+                    {% if form.email.errors %}
+                    {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.email.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
+                    {% endif %}
+                  </div>
+                </div>
+        
+                <div class="row row-sm mg-b-0">
+                  <div class="col-12">
+                    <br>
+                    <label class="form-label mg-b-10">Profil : <span class="tx-danger">*</span></label>
+                    <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
+                      <option label="Choisir le profil"></option>
+                      <option value="">Admin</option>
+                      <option value="">Responsable</option>
+                      <option value="">SO</option>
+                    </select>
+                  </div><!-- col-4 -->
+                </div>
+                </br>
+                <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
+                <div class="row row-sm mg-b-0">
+                  <!-- <div class="col-3 form-inline">
+                        <input type="checkbox" value="all" name="plateaux"/>
+                        <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
+                      </div>-->
+                  {% for ele in plateaux %}
+                  <div class="col-3 form-inline">
+                    <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />
+                    <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
+                  </div>
+                  {% endfor %}
+                  <br>
+                </div><br>
+                <div class="mg-t-30">
+                  <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
+                    Valider</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
     <!-- ACCOUNT LOGS MODAL -->
+    
     <div id="logs" class="modal fade effect-flip-vertical">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
@@ -315,13 +477,13 @@
                     </thead>
                     <tbody>
                       {% for ele in logs%}
-                      <tr>
-                        <td>{{ele.prenom}}</td>
-                        <td>{{ele.nom}} </td>
-                        <td>{{ele.users_transac}}</td>
-                        <td>{{ele.nom_transac}}</td>
-                        <td>{{ele.heure}}</td>
-                      </tr>
+                        <tr>
+                          <td>{{ele.prenom}}</td>
+                          <td>{{ele.nom}} </td>
+                          <td>{{ele.users_transac}}</td>
+                          <td>{{ele.nom_transac}}</td>
+                          <td>{{ele.heure}}</td>
+                        </tr>
                       {% endfor %}
                     </tbody>
                   </table>

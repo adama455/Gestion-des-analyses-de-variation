@@ -17,3 +17,22 @@
   });
 
 })(jQuery);
+
+/*POPUP DE CHARGEMENT DU FICHIER*/
+
+$('#demarrav').on('click', function(e) {  
+	e.preventDefault();           
+	$('#loginModal').modal('show');
+  	$(function () {
+    	$('[data-toggle="tooltip"]').tooltip()
+  })
+});
+
+
+$('#adduser').on('click', function(e) {  
+	e.preventDefault();           
+	$('#adduserModal').modal('show');
+  	$(function () {
+    	$('[data-toggle="tooltip"]').tooltip()
+  })
+});
