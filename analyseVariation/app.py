@@ -41,19 +41,22 @@ def compte():
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
 def listeAv():
-     return render_template('listeAv.html')  
+    form = RegistrationForm()
+    return render_template('listeAv.html',title='liste AV', form=form)  
  
  
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa")
 def listeVa():
-     return render_template('listeVa.html')  
+    form = RegistrationForm()
+    return render_template('listeVa.html',title='liste VA', form=form)  
  
  
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
 def analyseCause():
-     return render_template('analyse-cause.html')  
+    form = RegistrationForm()
+    return render_template('analyse-cause.html',title='Analyse Cause', form=form)  
  
 
 #Permet a tout utilisateur de verifier son profil
