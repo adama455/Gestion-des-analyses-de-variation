@@ -36,3 +36,11 @@ $('#adduser').on('click', function(e) {
     	$('[data-toggle="tooltip"]').tooltip()
   })
 });
+
+$('#changepwd').on('click', function(e) {  
+	e.preventDefault();           
+	$('#profil').modal('show');
+  	$(function () {
+    	$('[data-toggle="tooltip"]').tooltip()
+  })
+});

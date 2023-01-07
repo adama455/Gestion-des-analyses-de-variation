@@ -1,67 +1,115 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 {% block content %}
 
-    <div class="az-content-label mg-b-5"> MON PROFIL  - Moussa Dembele</div>
+    <div class="az-content-label mg-b-5 "> MON PROFIL  - Moussa Dembele</div>
     <p class="mg-b-20">Informations données utilisateurs.</p>
         <div class="card bd-10 bg-white">
         <div class="card-body">
     <p>
-    
-    <div class="row">
-      <div class="col-md-7 col-xl-7">
-        <div class="az-content-label tx-13 mg-b-25">Mes Informations</div>
-        <div class="az-profile-work-list">
-          <div class="media">
-            <div class="media-logo bg-success"><i class="fas fa-user"></i></div>
-            <div class="media-body">
-              <h6>Prénom & Nom</h6>
-              <span>Moussa Dembele</span>
-    
-            </div><!-- media-body -->
-          </div><!-- media -->
-          <div class="media">
-            <div class="media-logo bg-primary"><i class="fa fa-lock"></i></div>
-            <div class="media-body">
-              <h6>Login </h6>
-              <span>moussa</span>
-    
-            </div><!-- media-body -->
-          </div><!-- media -->
-        </div><!-- az-profile-work-list -->
-    
-    
-      </div><!-- col -->
-      <div class="col-md-5 col-xl-5 mg-t-40 mg-md-t-0">
-        <div class="az-content-label tx-13 mg-b-25">Contact Information</div>
-        <div class="az-profile-contact-list">
-          
-          <div class="media">
-            <div class="media-icon"><i class="fas fa-at"></i></div>
-            <div class="media-body">
-              <span>Email</span>
-              <div>moussa@orange.sn</div>
-            </div><!-- media-body -->
-          </div><!-- media -->
-          <div class="media">
-            <div class="media-icon"><i class="fas fa-user-tie"></i></div>
-            <div class="media-body">
-              <span>Fonction</span>
-              <div>Groupe1</div>
-            </div><!-- media-body -->
-          </div><!-- media -->
-        </div><!-- az-profile-contact-list -->
-      </div><!-- col -->
-    </div><!-- row -->
+    <div class="col-12 d-flex justify-content-center">
+      <div class="row border col-8 d-flex justify-content-around rounded-5">
+        <div class="col-md-5 col-xl-5 p-4 mg-30 ">
+          <div class="az-content-label tx-13 mg-b-25">Mes Informations</div>
+          <div class="az-profile-work-list">
+            <div class="media">
+              <div class="media-logo bg-success"><i class="fas fa-user"></i></div>
+              <div class="media-body">
+                <h6>Prénom & Nom</h6>
+                <span>Moussa Dembele</span>
+              </div><!-- media-body -->
+            </div><!-- media -->
+            <div class="media">
+              <div class="media-logo bg-primary"><i class="fa fa-lock"></i></div>
+              <div class="media-body">
+                <h6>Login </h6>
+                <span>moussa</span>
+              </div><!-- media-body -->
+            </div><!-- media -->
+            <div class="media">
+              <div class="media-logo bg-primary"><i class="fas fa-user-tie"></i></i></div>
+              <div class="media-body">
+                <h6>Fonction </h6>
+                <span>Groupe1</span>
+              </div><!-- media-body -->
+            </div><!-- media -->
+          </div><!-- az-profile-work-list -->
+        </div><!-- col -->
+        <div class="col-md- col-xl-5  p-4 mg-30 d-flex justify-content-end ">
+          <div class="az-profile-contact-list">
+            <div class="az-content-label tx-13 mg-b-25">Contact Information</div>
+            <div class="media">
+              <div class="media-icon"><i class="fas fa-at"></i></div>
+              <div class="media-body">
+                <h6>Email</h6>
+                <div>moussa@orange.sn</div>
+              </div> <!-- media-body -->
+            </div> <!-- media -->
+
+            <div class="media">
+              <div class="media-icon"><i class="fas fa-user-tie"></i></div>
+              <div class="media-body">
+                <h6>Telephone</h6>
+                <div>77 *** ** **</div>
+              </div> <!-- media-body -->
+            </div> <!-- media -->
+
+          </div> <!-- az-profile-contact-list -->
+        </div> <!-- col -->
+        <button id="changepwd" class="bg-primary btn col-8 rounded mg-b-20">
+          <a href="#" class="fs-5 text-white fw-bold ">Modifier mon Mot de passe</a>
+        </button>
+      </div> <!-- row -->
+    </div>
     <br>
-    <div class="az-content-label tx-13 "><a href="" class="text-dark">Modifier mon Mot de passe</a></div>
     <hr class="col-12">
     
     {% block password_change %}
     {% endblock password_change %}
-    
-    
-     
-    </div></div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="profil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered az-content-body" role="document">
+        <div class="modal-content card bg-gray-300 bd-10 w-50 mx-auto rounded col-12">
+          <div class="modal-header border-bottom-0 d-flex justify-content-end">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body ">
+            <div class="az-content-label mg-b-2 d-flex justify-content-center">Nouvel Utilisateur</div>
+      
+            <div class="d-flex flex-column card-body">
+              <form method="POST" target="cadre2">
+                <div class="row-sm mg-b-0 mb-3">
+
+                  <div class="col-12">
+                    <label class="form-label mg-b-10">Ancien mot de passe <span class="tx-danger">*</span></label>
+                    <input type="text" name="matricule" class="form-control wd-380" placeholder="saisir prenom" required>                    
+                  </div>
+        
+                  <div class="col-12">
+                    <label class="form-label mg-b-10">Nouveau mot de passe <span class="tx-danger">*</span></label>
+                    <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label mg-b-10">Confirmer mot de passe<span class="tx-danger">*</span></label>
+                    <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> 
+                  </div>
+                </div>
+
+                </br>
+                <div class="mg-t-30">
+                  <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
+                    Valider</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
     
      
 {% endblock content %}

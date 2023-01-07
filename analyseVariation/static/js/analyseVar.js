@@ -66,7 +66,6 @@ pourquoiSuivant.addEventListener('click', ()=>{
         icon.className='fa-solid fa-circle-plus fs-4 pourquois'
         icon.style="cursor: pointer"
         icon.id="icon_" +i
-        
         divInput.append(input)
         divIcon.append(icon)
         div.append(label, divInput, divIcon)
