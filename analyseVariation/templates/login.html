@@ -51,19 +51,15 @@
   </script>
 
   <form method="post" class="text-start" role="form">
-    
     <!-- MODAL REINIT PASSWORD -->
     <div id="modaldemo8" class="modal fade just-me" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content tx-size-sm bg-white">
-          
           <div class="modal-body tx-left pd-y-20 pd-x-20">
-            
             <h1 class="az-logo"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-orange">
               SO</span>' <span style="color: #009088;">VAR</span>
             </h1>
             <p>Pour une analyse simple, fiable et suivie.<br><br>Merci de renseigner vos paramétres de
-              
               <br>Pour des raisons de sécurité , une demande de modifications de votre mot de passe vous
               sera
               demandée
@@ -71,11 +67,8 @@
               première connexion !
             </p>
             <br>
-            
             <div class="col">
-              
             </div>
-
             <div class="row row-sm mg-b-0">
               <div class="col-12">
                 <div class="input-group input-group-outline mb-3">
@@ -95,13 +88,9 @@
                  {% else %}
                  {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
                  {% endif %}                
-                
                 </div><!-- input-group -->
-
-
               </div><!-- col-4 -->
             </div>
-
             <div class="row row-sm mg-b-0 mt-3 ">
               <div class="col-12">
                 <div class="input-group input-group-outline mb-3">
@@ -121,19 +110,15 @@
                   {% else %}
                   {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Mot de passe", id="id_password") }}
                   {% endif %}
-                
                 </div><!-- input-group -->
               </div><!-- col-4 -->
             </div>
-
             <div class=" text-right"><br>
               <button type="submit" class="btn  btn-az-secondary btn-rounded btn-sm pd-x-25"><i
                   class="fas fa-sign-in-alt"></i>
                 Connexion</button>
             </div>
-
             <h1 class="az-logo  "><img src="/static/img/orange_logo.svg" /> </h1>
-
             <!-- az-signup-header -->
             <div class="az-signup-footer text-right">
               <p> <a href="#" data-toggle="modal" class="text-right text-info" data-target="#Reinit">Mot
@@ -142,9 +127,7 @@
               </p>
             </div><!-- az-signin-footer -->
           </div><!-- modal-body -->
-
         </div><!-- modal-content -->
-
       </div><!-- modal-dialog -->
     </div>
   </form>
@@ -152,7 +135,6 @@
   <script src="/static/lib/jquery/jquery.min.js"></script>
   <script src="/static/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/static/lib/ionicons/ionicons.js"></script>
-
   <script src="/static/js/azia.js"></script>
 
   <script>
@@ -165,15 +147,13 @@
         $(this).parent().siblings().removeClass('show');
       })
     })
-<script>
   $(function () {
     'use strict'
     $('.az-sidebar .with-sub').on('click', function (e) {
       e.preventDefault();
       $(this).parent().toggleClass('show');
       $(this).parent().siblings().removeClass('show');
-    })
-
+    });
       $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
@@ -185,7 +165,6 @@
           }
         }
       });
-
 
       $('#azSidebarToggle').on('click', function (e) {
         e.preventDefault();
