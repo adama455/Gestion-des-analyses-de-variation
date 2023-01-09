@@ -69,7 +69,19 @@ def analyseCause():
     form = RegistrationForm()
     return render_template('analyse-cause.html',title='Analyse Cause', form=form)  
  
-
+#Permet de Méttre à jours une action:::::::::::::::::
+@app.route("/miseAjourAc")
+def miseAjourAc():
+    form = RegistrationForm()
+    return render_template('mise-a-jour-action.html',title='Analyse Cause', form=form)  
+ 
+#Permet de Méttre à jours une action:::::::::::::::::
+@app.route("/rejeterAv")
+def rejeterAv():
+    form = RegistrationForm()
+    return render_template('rejeterAv.html',title='Analyse Cause', form=form)  
+ 
+ 
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil")
 def profil():
