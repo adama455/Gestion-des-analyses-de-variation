@@ -45,6 +45,16 @@ def listeAv():
     form = LoginForm()
     return render_template('listeAv.html', title='Register', form=form)  
  
+@app.route("/listepa")
+def listepa():
+    form = LoginForm()
+    return render_template('listepa.html', title='Register', form=form)  
+ 
+@app.route("/editpa")
+def editpa():
+    form = LoginForm()
+    return render_template('editpa.html', title='Register', form=form)  
+ 
  
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa")
@@ -75,7 +85,8 @@ def rejeterAv():
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil")
 def profil():
-    return render_template('profil.html')    
+    form = RegistrationForm()
+    return render_template('profil.html',title='Analyse Cause', form=form)    
 
 #enregistrement d'une AV par le MO
 @app.route("/analyse_agent")
