@@ -1,0 +1,94 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container">
+
+    <h1 class="text-dark d-flex justify-content-center align-items-center py-1 my-4">MIS D'UN PLAN D'ACTION</h1>
+    {# <div class="row w-100  recherche mx-0  my-3">
+        <div class="col-8 d-flex">
+            <input type="search" name="recherche" id="" placeholder="Rechercher une AV"
+                class="w-50  border border-1 p-3 shadow-lg rounded">
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+            <button class="btn btn-info" class="">Lancer</button>
+        </div>
+    </div> #}
+    <div class="card bg-gray-100 bd-10">
+        <div class="card-body">
+            <table id="" class="display responsive nowrap mg-b-30 fs-5 border" width="100%">
+                <thead class="bg-primary">
+                    <tr>
+                        <th class="wd-20p text-dark">Reference AV</th>
+                        <th class="wd-40p text-dark">Libelle AV</th>
+                        <th class="wd-10p text-dark">Responsable AV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AD004</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAM</td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <table id="" class="table fs-5 border">
+                <thead>
+                    <tr>
+                        <th class="col-3 fs-5">Rechercher action</th>
+                        <th class="col-4 fs-5">Libelle AV</th>
+                        <th class="col-3 fs-5">Responsable AV</th>
+                        <th class="col-1 fs-5">Statut</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr>
+                        <td>AD004</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAM</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:35px; width:60px;">
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <table class="table border ">
+                <thead>
+                    <tr>
+                        <th class="col-12 fs-5 text-center">Libellé action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fs-5">libelle_action</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <form>
+                <div class="form-group fs-5">
+                  <label for="exampleFormControlTextarea1">Saisir un commentaire</label>
+                  <textarea class="form-control fs-5" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+            </form>
+            <div class="d-flex row col-6 ">
+                <div class="btn-icon-list col-2 mg-r-20">
+                    <a href="{{ url_for('home') }}">
+                        <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button></a>
+                    &nbsp;&nbsp;
+                </div>
+                <div class="btn-icon-list col-2">
+                    <a href="{{ url_for('home') }}">
+                        <button class="btn btn-primary  border-0 rounded" title="Sortir">Valider</i></button></a>
+                    &nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
