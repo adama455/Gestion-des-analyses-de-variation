@@ -3,198 +3,195 @@
 
 
 
-    <div class="az-content-label mg-b-5">Gestion des Utilisateurs</div>
-    <p class="mg-b-20">Monitoring et gestion des utilisateurs.</p>
-    
-    <div class="card bg-gray-100 bd-10">
-      <div class="card-body">
+<div class="az-content-label mg-b-5">Gestion des Utilisateurs</div>
+<p class="mg-b-20">Monitoring et gestion des utilisateurs.</p>
 
-        <table id="datatable1" class="display responsive nowrap" width="100%">
-          <thead class="bg-primary">
-            <tr>
-              <th class="wd-20p text-dark">Prénoms</th>
-              <th class="wd-10p text-dark">Nom</th>
-              <th class="wd-15p text-dark">Matricule</th>        
-              <th class="wd-15p text-dark">Email</th>
-              <th class="wd-15p text-dark">Profil</th>
-              <th class="wd-10p text-dark">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Adama</td>
-              <td>NDIAYE</td>
-              <td>nd0023</td>
-              <td>ndiaye@gmail.com</td>
-              <td>Admin</td>              
-              <td>
-                <a href="" class="text-center"
-                   title="Détails">
-                  Détails</a>
-              </td>
-            </tr>
-            <tr>
-              <td>Adama</td>
-              <td>NDIAYE</td>
-              <td>nd0023</td>
-              <td>ndiaye@gmail.com</td>
-              <td>Admin</td>              
-              <td>
-                <a href="" class="text-center"
-                   title="Détails">
-                  Détails</a>
-              </td>
-            </tr>
-            <tr>
-              <td>Adama</td>
-              <td>NDIAYE</td>
-              <td>nd0023</td>
-              <td>ndiaye@gmail.com</td>
-              <td>Admin</td>              
-              <td>
-                <a href="" class="text-center"
-                   title="Détails">
-                  Détails</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <br>
-        
-        <div class="btn-icon-list">
-          
-          <a id="adduser" href="" >
-            <button class="btn btn-icon btn-success pd-x-20" title="Ajouter"><i
-                class="typcn typcn-plus"></i></button></a> &nbsp;&nbsp;
+<div class="card bg-gray-100 bd-10">
+  <div class="card-body">
+
+    <table id="datatable1" class="display responsive nowrap" width="100%">
+      <thead class="bg-primary">
+        <tr>
+          <th class="wd-20p text-dark">Prénoms</th>
+          <th class="wd-10p text-dark">Nom</th>
+          <th class="wd-15p text-dark">Matricule</th>
+          <th class="wd-15p text-dark">Email</th>
+          <th class="wd-15p text-dark">Profil</th>
+          <th class="wd-10p text-dark">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Adama</td>
+          <td>NDIAYE</td>
+          <td>nd0023</td>
+          <td>ndiaye@gmail.com</td>
+          <td>Admin</td>
+          <td>
+            <a href="" class="text-center" title="Détails">
+              Détails</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Adama</td>
+          <td>NDIAYE</td>
+          <td>nd0023</td>
+          <td>ndiaye@gmail.com</td>
+          <td>Admin</td>
+          <td>
+            <a href="" class="text-center" title="Détails">
+              Détails</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Adama</td>
+          <td>NDIAYE</td>
+          <td>nd0023</td>
+          <td>ndiaye@gmail.com</td>
+          <td>Admin</td>
+          <td>
+            <a href="" class="text-center" title="Détails">
+              Détails</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+
+    <div class="btn-icon-list">
+
+      <a id="adduser" href="">
+        <button class="btn btn-icon btn-success pd-x-20" title="Ajouter"><i class="typcn typcn-plus"></i></button></a>
+      &nbsp;&nbsp;
 
 
-        </div>
-      </div>
     </div>
+  </div>
+</div>
 
-    <div class="modal fade" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered az-content-body" role="document">
-        <div class="modal-content card bg-gray-300 bd-10 w-50 mx-auto rounded col-12">
-          <div class="modal-header border-bottom-0 d-flex justify-content-end">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body ">
-            <div class="az-content-label mg-b-2 d-flex justify-content-center">Nouvel Utilisateur</div>
-      <p class="d-flex justify-content-center">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.</p>
-      <small class="">Le mot de passe par default est <span class="text-primary">Sovar@2022, </span> l'utilisateur devra
-        le modifier lors de sa première connexion.</small>
-            <div class="d-flex flex-column text-center card-body">
-              <form method="POST" target="cadre2">
-                <div class="row row-sm mg-b-0 mb-3">
-                  <div class="col-6">
-                    {# <label class="form-label mg-b-10">Matricule : <span class="tx-danger">*</span></label>
-                    <input type="text" name="matricule" class="form-control wd-380" placeholder="saisir prenom" required>
-                   #}
-                    {{ form.username.label(class="form-label mg-b-10") }}
-        
-                    {% if form.username.errors %}
-                    {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
-                    <div class="invalid-feedback">
-                      {% for error in form.username.errors %}
-                      <span> {{ error }} </span>
-                      {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
-                    {% endif %}
-                  </div>
-        
-                  <div class="col-6">
-                    {# <label class="form-label mg-b-10">Prénoms : <span class="tx-danger">*</span></label>
-                    <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> #}
-                    {{ form.prenom.label(class="form-label mg-b-10") }}
-                    {% if form.prenom.errors %}
-                    {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
-                    <div class="invalid-feedback">
-                      {% for error in form.prenom.errors %}
-                      <span> {{ error }} </span>
-                      {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
-                    {% endif %}
-                  </div>
+<div class="modal  fade pt-0" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered az-content-body" role="document">
+    <div class="modal-content card bg-gray-300 bd-10 w-50 mx-auto rounded col-12">
+      <div class="modal-header border-bottom-0 d-flex justify-content-end">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Nouvel Utilisateur</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pt-0 ">
+        {# <div class="az-content-label mg-b-10 d-flex justify-content-center">Nouvel Utilisateur</div> #}
+        <div class="d-flex justify-content-center">Renseigner les champs oblogatoires avec Asterisk en rouge pour valider.
+        </div>
+          <small class="text-center">Le mot de passe par default est 
+            <span class="text-primary ">Sovar@2022,</span> l'utilisateur devra le modifier lors de sa première connexion.
+          </small>
+        <div class="d-flex flex-column card-body mx-0 px-0">
+          <form method="POST" target="cadre2" >
+            <div class="row row-sm mg-b-0 mb-3">
+              <div class="col-6">
+               
+                {{ form.username.label(class="form-label mg-b-5") }}
+
+                {% if form.username.errors %}
+                {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
+                <div class="invalid-feedback">
+                  {% for error in form.username.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
                 </div>
-        
-                <div class="row row-sm mg-b-0 mb-3">
-                  <div class="col-6">
-                    {# <label class="form-label mg-b-10">Nom : <span class="tx-danger">*</span></label>
+                {% else %}
+                {{ form.username(class="form-control wd-380", placeholder="saisir maticule") }}
+                {% endif %}
+              </div>
+
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Prénoms : <span class="tx-danger">*</span></label>
+                    <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> #}
+                {{ form.prenom.label(class="form-label mg-b-5") }}
+                {% if form.prenom.errors %}
+                {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
+                <div class="invalid-feedback">
+                  {% for error in form.prenom.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row row-sm mg-b-0 mb-3">
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Nom : <span class="tx-danger">*</span></label>
                     <input type="text" name="nom" class="form-control wd-380" placeholder="saisir nom" required>
                    #}
-                    {{ form.nom.label(class="form-label mg-b-10") }}
-                    {% if form.nom.errors %}
-                    {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
-                    <div class="invalid-feedback">
-                      {% for error in form.nom.errors %}
-                      <span> {{ error }} </span>
-                      {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
-                    {% endif %}
-                  </div>
-                  <div class="col-6">
-                    {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
+                {{ form.nom.label(class="form-label mg-b-5") }}
+                {% if form.nom.errors %}
+                {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
+                <div class="invalid-feedback">
+                  {% for error in form.nom.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
+                {% endif %}
+              </div>
+              <div class="col-6">
+                {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
                     <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
                    #}
-                    {{ form.email.label(class="form-label mg-b-10") }}
-                    {% if form.email.errors %}
-                    {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
-                    <div class="invalid-feedback">
-                      {% for error in form.email.errors %}
-                      <span> {{ error }} </span>
-                      {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
-                    {% endif %}
-                  </div>
+                {{ form.email.label(class="form-label mg-b-5") }}
+                {% if form.email.errors %}
+                {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
+                <div class="invalid-feedback">
+                  {% for error in form.email.errors %}
+                  <span> {{ error }} </span>
+                  {% endfor %}
                 </div>
-        
-                <div class="row row-sm mg-b-0">
-                  <div class="col-12">
-                    <br>
-                    <label class="form-label mg-b-10">Profil : <span class="tx-danger">*</span></label>
-                    <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
-                      <option label="Choisir le profil"></option>
-                      <option value="">Admin</option>
-                      <option value="">Responsable</option>
-                      <option value="">SO</option>
-                    </select>
-                  </div><!-- col-4 -->
-                </div>
-                </br>
-                <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
-                <div class="row row-sm mg-b-0">
-                  <!-- <div class="col-3 form-inline">
+                {% else %}
+                {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row row-sm mg-b-0">
+              <div class="col-12">
+                <br>
+                <label class="form-label mg-b-10">Profil : <span class="tx-danger">*</span></label>
+                <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
+                  <option label="Choisir le profil"></option>
+                  <option value="">Admin</option>
+                  <option value="">Responsable</option>
+                  <option value="">SO</option>
+                </select>
+              </div><!-- col-4 -->
+            </div>
+            </br>
+            <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
+            <div class="row row-sm mg-b-0">
+              <!-- <div class="col-3 form-inline">
                         <input type="checkbox" value="all" name="plateaux"/>
                         <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
                       </div>-->
-                  {% for ele in plateaux %}
-                  <div class="col-3 form-inline">
-                    <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />
-                    <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
-                  </div>
-                  {% endfor %}
-                  <br>
-                </div><br>
-                <div class="mg-t-30">
-                  <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
-                    Valider</button>
-                </div>
-              </form>
-          </div>
+              {% for ele in plateaux %}
+              <div class="col-3 form-inline">
+                <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />
+                <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
+              </div>
+              {% endfor %}
+              <br>
+            </div><br>
+            <div class="mg-t-30">
+              <button type="submit" class="btn btn-block btn-az-primary pd-x-20"><i class="fas fa-save"></i>
+                Valider</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    </div>
+  </div>
+</div>
 
 
 {% endblock content %}
