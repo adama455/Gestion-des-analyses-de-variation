@@ -18,4 +18,5 @@ class User(db.Model):
         self.username=username
         self.email=email
 
+
 base.init_base()
