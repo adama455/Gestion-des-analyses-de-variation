@@ -1,9 +1,11 @@
+import sys
+sys.path.append('.')
+sys.path.append('..')
 from sqlalchemy import Boolean, Column,String,Integer
-import base
+from analyseVariation import db, init_base
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
 
-db= base.db
 
 class User(db.Model):
     __tablename__='users'
@@ -31,9 +33,9 @@ class ActionProgramme(db.Model):
         self.id = id
         self.action = action
         self.porteur = porteur
-        self.echeance = None
-        self.status = None
-        self.commentaire = None
+        self.echeance = echeance
+        self.status = statut
+        self.commentaire = commentaire
 
     def Valider(self, ):
         pass
@@ -105,7 +107,7 @@ class Fichier(db.Model):
     def Importer(self, ):
         pass
 
-class Prourquoi(db.Model):
+class Pourquoi(db.Model):
     __tablename__='pourquoi'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
@@ -128,5 +130,14 @@ class ValeursAberrante(db.Model):
     def Analyser(self, ):
         pass
 
+class Profil(db.Model):
+    __tablename__='profil'
+    id = db.Column(db.Integer, primary_key=True)
+    libelle = db.Column(db.String(80))
 
-base.init_base()
+    def __init__(self, id, libelle):
+        self.id = id
+        self.libelle = libelle
+
+
+init_base()
