@@ -1,11 +1,16 @@
+import sys
+sys.path.append('.')
+sys.path.append('..')
 from sqlalchemy import Boolean, Column,String,Integer
-import base
+# import base
+from analyseVariation import db, init_base
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
 
-db= base.db
+# db= base.db
 
 class User(db.Model):
+    __table_args__ = {'extend_existing': True} 
     __tablename__='users'
     id=db.Column(db.Integer, primary_key=True)
     nom=db.Column(db.String(50))
@@ -20,6 +25,7 @@ class User(db.Model):
         self.email=email
 
 class ActionProgramme(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='action_programme'
     id=db.Column(db.Integer, primary_key=True)
     action=db.Column(db.String(80))
@@ -31,9 +37,9 @@ class ActionProgramme(db.Model):
         self.id = id
         self.action = action
         self.porteur = porteur
-        self.echeance = None
-        self.status = None
-        self.commentaire = None
+        self.echeance = echeance
+        self.statut = statut
+        self.commentaire = commentaire
 
     def Valider(self, ):
         pass
@@ -42,6 +48,7 @@ class ActionProgramme(db.Model):
         pass
 
 class Cause(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='causes'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
@@ -55,6 +62,7 @@ class Cause(db.Model):
         self.pourquoi = pourquoi
 
 class Statut(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='statut'
     id = db.Column(db.Integer, primary_key=True)
     valide = db.Column(db.String(80))
@@ -68,6 +76,7 @@ class Statut(db.Model):
         self.cloture = cloture
 
 class Enregistrement_AV(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='enregistrement_av'
     id = db.Column(db.Integer, primary_key=True)
     agent = db.Column(db.String(80))
@@ -93,6 +102,7 @@ class Enregistrement_AV(db.Model):
 
 
 class Fichier(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='fichier'
     id = db.Column(db.Integer, primary_key=True)
     valeur = db.Column(db.Integer)
@@ -106,6 +116,7 @@ class Fichier(db.Model):
         pass
 
 class Prourquoi(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='pourquoi'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
@@ -115,6 +126,7 @@ class Prourquoi(db.Model):
         self.libelle = libelle
 
 class ValeursAberrante(db.Model):
+    __table_args__ = {'extend_existing': True}
     __tablename__='valeurs_aberante'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
@@ -129,4 +141,4 @@ class ValeursAberrante(db.Model):
         pass
 
 
-base.init_base()
+init_base()

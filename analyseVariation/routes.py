@@ -1,17 +1,15 @@
-from flask import Flask, render_template, url_for, request
-from flask_sqlalchemy import SQLAlchemy 
+from flask import Flask, render_template, url_for, flash, redirect, request
+from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm
-from analyseVariation import  app, db 
+from analyseVariation import  app, db
+from analyseVariation.models import User
+
 #from config import get_config
 
+# app = Flask(__name__)
 
-#la racine ou page connexion des utilisateurs
+# app.config['SECRET_KEY'] = '7540d096a1af7602423becbadf2f2df8'
 
-@app.route('/')
-@app.route("/login")
-def login():
-    form = LoginForm()
-    return render_template('login.html', title='Login', form=form)    
 
 #La page acceuil de notre application
 @app.route("/home")
@@ -21,10 +19,31 @@ def home():
     return render_template('home.html', title='Régister', form=form)    
 
 #Cette page permet a l'administrateur d'ajouter de users
-@app.route("/addUser")
+@app.route("/addUser", methods=['GET', 'POST'])
 def addUser():
     form = RegistrationForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User(
+                prenom=form.prenom.data,
+                nom=form.nom.data,
+                username=form.username.data,
+                email=form.email.data
+                    )
+            db.session.add(user)
+            db.session.commit()
+            flash('Votre compte a été créé avec succès!')
+            return redirect(url_for('login'))
+    
     return render_template('add-user.html', title='Register', form=form)    
+
+#la racine ou page connexion des utilisateurs
+@app.route('/')
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)    
+
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
 @app.route("/change-password")
@@ -33,7 +52,7 @@ def changepassword():
     return render_template('changepassword.html')    
 
 #Permet a l'admin de visualiser la liste des Utilisateurs
-@app.route("/compte")
+@app.route("/compte", methods=['GET', 'POST'])
 def compte():
     form = RegistrationForm()
     return render_template('comptes.html', title='Register', form=form) 
