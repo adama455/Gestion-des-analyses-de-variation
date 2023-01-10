@@ -2,12 +2,18 @@ import sys
 sys.path.append('.')
 sys.path.append('..')
 from sqlalchemy import Boolean, Column,String,Integer
+<<<<<<< HEAD
 # import base
+=======
+>>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
 from analyseVariation import db, init_base
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
 
+<<<<<<< HEAD
 # db= base.db
+=======
+>>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
 
 class User(db.Model):
     __table_args__ = {'extend_existing': True} 
@@ -38,7 +44,11 @@ class ActionProgramme(db.Model):
         self.action = action
         self.porteur = porteur
         self.echeance = echeance
+<<<<<<< HEAD
         self.statut = statut
+=======
+        self.status = statut
+>>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
         self.commentaire = commentaire
 
     def Valider(self, ):
@@ -115,8 +125,12 @@ class Fichier(db.Model):
     def Importer(self, ):
         pass
 
+<<<<<<< HEAD
 class Prourquoi(db.Model):
     __table_args__ = {'extend_existing': True}
+=======
+class Pourquoi(db.Model):
+>>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
     __tablename__='pourquoi'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
@@ -139,6 +153,15 @@ class ValeursAberrante(db.Model):
 
     def Analyser(self, ):
         pass
+
+class Profil(db.Model):
+    __tablename__='profil'
+    id = db.Column(db.Integer, primary_key=True)
+    libelle = db.Column(db.String(80))
+
+    def __init__(self, id, libelle):
+        self.id = id
+        self.libelle = libelle
 
 
 init_base()

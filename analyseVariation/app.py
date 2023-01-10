@@ -1,14 +1,29 @@
+<<<<<<< HEAD
 from flask import Flask, render_template, url_for, request
 from flask_sqlalchemy import SQLAlchemy 
 from analyseVariation.forms import  RegistrationForm, LoginForm
 from analyseVariation import  app, db 
 #from config import get_config
 
+=======
+import sys
+sys.path.append('.')
+sys.path.append('..')
+from flask import Flask, render_template, url_for, request, redirect, flash
+from flask_sqlalchemy import SQLAlchemy
+from analyseVariation.forms import  RegistrationForm, LoginForm
+from analyseVariation.models import User
+from analyseVariation import app, db
+
+#app = Flask(__name__)
+
+#app.config['SECRET_KEY'] = '7540d096a1af7602423becbadf2f2df8'
+>>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
 
 #la racine ou page connexion des utilisateurs
 
 @app.route('/')
-@app.route("/login")
+@app.route("/login", methods=('GET', 'POST'))
 def login():
     form = LoginForm()
     return render_template('login.html', title='Login', form=form)    
@@ -21,9 +36,16 @@ def home():
     return render_template('home.html', title='Régister', form=form)    
 
 #Cette page permet a l'administrateur d'ajouter de users
-@app.route("/addUser")
+@app.route("/addUser", methods=('GET', 'POST'))
 def addUser():
     form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(prenom=form.prenom.data, nom=form.nom.data, username=form.username.data, email=form.email.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Votre compte a été bien créé')
+
+        return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
@@ -33,9 +55,10 @@ def changepassword():
     return render_template('changepassword.html')    
 
 #Permet a l'admin de visualiser la liste des Utilisateurs
-@app.route("/compte")
+@app.route("/compte", methods=('GET', 'POST'))
 def compte():
     form = RegistrationForm()
+
     return render_template('comptes.html', title='Register', form=form) 
  
  
@@ -43,6 +66,7 @@ def compte():
 @app.route("/listeAv")
 def listeAv():
     form = LoginForm()
+
     return render_template('listeAv.html', title='Register', form=form)  
  
 @app.route("/listepa")
