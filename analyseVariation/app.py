@@ -29,8 +29,12 @@ def home():
 @app.route("/addUser", methods=('GET', 'POST'))
 def addUser():
     form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(prenom=form.prenom.data, nom=form.nom.data, username=form.username.data, email=form.email.data)
+    if request.method=='POST':
+        prenom=request.args.get('prenom')
+        print('test ', form.prenom.data)
+        #if form.validate_on_submit():
+        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+        print(user)
         db.session.add(user)
         db.session.commit()
         flash('Votre compte a été bien créé')
