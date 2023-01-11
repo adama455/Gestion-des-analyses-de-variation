@@ -30,18 +30,17 @@ def home():
 @app.route("/addUser", methods=('GET', 'POST'))
 def addUser():
     form = RegistrationForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            username = request.form['username']
-            prenom = request.form['prenom']
-            nom = request.form['nom']
-            email = request.form['email']
-            users = User(username=username, prenom=prenom, nom=nom, email=email)
-            db.session.add(users)
-            db.session.commit()
-            flash('Votre compte a été bien créé')
+    if request.method=='POST':
+        prenom=request.args.get('prenom')
+        print('test ', form.prenom.data)
+        #if form.validate_on_submit():
+        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+        print(user)
+        db.session.add(user)
+        db.session.commit()
+        flash('Votre compte a été bien créé')
 
-            return redirect(url_for('login'))
+        return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs

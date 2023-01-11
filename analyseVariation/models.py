@@ -16,9 +16,10 @@ class User(db.Model):
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
 
-    def __init__(self,id,name,username,email):
+    def __init__(self,id,nom, prenom, username,email):
         self.id=id
-        self.name=name
+        self.nom=nom
+        self.prenom=prenom
         self.username=username
         self.email=email
 
