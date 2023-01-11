@@ -13,17 +13,17 @@ from analyseVariation import app, db
 
 #la racine ou page connexion des utilisateurs
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 @app.route("/login", methods=('GET', 'POST'))
 def login():
     form = LoginForm()
     if request.method=='POST':
-        
         print(form.email.data)
-        #data = User.query.filter_by(username='moussa83').first()
-        data = User.query.all()
-        print(data)
-        return redirect(url_for('home'))
+        data = User.query.filter_by(username=form.email.data).first()
+        #data = User.query.all()
+        print(data.username)
+        if data.password==form.password.data:
+            return redirect(url_for('home'))
 
     return render_template('login.html', title='Login', form=form)    
 
@@ -42,15 +42,11 @@ def addUser():
         prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
         #if form.validate_on_submit():
-<<<<<<< HEAD
-        user = User(1, form.nom.data, form.prenom.data, form.username.data, form.email.data)
-=======
         user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data)
->>>>>>> 3b47e49950499073301abd86f8acbbc54bc5bf89
         print(user)
         db.session.add(user)
         db.session.commit()
-        flash('Votre compte a été bien créé')
+        #flash('Votre compte a été bien créé')
 
         return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)    
@@ -68,7 +64,7 @@ def compte():
     if request.method=='POST':
         print('test ', form.prenom.data)
         #if form.validate_on_submit():
-        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+        user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data)
         print(user)
         db.session.add(user)
         db.session.commit()
