@@ -63,15 +63,17 @@ def changepassword():
 def compte():
     form = RegistrationForm()
     if request.method=='POST':
+        prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
         if form.validate_on_submit():
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
-            user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
+            user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
             print(user)
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé','success')
-            return redirect(url_for('login'))
+        return redirect(url_for('login'))
+            
     return render_template('comptes.html', title='Register', form=form) 
  
  
