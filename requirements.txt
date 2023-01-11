@@ -3,3 +3,4 @@ flask-sqlalchemy==3.0.2
 Flask-WTF
 email-validator
 mysqlclient==2.1.1
+Werkzeug ==2.1.1
