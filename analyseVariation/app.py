@@ -5,7 +5,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm
 from analyseVariation.models import User
-from analyseVariation import app, db
+from analyseVariation import app, db, bcrypt
 
 #app = Flask(__name__)
 
@@ -33,14 +33,14 @@ def addUser():
     if request.method=='POST':
         prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
-        #if form.validate_on_submit():
-        user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data)
-        print(user)
-        db.session.add(user)
-        db.session.commit()
-        flash('Votre compte a été bien créé')
-
-        return redirect(url_for('login'))
+        if form.validate_on_submit():
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
+            user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
+            print(user)
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Votre compte a été bien créé', 'success')
+            return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs

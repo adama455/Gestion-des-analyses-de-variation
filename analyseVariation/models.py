@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')
 sys.path.append('..')
-from sqlalchemy import Boolean, Column, String, Integer
+# from sqlalchemy import Boolean, Column, String, Integer
 from analyseVariation import db, init_base
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
@@ -15,12 +15,15 @@ class User(db.Model):
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    
 
-    def __init__(self,nom, prenom, username,email):
+    def __init__(self,nom, prenom, username,email, password):
         self.nom=nom
         self.prenom=prenom
         self.username=username
         self.email=email
+        self.password=password
 
 class ActionProgramme(db.Model):
     __table_args__ = {'extend_existing': True}

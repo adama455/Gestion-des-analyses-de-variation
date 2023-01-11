@@ -1,7 +1,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '7540d096a1af7602423becbadf2f2df8'
@@ -14,6 +14,7 @@ app.config.update(
 )
 
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 def init_base():
     with app.app_context():

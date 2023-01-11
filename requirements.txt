@@ -4,3 +4,4 @@ Flask-WTF
 email-validator
 mysqlclient==2.1.1
 Werkzeug ==2.1.1
+flask-bcrypt==1.0.1
