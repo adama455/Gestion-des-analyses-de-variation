@@ -2,27 +2,19 @@ import sys
 sys.path.append('.')
 sys.path.append('..')
 from sqlalchemy import Boolean, Column,String,Integer
-<<<<<<< HEAD
-# import base
-=======
->>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
 from analyseVariation import db, init_base
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
 
-<<<<<<< HEAD
-# db= base.db
-=======
->>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
 
 class User(db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='users'
     id=db.Column(db.Integer, primary_key=True)
-    nom=db.Column(db.String(50))
-    prenom=db.Column(db.String(50))
-    username=db.Column(db.String(50))
-    email=db.Column(db.String(50))
+    nom=db.Column(db.String(50), nullable=False)
+    prenom=db.Column(db.String(150), nullable=False)
+    username=db.Column(db.String(50), unique=True, nullable=False)
+    email=db.Column(db.String(50), unique=True, nullable=False)
 
     def __init__(self,id,name,username,email):
         self.id=id
@@ -44,11 +36,7 @@ class ActionProgramme(db.Model):
         self.action = action
         self.porteur = porteur
         self.echeance = echeance
-<<<<<<< HEAD
-        self.statut = statut
-=======
         self.status = statut
->>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
         self.commentaire = commentaire
 
     def Valider(self, ):
@@ -125,12 +113,7 @@ class Fichier(db.Model):
     def Importer(self, ):
         pass
 
-<<<<<<< HEAD
-class Prourquoi(db.Model):
-    __table_args__ = {'extend_existing': True}
-=======
 class Pourquoi(db.Model):
->>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
     __tablename__='pourquoi'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))

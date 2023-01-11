@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-from flask import Flask, render_template, url_for, request
-from flask_sqlalchemy import SQLAlchemy 
-from analyseVariation.forms import  RegistrationForm, LoginForm
-from analyseVariation import  app, db 
-#from config import get_config
-
-=======
 import sys
 sys.path.append('.')
 sys.path.append('..')
@@ -18,7 +10,6 @@ from analyseVariation import app, db
 #app = Flask(__name__)
 
 #app.config['SECRET_KEY'] = '7540d096a1af7602423becbadf2f2df8'
->>>>>>> 3c8cb3fdc57c701c65e3ab85a69e12fce8943c7f
 
 #la racine ou page connexion des utilisateurs
 
@@ -39,13 +30,18 @@ def home():
 @app.route("/addUser", methods=('GET', 'POST'))
 def addUser():
     form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(prenom=form.prenom.data, nom=form.nom.data, username=form.username.data, email=form.email.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Votre compte a été bien créé')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            username = request.form['username']
+            prenom = request.form['prenom']
+            nom = request.form['nom']
+            email = request.form['email']
+            users = User(username=username, prenom=prenom, nom=nom, email=email)
+            db.session.add(users)
+            db.session.commit()
+            flash('Votre compte a été bien créé')
 
-        return redirect(url_for('login'))
+            return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
