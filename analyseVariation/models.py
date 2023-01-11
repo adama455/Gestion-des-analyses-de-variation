@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')
 sys.path.append('..')
-from sqlalchemy import Boolean, Column,String,Integer
+from sqlalchemy import Boolean, Column, String, Integer
 from analyseVariation import db, init_base
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
@@ -10,14 +10,13 @@ from sqlalchemy.orm import *
 class User(db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='users'
-    id=db.Column(db.Integer, primary_key=True)
+    id=db.Column(db.Integer,primary_key=True, autoincrement=True)
     nom=db.Column(db.String(50), nullable=False)
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
 
-    def __init__(self,id,nom, prenom, username,email):
-        self.id=id
+    def __init__(self,nom, prenom, username,email):
         self.nom=nom
         self.prenom=prenom
         self.username=username
@@ -32,8 +31,7 @@ class ActionProgramme(db.Model):
     echeance=db.Column(db.String(80))
     status=db.Column(db.String(80))
     commentaire=db.Column(db.String(80))
-    def __init__(self, id, action, porteur, echeance, statut, commentaire):
-        self.id = id
+    def __init__(self, action, porteur, echeance, statut, commentaire):
         self.action = action
         self.porteur = porteur
         self.echeance = echeance
@@ -54,8 +52,7 @@ class Cause(db.Model):
     desciption = db.Column(db.String(80))
     pourquoi = db.Column(db.String(80))
 
-    def __init__(self, id, libelle, description, pourquoi):
-        self.id = id
+    def __init__(self, libelle, description, pourquoi):
         self.libelle = libelle
         self.description = description
         self.pourquoi = pourquoi
@@ -68,8 +65,7 @@ class Statut(db.Model):
     enregistre = db.Column(db.String(80))
     cloture = db.Column(db.String(80))
 
-    def __init__(self, id, valide, enregistre, cloture):
-        self.id = id
+    def __init__(self, valide, enregistre, cloture):
         self.valide = valide
         self.enregistre = enregistre
         self.cloture = cloture
@@ -83,8 +79,7 @@ class Enregistrement_AV(db.Model):
     statut_analyse = db.Column(db.String(80))
     commentaire = db.Column(db.String(80))
 
-    def __init__(self, id, agent, valeur, statut_analyse, commentaire):
-        self.id = id
+    def __init__(self, agent, valeur, statut_analyse, commentaire):
         self.agent = agent
         self.valeur = valeur
         self.statut_analyse = statut_analyse
@@ -99,15 +94,13 @@ class Enregistrement_AV(db.Model):
     def Consulter(self, ):
         pass
 
-
 class Fichier(db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='fichier'
     id = db.Column(db.Integer, primary_key=True)
     valeur = db.Column(db.Integer)
     conseiller = db.Column(db.String(80))
-    def __init__(self, id, valeur, conseiller):
-        self.Id = id
+    def __init__(self, valeur, conseiller):
         self.Valeur = valeur
         self.conseiller = conseiller
 
@@ -119,8 +112,7 @@ class Pourquoi(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
 
-    def __init__(self, id, libelle):
-        self.id = id
+    def __init__(self, libelle):
         self.libelle = libelle
 
 class ValeursAberrante(db.Model):
@@ -130,8 +122,7 @@ class ValeursAberrante(db.Model):
     date = db.Column(db.Date)
     enregistrement = db.Column(db.String(80))
 
-    def __init__(self, id, date, enregistrement):
-        self.id = id
+    def __init__(self, date, enregistrement):
         self.date = date
         self.enregistrement = enregistrement
 
@@ -143,8 +134,7 @@ class Profil(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
 
-    def __init__(self, id, libelle):
-        self.id = id
+    def __init__(self, libelle):
         self.libelle = libelle
 
 
