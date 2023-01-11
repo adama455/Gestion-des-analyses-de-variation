@@ -17,6 +17,14 @@ from analyseVariation import app, db, bcrypt
 @app.route("/login", methods=('GET', 'POST'))
 def login():
     form = LoginForm()
+    if request.method=='POST':
+        
+        print(form.email.data)
+        #data = User.query.filter_by(username='moussa83').first()
+        data = User.query.all()
+        print(data)
+        return redirect(url_for('home'))
+
     return render_template('login.html', title='Login', form=form)    
 
 #La page acceuil de notre application
@@ -33,6 +41,7 @@ def addUser():
     if request.method=='POST':
         prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
+<<<<<<< HEAD
         if form.validate_on_submit():
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
@@ -41,6 +50,20 @@ def addUser():
             db.session.commit()
             flash(f'Votre compte a été bien créé', 'success')
             return redirect(url_for('login'))
+=======
+        #if form.validate_on_submit():
+<<<<<<< HEAD
+        user = User(1, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+=======
+        user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data)
+>>>>>>> 3b47e49950499073301abd86f8acbbc54bc5bf89
+        print(user)
+        db.session.add(user)
+        db.session.commit()
+        flash('Votre compte a été bien créé')
+
+        return redirect(url_for('login'))
+>>>>>>> 46e1304f3fb985154d96962946e4317e8632eb6c
     return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
@@ -53,7 +76,15 @@ def changepassword():
 @app.route("/compte", methods=('GET', 'POST'))
 def compte():
     form = RegistrationForm()
-
+    if request.method=='POST':
+        print('test ', form.prenom.data)
+        #if form.validate_on_submit():
+        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+        print(user)
+        db.session.add(user)
+        db.session.commit()
+        flash('Votre compte a été bien créé')
+        return redirect(url_for('compte'))
     return render_template('comptes.html', title='Register', form=form) 
  
  
@@ -102,9 +133,10 @@ def rejeterAv():
  
  
 #Permet a tout utilisateur de verifier son profil
-@app.route("/profil")
+@app.route("/profil", methods=('GET', 'POST'))
 def profil():
     form = RegistrationForm()
+
     return render_template('profil.html',title='Analyse Cause', form=form)    
 
 #enregistrement d'une AV par le MO
