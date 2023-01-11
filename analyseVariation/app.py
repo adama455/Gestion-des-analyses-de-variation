@@ -16,6 +16,14 @@ from analyseVariation import app, db
 @app.route("/login", methods=('GET', 'POST'))
 def login():
     form = LoginForm()
+    if request.method=='POST':
+        
+        print(form.email.data)
+        #data = User.query.filter_by(username='moussa83').first()
+        data = User.query.all()
+        print(data)
+        return redirect(url_for('home'))
+
     return render_template('login.html', title='Login', form=form)    
 
 #La page acceuil de notre application
@@ -33,7 +41,7 @@ def addUser():
         prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
         #if form.validate_on_submit():
-        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+        user = User(1, form.nom.data, form.prenom.data, form.username.data, form.email.data)
         print(user)
         db.session.add(user)
         db.session.commit()
@@ -52,7 +60,15 @@ def changepassword():
 @app.route("/compte", methods=('GET', 'POST'))
 def compte():
     form = RegistrationForm()
-
+    if request.method=='POST':
+        print('test ', form.prenom.data)
+        #if form.validate_on_submit():
+        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
+        print(user)
+        db.session.add(user)
+        db.session.commit()
+        flash('Votre compte a été bien créé')
+        return redirect(url_for('compte'))
     return render_template('comptes.html', title='Register', form=form) 
  
  
@@ -101,9 +117,10 @@ def rejeterAv():
  
  
 #Permet a tout utilisateur de verifier son profil
-@app.route("/profil")
+@app.route("/profil", methods=('GET', 'POST'))
 def profil():
     form = RegistrationForm()
+
     return render_template('profil.html',title='Analyse Cause', form=form)    
 
 #enregistrement d'une AV par le MO

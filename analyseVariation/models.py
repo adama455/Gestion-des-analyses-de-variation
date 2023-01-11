@@ -9,7 +9,7 @@ from sqlalchemy.orm import *
 
 class User(db.Model):
     __tablename__='users'
-    id=db.Column(db.Integer, primary_key=True)
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom=db.Column(db.String(50))
     prenom=db.Column(db.String(50))
     username=db.Column(db.String(50))
