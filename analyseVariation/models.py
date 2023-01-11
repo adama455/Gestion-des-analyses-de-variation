@@ -10,24 +10,13 @@ from sqlalchemy.orm import *
 class User(db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='users'
-<<<<<<< HEAD
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nom=db.Column(db.String(50))
-    prenom=db.Column(db.String(50))
-    username=db.Column(db.String(50))
-    email=db.Column(db.String(50))
-=======
     id=db.Column(db.Integer,primary_key=True, autoincrement=True)
     nom=db.Column(db.String(50), nullable=False)
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
-<<<<<<< HEAD
     password = db.Column(db.String(120), nullable=False)
     
-=======
->>>>>>> 3b47e49950499073301abd86f8acbbc54bc5bf89
->>>>>>> 46e1304f3fb985154d96962946e4317e8632eb6c
 
     def __init__(self,nom, prenom, username,email, password):
         self.nom=nom

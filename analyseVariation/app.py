@@ -41,29 +41,15 @@ def addUser():
     if request.method=='POST':
         prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
-<<<<<<< HEAD
         if form.validate_on_submit():
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
             print(user)
             db.session.add(user)
             db.session.commit()
-            flash(f'Votre compte a été bien créé', 'success')
-            return redirect(url_for('login'))
-=======
-        #if form.validate_on_submit():
-<<<<<<< HEAD
-        user = User(1, form.nom.data, form.prenom.data, form.username.data, form.email.data)
-=======
-        user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data)
->>>>>>> 3b47e49950499073301abd86f8acbbc54bc5bf89
-        print(user)
-        db.session.add(user)
-        db.session.commit()
-        flash('Votre compte a été bien créé')
+            flash('Votre compte a été bien créé','success')
 
         return redirect(url_for('login'))
->>>>>>> 46e1304f3fb985154d96962946e4317e8632eb6c
     return render_template('add-user.html', title='Register', form=form)    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
@@ -78,13 +64,14 @@ def compte():
     form = RegistrationForm()
     if request.method=='POST':
         print('test ', form.prenom.data)
-        #if form.validate_on_submit():
-        user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data)
-        print(user)
-        db.session.add(user)
-        db.session.commit()
-        flash('Votre compte a été bien créé')
-        return redirect(url_for('compte'))
+        if form.validate_on_submit():
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
+            user = User(2, form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
+            print(user)
+            db.session.add(user)
+            db.session.commit()
+            flash('Votre compte a été bien créé','success')
+            return redirect(url_for('login'))
     return render_template('comptes.html', title='Register', form=form) 
  
  
