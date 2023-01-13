@@ -1,13 +1,20 @@
 import sys
 sys.path.append('.')
 sys.path.append('..')
-from sqlalchemy import Boolean, Column, String, Integer
-from analyseVariation import db, init_base
+# from sqlalchemy import Boolean, Column, String, Integer
+from analyseVariation import db, init_base, login_manager
 #import Model1.ActionProgramme as mod
 from sqlalchemy.orm import *
+from flask_login import UserMixin
 
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return User.query.get(int(user_id))
+
+
+class User(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='users'
     id=db.Column(db.Integer,primary_key=True, autoincrement=True)
@@ -15,14 +22,17 @@ class User(db.Model):
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    
 
-    def __init__(self,nom, prenom, username,email):
+    def __init__(self,nom, prenom, username,email, password):
         self.nom=nom
         self.prenom=prenom
         self.username=username
         self.email=email
+        self.password=password
 
-class ActionProgramme(db.Model):
+class ActionProgramme(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='action_programme'
     id=db.Column(db.Integer, primary_key=True)
@@ -57,7 +67,7 @@ class Cause(db.Model):
         self.description = description
         self.pourquoi = pourquoi
 
-class Statut(db.Model):
+class Statut(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='statut'
     id = db.Column(db.Integer, primary_key=True)
@@ -70,7 +80,7 @@ class Statut(db.Model):
         self.enregistre = enregistre
         self.cloture = cloture
 
-class Enregistrement_AV(db.Model):
+class Enregistrement_AV(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='enregistrement_av'
     id = db.Column(db.Integer, primary_key=True)
@@ -94,7 +104,7 @@ class Enregistrement_AV(db.Model):
     def Consulter(self, ):
         pass
 
-class Fichier(db.Model):
+class Fichier(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='fichier'
     id = db.Column(db.Integer, primary_key=True)
@@ -115,7 +125,7 @@ class Pourquoi(db.Model):
     def __init__(self, libelle):
         self.libelle = libelle
 
-class ValeursAberrante(db.Model):
+class ValeursAberrante(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='valeurs_aberante'
     id = db.Column(db.Integer, primary_key=True)
@@ -129,7 +139,7 @@ class ValeursAberrante(db.Model):
     def Analyser(self, ):
         pass
 
-class Profil(db.Model):
+class Profil(UserMixin, db.Model):
     __tablename__='profil'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
