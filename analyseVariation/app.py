@@ -18,7 +18,6 @@ from analyseVariation import app, db, bcrypt
 def login():
     form = LoginForm()
     if request.method=='POST':
-        
         print(form.email.data)
         #data = User.query.filter_by(username='moussa83').first()
         data = User.query.all()
@@ -39,10 +38,11 @@ def home():
 def addUser():
     form = RegistrationForm()
     if request.method=='POST':
+        password = 'Sovar@2023'
         prenom=request.args.get('prenom')
         print('test ', form.prenom.data)
         if form.validate_on_submit():
-            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
             print(user)
             db.session.add(user)
@@ -64,17 +64,20 @@ def compte():
     form = RegistrationForm()
     if request.method=='POST':
         prenom=request.args.get('prenom')
+        password = 'Sovar@2023'
         print('test ', form.prenom.data)
         if form.validate_on_submit():
-            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf8')
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
             print(user)
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé','success')
-        return redirect(url_for('login'))
+        return redirect(url_for('compte'))
             
-    return render_template('comptes.html', title='Register', form=form) 
+    users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('comptes.html', title='Register', form=form, data=users) 
+
  
  
 #Permet de visualiser la liste des Analyses de Variation
