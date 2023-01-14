@@ -59,7 +59,7 @@
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages  %}
-                <div class="alert alert-{{ category }} fs-4">
+                <div class="alert alert-{{ category }} small mb-0">
                   {{ message }}
                 </div>
               {% endfor %}
@@ -91,7 +91,7 @@
                     </div><!-- input-group-prepend -->
                     {# <input type="text" class="form-control form-control-lg" id="matricule" placeholder="Login" name="username"> #}
                     {% if form.email.errors %}
-                    {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
+                      {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
                     <div class="invalid-feedback">
                       {% for error in form.email.errors %}
                       <span> {{ error }} </span>
