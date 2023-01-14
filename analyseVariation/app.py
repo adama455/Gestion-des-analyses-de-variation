@@ -22,7 +22,7 @@ def login():
             login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
-            flash("Une erreur s'est produit, veillez verifier les information que vous avez saisi ")
+            flash(f'Une erreur s est produit, veillez verifier les information que vous avez saisi', 'danger')
 
     return render_template('login.html', title='Login', form=form)    
 

@@ -15,10 +15,10 @@
   <!-- vendor css -->
   <link href="{{ url_for('static', filename='lib/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='lib/select2/css/select2.min.css') }}" rel="stylesheet">
-  
+
   <!--  fontaweson latest update -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  rel="stylesheet" />
-  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet" />
+
   <!-- azia CSS -->
   <link href="{{ url_for('static', filename='css/azia.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/azia.min.css') }}" rel="stylesheet">
@@ -51,83 +51,96 @@
   </script>
 
   <form method="POST" class="text-start" role="form">
+
     <!-- MODAL REINIT PASSWORD -->
     <div id="modaldemo8" class="modal fade just-me" data-keyboard="false" data-backdrop="static">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content tx-size-sm bg-white">
-          <div class="modal-body tx-left pd-y-20 pd-x-20">
-            <h1 class="az-logo"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-orange">
-              SO</span>' <span style="color: #009088;">VAR</span>
-            </h1>
-            <p>Pour une analyse simple, fiable et suivie.<br><br>Merci de renseigner vos paramétres de
-              <br>Pour des raisons de sécurité , une demande de modifications de votre mot de passe vous
-              sera
-              demandée
-              lors de votre
-              première connexion !
-            </p>
-            <br>
-            <div class="col">
-            </div>
-            <div class="row row-sm mg-b-0">
-              <div class="col-12">
-                <div class="input-group input-group-outline mb-3">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text bg-black-2">
-                      <i class="fas fa-user tx-18 lh--9 op-8"></i>
-                    </div>
-                  </div><!-- input-group-prepend -->
-                 {# <input type="text" class="form-control form-control-lg" id="matricule" placeholder="Login" name="username"> #}
-                 {% if form.email.errors %}
-                 {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
-                 <div class="invalid-feedback">
-                   {% for error in form.email.errors %}
-                   <span> {{ error }} </span>
-                   {% endfor %}
-                 </div>
-                 {% else %}
-                 {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
-                 {% endif %}                
-                </div><!-- input-group -->
-              </div><!-- col-4 -->
-            </div>
-            <div class="row row-sm mg-b-0 mt-3 ">
-              <div class="col-12">
-                <div class="input-group input-group-outline mb-3">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text bg-black-2">
-                      <i class="fa fa-unlock tx-18 lh--9 op-8" aria-hidden="true" ></i>
-                    </div>
-                  </div><!-- input-group-prepend -->
-                  {# <input type="password" class="form-control form-control-lg" name="password" placeholder="Mot de passe" id="password" required> #}
-                  {% if form.password.errors %}
-                  {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Mot de passe", id="id_password") }}
-                  <div class="invalid-feedback">
-                    {% for error in form.password.errors %}
-                    <span> {{ error }} </span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Mot de passe", id="id_password") }}
-                  {% endif %}
-                </div><!-- input-group -->
-              </div><!-- col-4 -->
-            </div>
-            <div class=" text-right"><br>
-              <button type="submit" class="btn  btn-az-secondary btn-rounded btn-sm pd-x-25"><i
-                  class="fas fa-sign-in-alt"></i>
-                Connexion</button>
-            </div>
-            <h1 class="az-logo  "><img src="/static/img/orange_logo.svg" /> </h1>
-            <!-- az-signup-header -->
-            <div class="az-signup-footer text-right">
-              <p> <a href="#" data-toggle="modal" class="text-right text-info" data-target="#Reinit">Mot
-                  de passe
-                  oublié ?</a>
+        <div class="">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages  %}
+                <div class="alert alert-{{ category }} fs-4">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          <div class="modal-content tx-size-sm bg-white">
+            <div class="modal-body tx-left pd-y-20 pd-x-20">
+              <h1 class="az-logo"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-orange">
+                  SO</span>' <span style="color: #009088;">VAR</span>
+              </h1>
+              <p>Pour une analyse simple, fiable et suivie.<br><br>Merci de renseigner vos paramétres de
+                <br>Pour des raisons de sécurité , une demande de modifications de votre mot de passe vous
+                sera
+                demandée
+                lors de votre
+                première connexion !
               </p>
-            </div><!-- az-signin-footer -->
-          </div><!-- modal-body -->
-        </div><!-- modal-content -->
+              <br>
+              <div class="col">
+              </div>
+              <div class="row row-sm mg-b-0">
+                <div class="col-12">
+                  <div class="input-group input-group-outline mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text bg-black-2">
+                        <i class="fas fa-user tx-18 lh--9 op-8"></i>
+                      </div>
+                    </div><!-- input-group-prepend -->
+                    {# <input type="text" class="form-control form-control-lg" id="matricule" placeholder="Login" name="username"> #}
+                    {% if form.email.errors %}
+                    {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.email.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.email(class="form-control form-control-lg is-invalid", placeholder="Login") }}
+                    {% endif %}
+                  </div><!-- input-group -->
+                </div><!-- col-4 -->
+              </div>
+              <div class="row row-sm mg-b-0 mt-3 ">
+                <div class="col-12">
+                  <div class="input-group input-group-outline mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text bg-black-2">
+                        <i class="fa fa-unlock tx-18 lh--9 op-8" aria-hidden="true"></i>
+                      </div>
+                    </div><!-- input-group-prepend -->
+                    {# <input type="password" class="form-control form-control-lg" name="password" placeholder="Mot de passe" id="password" required> #}
+                    {% if form.password.errors %}
+                    {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Mot de passe", id="id_password") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.password.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.password(class="form-control form-control-lg is-invalid", placeholder="Mot de passe", id="id_password") }}
+                    {% endif %}
+                  </div><!-- input-group -->
+                </div><!-- col-4 -->
+              </div>
+              <div class=" text-right"><br>
+                <button type="submit" class="btn  btn-az-secondary btn-rounded btn-sm pd-x-25"><i
+                    class="fas fa-sign-in-alt"></i>
+                  Connexion</button>
+              </div>
+              <h1 class="az-logo  "><img src="/static/img/orange_logo.svg" /> </h1>
+              <!-- az-signup-header -->
+              <div class="az-signup-footer text-right">
+                <p> <a href="#" data-toggle="modal" class="text-right text-info" data-target="#Reinit">Mot
+                    de passe
+                    oublié ?</a>
+                </p>
+              </div><!-- az-signin-footer -->
+            </div><!-- modal-body -->
+          </div><!-- modal-content -->
+        </div>
       </div><!-- modal-dialog -->
     </div>
   </form>
@@ -147,13 +160,13 @@
         $(this).parent().siblings().removeClass('show');
       })
     })
-  $(function () {
-    'use strict'
-    $('.az-sidebar .with-sub').on('click', function (e) {
-      e.preventDefault();
-      $(this).parent().toggleClass('show');
-      $(this).parent().siblings().removeClass('show');
-    });
+    $(function () {
+      'use strict'
+      $('.az-sidebar .with-sub').on('click', function (e) {
+        e.preventDefault();
+        $(this).parent().toggleClass('show');
+        $(this).parent().siblings().removeClass('show');
+      });
       $(document).on('click touchstart', function (e) {
         e.stopPropagation();
 
