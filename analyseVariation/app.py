@@ -58,11 +58,16 @@ def addUser():
         return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)
 
+
+
 #Cette page permet voir les détail d'un Utilisateur
-@app.route("/detailUser", methods=('GET', 'POST'))
+@app.route("/detailUser/<int:id>")
 @login_required
-def detailUser():
-    return render_template('detail.user.html', title='Détail')     
+def detailUser(id):
+    oneUser = User.query.filter_by(id=id).first()
+    if oneUser:
+        return render_template('detail.user.html', title='Détail', user=oneUser) 
+    return f"Utilisateur avec id ={id} n'existe pas!"    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
 @app.route("/change-password")
@@ -71,14 +76,14 @@ def changepassword():
     
     return render_template('changepassword.html')    
 
+
 #Permet a l'admin de visualiser la liste des Utilisateurs
 @app.route("/compte", methods=('GET', 'POST'))
-@login_required
+@login_required 
 def compte():
     form = RegistrationForm()
     if form.validate_on_submit():
         if request.method=='POST':
-            prenom=request.args.get('prenom')
             password = 'Sovar@2023'
             print('test ', form.prenom.data)
             hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
@@ -92,7 +97,36 @@ def compte():
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('comptes.html', title='Register', form=form, data=users) 
 
+#Cette page permet voir les détail d'un Utilisateur
+@app.route("/editUser", methods=['GET', 'POST'])
+@login_required
+def editUser():
+
+    if request.method =='POST':
+        data = User.query.get(request.form.get('id'))
+        data.username = request.form['username']
+        data.prenom = request.form['prenom']
+        data.nom = request.form['nom']
+        data.email = request.form['email']
+    
+        db.session.commit()
+        flash('Utilisateur modifié avec Succès!','success')
+        return redirect(url_for('compte'))
+    return render_template('comptes.html', title='Register')
  
+#Permet de Supprimer un utilisateur
+@app.route("/supprimerUser/<id>/", methods=('GET', 'POST'))
+@login_required
+def supprimerUser(id):
+    form = RegistrationForm()
+    if not id or id != 0:
+        oneUser = User.query.get(id)
+        db.session.delete(oneUser)
+        db.session.commit()
+        flash('Utilisateur supprimer avec succès', 'success')
+        return redirect(url_for('compte'))
+    users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('comptes.html', title='Register', form=form, data=users) 
  
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
