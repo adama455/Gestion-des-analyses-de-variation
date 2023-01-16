@@ -13,6 +13,8 @@ from flask_login import login_user, login_required, logout_user, current_user
 @app.route('/', methods=('GET', 'POST'))
 @app.route("/login", methods=('GET', 'POST'))
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if request.method=='POST':
     #if form.validate_on_submit():
@@ -38,6 +40,8 @@ def home():
 @app.route("/addUser", methods=('GET', 'POST'))
 @login_required
 def addUser():
+    if current_user.is_authenticated:
+        return redirect(url_for('compte'))
     form = RegistrationForm()
     if request.method=='POST':
         password = 'Sovar@2023'
@@ -49,10 +53,16 @@ def addUser():
             print(user)
             db.session.add(user)
             db.session.commit()
-            flash('Votre compte a été bien créé','success')
+            flash('Votre compte a été bien créé', 'success') 
 
         return redirect(url_for('login'))
-    return render_template('add-user.html', title='Register', form=form)    
+    return render_template('add-user.html', title='Register', form=form)
+
+#Cette page permet voir les détail d'un Utilisateur
+@app.route("/detailUser", methods=('GET', 'POST'))
+@login_required
+def detailUser():
+    return render_template('detail.user.html', title='Détail')     
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
 @app.route("/change-password")
@@ -66,18 +76,18 @@ def changepassword():
 @login_required
 def compte():
     form = RegistrationForm()
-    if request.method=='POST':
-        prenom=request.args.get('prenom')
-        password = 'Sovar@2023'
-        print('test ', form.prenom.data)
-        if form.validate_on_submit():
+    if form.validate_on_submit():
+        if request.method=='POST':
+            prenom=request.args.get('prenom')
+            password = 'Sovar@2023'
+            print('test ', form.prenom.data)
             hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
             print(user)
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé','success')
-        return redirect(url_for('compte'))
+            return redirect(url_for('compte'))
             
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('comptes.html', title='Register', form=form, data=users) 

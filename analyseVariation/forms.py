@@ -1,8 +1,8 @@
-# # from flask_login import current_user
 from flask_wtf import FlaskForm
+from flask_login import current_user
 from wtforms import StringField,PasswordField,SubmitField,BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-# # from analyseVariation.models import User
+from analyseVariation.models import User
 
 
 

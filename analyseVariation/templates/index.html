@@ -146,11 +146,11 @@
               <nav class="nav az-nav fs-4">
                 <a href="/" class="nav-link  text-white" data-placement="top" title="Dashboard"> <i
                     class="fas fa-home me-1 fs-5"></i><strong>Dashboard</strong></a>
-                <a href="" id="demarrav" class="nav-link text-white" title="Mes Donnees"><i
+                <a href="{{ url_for('analyseCause') }}" id="demarrav" class="nav-link text-white" title="Mes Donnees"><i
                     class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
                 <a href="{{ url_for('listeAv') }}" class="nav-link text-white" title="Mes Donnees"><i
                     class="fas fa-list me-1 fs-5"></i><strong>Liste AV</strong></a>
-                <a href="" class="nav-link text-white" title="Mon Profil"><i
+                <a href="{{ url_for('profil') }}" class="nav-link text-white" title="Mon Profil"><i
                     class="fas fa-user me-1 fs-5"></i><strong>Mon Profil</strong></a>
               </nav>
             </div>
