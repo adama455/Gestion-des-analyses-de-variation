@@ -98,9 +98,9 @@
         <div class="footer pt-5">
           <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             Copyright &copy;
-            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with
-            <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-              target="_blank">Colorlib.com</a>
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | This application is made with
+            <i class="icon-heart" aria-hidden="true"></i> by <a href="https://www.orange.sn"
+              target="_blank">www.orange.sn</a>
             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
           </p>
         </div>
@@ -144,14 +144,14 @@
             <div class="collapse navbar-collapse col-8 d-flex  justify-content-center mg-r-100"
               id="navbarSupportedContent">
               <nav class="nav az-nav fs-4">
-                <a href="/" class="nav-link  text-white" data-placement="top" title="Dashboard"> <i
-                    class="fas fa-home me-1 fs-5"></i><strong>Dashboard</strong></a>
-                <a href="" id="demarrav" class="nav-link text-white" title="Mes Donnees"><i
-                    class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
-                <a href="{{ url_for('listeAv') }}" class="nav-link text-white" title="Mes Donnees"><i
-                    class="fas fa-list me-1 fs-5"></i><strong>Liste AV</strong></a>
-                <a href="" class="nav-link text-white" title="Mon Profil"><i
-                    class="fas fa-user me-1 fs-5"></i><strong>Mon Profil</strong></a>
+                <a href="/home" class="nav-link  text-white" data-placement="top" title="Dashboard"> 
+                  <i class="fas fa-home me-1 fs-5"></i><strong>Dashboard</strong></a>
+                <a href="{{ url_for('upload_file') }}" class="nav-link text-white" title="Mes Donnees"> <!-- id="demarrav" --> 
+                  <i class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
+                <a href="{{ url_for('listeAv') }}" class="nav-link text-white" title="Mes Donnees">
+                  <i class="fas fa-list me-1 fs-5"></i><strong>Liste AV</strong></a>
+                <a href="{{ url_for('profil') }}" class="nav-link text-white" title="Mon Profil">
+                  <i class="fas fa-user me-1 fs-5"></i><strong>Mon Profil</strong></a>
               </nav>
             </div>
 
@@ -218,10 +218,8 @@
             {% endif %}
           {% endwith %}
         </div>
-
         {% block content %}{% endblock content %}
       </div><!-- az-content-body -->
-
     </div>
   </div>
 
@@ -253,19 +251,11 @@
             <h4>Saisir le libelle et charger le fichier</h4>
           </div>
           <div class="d-flex flex-column text-center">
-            <form>
+            <form action="{{ url_for('upload_file') }}" method="POST">
               <div class="form-group">
                 <input type="text" class="form-control" id="" placeholder="Libelle analyse">
               </div>
-              <button type="button" class="btn btn-info btn-block btn-round">Fichier</button>
-              <!--<div class="col-12 d-flex flex-row justify-content-between">
-                  <button type="button" class="btn btn-info btn-block btn-round col-3 mg-r-10">
-                  Fichier
-                  </button>
-                  <button type="button" class="btn btn-info btn-block btn-round col-3 rounded-pill btn-az-primary text-white">
-                    <a class="text-white" href="{{ url_for('demarrerav')}}">Valider</a>
-                  </button>
-                </div>-->
+              <button type="submit" class="btn btn-info btn-block btn-round">Fichier</button>
             </form>
           </div>
         </div>

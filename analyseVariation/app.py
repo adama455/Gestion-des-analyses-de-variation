@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 sys.path.append('.')
 sys.path.append('..')
@@ -7,6 +8,18 @@ from analyseVariation.forms import  RegistrationForm, LoginForm
 from analyseVariation.models import User
 from analyseVariation import app, db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
+import os
+from tkinter import filedialog
+from tkinter import *
+from openpyxl import load_workbook
+import csv
+from threading import Thread
+import pandas as pd
+
+
+
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
 #la racine ou page connexion des utilisateurs
@@ -61,7 +74,7 @@ def changepassword():
     
     return render_template('changepassword.html')    
 
-#Permet a l'admin de visualiser la liste des Utilisateurs
+#Permet a l'admin de visualiser la liste des Utilisateurs.
 @app.route("/compte", methods=('GET', 'POST'))
 @login_required
 def compte():
@@ -169,11 +182,46 @@ def logout():
     logout_user()
     return redirect('login')    
 
-@app.route("/connexion")
-def connexion():
-   
-    return render_template('page-connections.html')    
+@app.route("/synthese-av", methods=['POST', 'GET'])
+def synthese_av():
+    fichier = request.args.get('filename')
+    if fichier :
+        data = pd.read_excel(fichier)
+        mesures = data.Mesures.dropna()
+        data = data.dropna()
+        data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
+        #data['Mesures'] = data['Mesures'].apply(lambda x : float(x[:]))
+        max = pd.to_numeric(mesures, errors='coerce').max()
+        min = pd.to_numeric(mesures, errors='coerce').min()
+        nbr_va_sou_perf = data[data["Mesures"]<650].Nom.count()
+        nbr_va_sur_perf = data[data["Mesures"]>1000].Nom.count()
+        print(nbr_va_sou_perf)
+        prenom = current_user.prenom
+        nom = current_user.nom
+        print(prenom)
+        print(nom)
+        #print("Voici votre fichier :",fichier)
+        
+        #print(nbr_va_sou_perf)
+        return render_template('synthese-av.html', data=data, prenom=prenom, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+    if request.method=='POST':
+        return redirect(url_for('listeVa'))  
+    return render_template('synthese-av.html')
 
+
+@app.route('/uploader', methods = ['GET', 'POST']) 
+def upload_file () : 
+    filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
+                                        filetypes=(("Fichier texte","*.txt"), ("Fichier excel","*.xsl"),("Tous les fichiers","*.*")))
+        
+    #print(filename )
+    #os.popen(filename)
+    #with open(filename, "r", encoding='latin-1') as file:
+    #        myReader = csv.reader(file)
+    #        for line in myReader:
+    #            print(line)
+
+    return redirect(url_for('synthese_av', filename=filename))
 
 
 if __name__=='__main__':
