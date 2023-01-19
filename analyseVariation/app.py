@@ -26,6 +26,8 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 @app.route('/', methods=('GET', 'POST'))
 @app.route("/login", methods=('GET', 'POST'))
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if request.method=='POST':
     #if form.validate_on_submit():
@@ -51,6 +53,8 @@ def home():
 @app.route("/addUser", methods=('GET', 'POST'))
 @login_required
 def addUser():
+    if current_user.is_authenticated:
+        return redirect(url_for('compte'))
     form = RegistrationForm()
     if request.method=='POST':
         password = 'Sovar@2023'
@@ -62,10 +66,21 @@ def addUser():
             print(user)
             db.session.add(user)
             db.session.commit()
-            flash('Votre compte a été bien créé','success')
+            flash('Votre compte a été bien créé', 'success') 
 
         return redirect(url_for('login'))
-    return render_template('add-user.html', title='Register', form=form)    
+    return render_template('add-user.html', title='Register', form=form)
+
+
+
+#Cette page permet voir les détail d'un Utilisateur
+@app.route("/detailUser/<int:id>")
+@login_required
+def detailUser(id):
+    oneUser = User.query.filter_by(id=id).first()
+    if oneUser:
+        return render_template('detail.user.html', title='Détail', user=oneUser) 
+    return f"Utilisateur avec id ={id} n'existe pas!"    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
 @app.route("/change-password")
@@ -76,26 +91,54 @@ def changepassword():
 
 #Permet a l'admin de visualiser la liste des Utilisateurs.
 @app.route("/compte", methods=('GET', 'POST'))
-@login_required
+@login_required 
 def compte():
     form = RegistrationForm()
-    if request.method=='POST':
-        prenom=request.args.get('prenom')
-        password = 'Sovar@2023'
-        print('test ', form.prenom.data)
-        if form.validate_on_submit():
+    if form.validate_on_submit():
+        if request.method=='POST':
+            password = 'Sovar@2023'
+            print('test ', form.prenom.data)
             hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
             print(user)
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé','success')
-        return redirect(url_for('compte'))
+            return redirect(url_for('compte'))
             
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('comptes.html', title='Register', form=form, data=users) 
 
+#Cette page permet voir les détail d'un Utilisateur
+@app.route("/editUser", methods=['GET', 'POST'])
+@login_required
+def editUser():
+
+    if request.method =='POST':
+        data = User.query.get(request.form.get('id'))
+        data.username = request.form['username']
+        data.prenom = request.form['prenom']
+        data.nom = request.form['nom']
+        data.email = request.form['email']
+    
+        db.session.commit()
+        flash('Utilisateur modifié avec Succès!','success')
+        return redirect(url_for('compte'))
+    return render_template('comptes.html', title='Register')
  
+#Permet de Supprimer un utilisateur
+@app.route("/supprimerUser/<id>/", methods=('GET', 'POST'))
+@login_required
+def supprimerUser(id):
+    form = RegistrationForm()
+    if not id or id != 0:
+        oneUser = User.query.get(id)
+        db.session.delete(oneUser)
+        db.session.commit()
+        flash('Utilisateur supprimer avec succès', 'success')
+        return redirect(url_for('compte'))
+    users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('comptes.html', title='Register', form=form, data=users) 
  
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")

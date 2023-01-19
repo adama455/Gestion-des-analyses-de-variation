@@ -44,3 +44,11 @@ $('#changepwd').on('click', function(e) {
     	$('[data-toggle="tooltip"]').tooltip()
   })
 });
+
+$('#edituser').on('click', function(e) {  
+	e.preventDefault();           
+	$('#modaledit').modal('show');
+  	$(function () {
+    	$('[data-toggle="tooltip"]').tooltip()
+  })
+});
