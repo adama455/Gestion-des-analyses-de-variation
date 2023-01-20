@@ -5,7 +5,7 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm
-from analyseVariation.models import User
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV
 from analyseVariation import app, db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 import os
@@ -15,6 +15,7 @@ from openpyxl import load_workbook
 import csv
 from threading import Thread
 import pandas as pd
+from datetime import date
 
 
 
@@ -162,13 +163,16 @@ def editpa():
  
  
 #Permet de visualiser la liste des Valeurs Aberantes
-@app.route("/listeVa")
+@app.route("/listeVa", methods=('POST', 'GET'))
 @login_required
 def listeVa():
     form = RegistrationForm()
-    return render_template('listeVa.html',title='liste VA', form=form)  
- 
- 
+    ref = request.args.get('ref')
+    liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
+    n = len(liste)
+    print("data = ", liste[1].nom_cc, n)
+    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n)  
+
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
 @login_required
@@ -225,10 +229,12 @@ def logout():
     logout_user()
     return redirect('login')    
 
-@app.route("/synthese-av", methods=['POST', 'GET'])
+@app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
     fichier = request.args.get('filename')
+    test= 0
     if fichier :
+        reference = '000012'
         data = pd.read_excel(fichier)
         mesures = data.Mesures.dropna()
         data = data.dropna()
@@ -238,34 +244,41 @@ def synthese_av():
         min = pd.to_numeric(mesures, errors='coerce').min()
         nbr_va_sou_perf = data[data["Mesures"]<650].Nom.count()
         nbr_va_sur_perf = data[data["Mesures"]>1000].Nom.count()
-        print(nbr_va_sou_perf)
+        data = data[(data["Mesures"]<650)|(data['Mesures']>1000)]
+        print(data)
         prenom = current_user.prenom
         nom = current_user.nom
+        Date = date.today()
         print(prenom)
-        print(nom)
-        #print("Voici votre fichier :",fichier)
+        print(Date)
+        analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).all()
         
-        #print(nbr_va_sou_perf)
-        return render_template('synthese-av.html', data=data, prenom=prenom, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+        if not analyse_variation:
+            for i in range(data.shape[0]):
+                print(reference, data.index[i])
+                valeur_aberante = ValeursAberrante(reference, data['Nom'][data.index[i]], data['Mesures'][data.index[i]])
+                db.session.add(valeur_aberante)
+                db.session.commit()
+            av = Enregistrement_AV(prenom +' '+ nom, reference, Date, 'Statut en cour','')
+            db.session.add(av)
+            db.session.commit()
+            
+        return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
     if request.method=='POST':
-        return redirect(url_for('listeVa'))  
+        print('nombre :', data.count())
+        
+        return redirect(url_for('listeVa'), data=data, prenom=prenom, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
     return render_template('synthese-av.html')
-
 
 @app.route('/uploader', methods = ['GET', 'POST']) 
 def upload_file () : 
     filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
                                         filetypes=(("Fichier texte","*.txt"), ("Fichier excel","*.xsl"),("Tous les fichiers","*.*")))
-        
-    #print(filename )
-    #os.popen(filename)
-    #with open(filename, "r", encoding='latin-1') as file:
-    #        myReader = csv.reader(file)
-    #        for line in myReader:
-    #            print(line)
-
-    return redirect(url_for('synthese_av', filename=filename))
-
+    
+    if filename:
+        return redirect(url_for('synthese_av', filename=filename))
+    else:
+        flash("Aucun fichier selectionne! ")
 
 if __name__=='__main__':
     app.run()

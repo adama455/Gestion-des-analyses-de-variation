@@ -8,18 +8,11 @@
     <div class="card bg-gray-100 bd-10 shadow">
         <div class="mg-20">
 
-            <form action="{{ url_for('listeVa') }}" method="POST">
+            <form action="{{ url_for('listeVa', ref=ref) }}" method="POST">
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                     <div class="col-2" style="background-color: #D9D9D9;">Reference</div>
                     <div class="col-3" style="background-color: #D9D9D9;">Date: 
-                    <script>
-                        document.write(new Date().getDate());
-                    </script>/<script>
-                        document.write(new Date().getUTCMonth()+01);
-                    </script>/
-                    <script>
-                        document.write(new Date().getFullYear());
-                    </script>
+                        {{ Date }}
                     </div>
                     <div class="col-3" style="background-color: #D9D9D9;">Aut : {{ prenom }} {{ nom }}</div>
                         <select class="col-2" name="profil" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
@@ -71,7 +64,7 @@
                             &nbsp;&nbsp;
                         </div>
                         <div class="col-3 btn-icon-list">
-                            <a href="{{ url_for('listeVa') }}">
+                            <a href="#">
                                 <button class="btn btn-primary  border-0 rounded" title="Sortir" style="font-size: 1.3em;">Analyser les causes</i></button></a>
                             &nbsp;&nbsp;
                         </div>
