@@ -16,9 +16,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for i in range(n) %}
                     <tr>
-                        <td>AD004</td>
-                        <td>100</td>
+                        <td>{{ liste[i].nom_cc }}</td>
+                        <td>{{ liste[i].valeurs }}</td>
                         <td>
                             <a href="{{ url_for('home') }}">
                                 <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
@@ -27,40 +28,7 @@
                             </a>
                         </td>
                     </tr>
-                    <tr>
-                        <td>AD002</td>
-                        <td>120</td>
-                        <td>
-                            <a href="{{ url_for('home') }}">
-                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
-                                    <i class="fa-solid  fs-2 fa-circle"></i>
-                                </div>
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>AD005</td>
-                        <td>130</td>
-                        <td>
-                            <a href="{{ url_for('home') }}">
-                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
-                                    <i class="fa-solid  fs-2 fa-circle"></i>
-                                </div>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>AD011</td>
-                        <td>90</td>
-                        <td>
-                            <a href="{{ url_for('home') }}">
-                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
-                                    <i class="fa-solid  fs-2 fa-circle"></i>
-                                </div>
-                            </a>
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             <br>

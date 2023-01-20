@@ -85,13 +85,15 @@ class Enregistrement_AV(UserMixin, db.Model):
     __tablename__='enregistrement_av'
     id = db.Column(db.Integer, primary_key=True)
     agent = db.Column(db.String(80))
-    valeur = db.Column(db.String(80))
+    reference_av = db.Column(db.String(80))
+    date = db.Column(db.Date)
     statut_analyse = db.Column(db.String(80))
-    commentaire = db.Column(db.String(80))
+    commentaire = db.Column(db.String(80), nullable=True)
 
-    def __init__(self, agent, valeur, statut_analyse, commentaire):
+    def __init__(self, agent, reference_av, date, statut_analyse, commentaire):
         self.agent = agent
-        self.valeur = valeur
+        self.reference_av = reference_av
+        self.date = date
         self.statut_analyse = statut_analyse
         self.commentaire = commentaire
 
@@ -125,16 +127,18 @@ class Pourquoi(db.Model):
     def __init__(self, libelle):
         self.libelle = libelle
 
-class ValeursAberrante(UserMixin, db.Model):
+class ValeursAberrante(UserMixin, db.Model):    
     __table_args__ = {'extend_existing': True}
     __tablename__='valeurs_aberante'
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
-    enregistrement = db.Column(db.String(80))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    reference_av = db.Column(db.String(80))
+    nom_cc = db.Column(db.String(80))
+    valeurs = db.Column(db.Float)
 
-    def __init__(self, date, enregistrement):
-        self.date = date
-        self.enregistrement = enregistrement
+    def __init__(self, reference_av, nom_cc, valeurs):
+        self.reference_av = reference_av
+        self.nom_cc = nom_cc
+        self.valeurs = valeurs
 
     def Analyser(self, ):
         pass
