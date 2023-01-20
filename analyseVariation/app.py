@@ -11,9 +11,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 import os
 from tkinter import filedialog
 from tkinter import *
-from openpyxl import load_workbook
-import csv
-from threading import Thread
 import pandas as pd
 
 
