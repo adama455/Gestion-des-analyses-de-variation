@@ -3,10 +3,22 @@ sys.path.append('.')
 sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
-from analyseVariation.forms import  RegistrationForm, LoginForm
-from analyseVariation.models import User
+from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm
+from analyseVariation.models import User,Cause,Plateau
 from analyseVariation import app, db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
+import pandas as pd
+
+
+df = pd.read_csv("data.csv")
+df.to_csv("data.csv", index=None)
+
+@app.route("/data")
+def csvtohtml():
+    data =pd.read_csv("data.csv")
+    data.age = df.age*2
+    data.name = df.name+"_"+df.country
+    return render_template("csvtohtml.html",tables=[data.to_html()], titles=[''])
 
 
 #la racine ou page connexion des utilisateurs
@@ -69,14 +81,6 @@ def detailUser(id):
         return render_template('detail.user.html', title='Détail', user=oneUser) 
     return f"Utilisateur avec id ={id} n'existe pas!"    
 
-#C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
-@app.route("/change-password")
-@login_required
-def changepassword():
-    
-    return render_template('changepassword.html')    
-
-
 #Permet a l'admin de visualiser la liste des Utilisateurs
 @app.route("/compte", methods=('GET', 'POST'))
 @login_required 
@@ -127,7 +131,106 @@ def supprimerUser(id):
         return redirect(url_for('compte'))
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('comptes.html', title='Register', form=form, data=users) 
- 
+
+#Permet de Lister une Cause
+@app.route("/cause", methods=['POST','GET'])
+@login_required
+def cause():
+    form = CausesForm()
+    if request.method =='POST':
+        if form.validate_on_submit():
+            cause = Cause(form.libelle.data, form.description.data)
+            db.session.add(cause)
+            db.session.commit()
+            flash('Une nouvelle Cause vient être ajoutée', 'success') 
+
+        return redirect(url_for('cause'))
+    data = Cause.query.all()
+    return render_template('causes.html', title='Cause', form=form, causes = data)    
+
+#Cette page permet Modifier une Cause
+@app.route("/editCause", methods=['POST','GET'])
+@login_required
+def editCause():
+    if request.method =='POST':
+        data = Cause.query.get(request.form.get('id'))
+        data.libelle = request.form['libelle']
+        data.description = request.form['description']
+    
+        db.session.commit()
+        flash('Cause modifié avec Succès!','success')
+        return redirect(url_for('cause'))
+    return render_template('causes.html', title='Cause')
+
+#Permet de Supprimer une Cause
+@app.route("/supprimerCause/<id>/", methods=('GET', 'POST'))
+@login_required
+def supprimerCause(id):
+    form = CausesForm()
+    if not id or id != 0:
+        oneCause = Cause.query.get(id)
+        db.session.delete(oneCause)
+        db.session.commit()
+        flash('Cause supprimer avec succès', 'success')
+        return redirect(url_for('cause'))
+    data = Cause.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('causes.html', title='Cause', form=form, causes=data) 
+
+#C'est ici qu'on voit les plateaux
+@app.route("/plateau", methods=('GET', 'POST'))
+@login_required
+def plateau():
+    form = PlateauForm()
+    if request.method =='POST':
+        # if form.validate_on_submit():
+            print('form.libelle.data')
+            plateau = Plateau(form.libelle.data, form.description.data, form.univers.data)
+            db.session.add(plateau)
+            db.session.commit()
+            flash('Un nouveau Plateau vient être ajoutée', 'success') 
+
+            return redirect(url_for('plateau'))
+    data = Plateau.query.all()
+    return render_template('plateau.html', tiltle='Plateau', form=form, plateaux=data)    
+
+#Cette page permet Modifier une Cause
+@app.route("/editPlateau", methods=['POST','GET'])
+@login_required
+def editPlateau():
+    if request.method =='POST':
+        data = Plateau.query.get(request.form.get('id'))
+        data.libelle = request.form['libelle']
+        data.description = request.form['description']
+        data.univers= request.form['univers']
+    
+        db.session.commit()
+        flash('Plateau modifié avec Succès!','success')
+        return redirect(url_for('plateau'))
+    return render_template('plateau.html', title='Plateau')
+
+#Permet de Supprimer une Cause
+@app.route("/supprimerPlateau/<id>/", methods=('GET', 'POST'))
+@login_required
+def supprimerPlateau(id):
+    form = PlateauForm()
+    if not id or id != 0:
+        onePlateau = Plateau.query.get(id)
+        db.session.delete(onePlateau)
+        db.session.commit()
+        flash('Plateau supprimer avec succès', 'success')
+        return redirect(url_for('plateau'))
+    data = Plateau.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('plateau.html', title='Plateau', form=form, plateaux=data) 
+
+
+#C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
+@app.route("/change-password")
+@login_required
+def changepassword():
+    
+    return render_template('changepassword.html')    
+
+
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
 @login_required
@@ -193,13 +296,6 @@ def profil():
 def analyse_agent():
     
     return render_template('analyse-agent.html')    
-
-#Analyse des causes par le MO
-@app.route("/cause")
-@login_required
-def cause():
-    
-    return render_template('causes.html')    
 
 
 @app.route("/demarrer-av")

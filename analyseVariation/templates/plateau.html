@@ -1,0 +1,171 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container-lg">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-5">Paramétrage - Plateaux</div>
+    <p class="mg-b-20">Gestion et suivi des plateaux .</p>
+
+    <div class="card bg-gray-300 bd-10 ">
+        <div class="card-body">
+            <div class="row row-sm ">
+                {% for ele in plateaux %}
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="editSup px-2 d-flex justify-content-between">
+                            <a href="/editPlateau/{{ele.id}}" class="fs-5" title="edit" data-toggle="modal"
+                                data-target="#modifPlateauModal{{ele.id}}" data-placement="top">
+                                <i class="fa-solid fa-pen-to-square text-info"></i>
+                            </a>
+                            <a href="/supprimerPlateau/{{ele.id}}" class="fs-5" title="supprimer" onclick="return confirm('Etes Vous sûr de Supprimer')">
+                                <i class="fa-solid fa-trash  text-danger"></i>
+                            </a>
+                        </div>
+                        <div class="card-body tx-center ">
+                            <p class="mg-b-0 tx-center"><strong>{{ele.libelle}} - UNIVERS ({{ele.univers}})</strong></p>
+                            <span>{{ele.description}}</span>
+                        </div><!-- card-body -->
+                        <div class="card-footer bd-t tx-center bg-primary">
+
+                            <a href="{{ele.libelle}}" class="nav-sub-link text-white" data-toggle="tooltip"
+                                data-placement="top" title="Voir Détails"
+                                onClick="window.open('/details_plateau/{{ele.id}}', 'cadre2','toolbar=0, location=0, directories=0, status=0, scrollbars=1, resizable=0, copyhistory=0, menuBar=0, width=800, height=700'); return false">
+                                <i class="fas fa-solid fa-th-list"></i> &nbsp; Détails</a>
+                        </div><!-- card-footer -->
+                    </div><!-- card -->
+                    <br>
+                </div><!-- col -->
+                <br>
+                {% endfor %}
+
+            </div><!-- row -->
+
+        </div><!-- az-content-body -->
+
+    </div><br>
+    <br>
+
+    <div class="btn-icon-list">
+        {# {% url 'ajout_plateau' %} #}
+        <a id="addPlateau" href="#">
+            <button class="btn btn-az-secondary btn-icon" title="Ajouter"><i class="typcn typcn-plus"></i></button>
+        </a>
+    </div>
+
+    {# Modifier Cause Modal #}
+    {% for ele in plateaux %}
+
+    <div class="modal fade pt-0" id="modifPlateauModal{{ele.id}}" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered az-content-body" role="document">
+            <div class=" border border-3 border-white modal-content text-white card bd-10 w-50 mx-auto rounded col-12"
+                style="background:url('/static/img/2.png');">
+                <div class="modal-header border-bottom-0 d-flex justify-content-end ">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Cause</h1>
+                    <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0 text-white ">
+                    <div class="d-flex flex-column card-body mx-0 px-0">
+                        <form action="{{ url_for('editPlateau') }}" method="POST" target="cadre2">
+
+                            <div class="row row-sm mg-b-0 mb-3">
+                                <div class="col-12 form-group">
+
+                                    <input type="hidden" name="id" value="{{ele.id}}">
+                                    {{ form.libelle.label(class="form-label mg-b-5 text-white") }}
+                                    <input type="text" name="libelle" class="form-control wd-380 is-invalid" ,
+                                        placeholder="saisir libelle" value="{{ele.libelle}}">
+
+                                </div>
+                            </div>
+                            <div class="row row-sm mg-b-0 mb-3">
+                                <div class="col-12 form-group">
+                                    {{ form.libelle.label(class="form-label mg-b-5 text-white") }}
+                                    {# <label for="" class="form-label mg-b-5 text-white">Univers</label> #}
+                                    <select name="univers" class="form-control wd-380 is-invalid">
+                                        <option value="{{ele.univers}}">FRONT OFFICHE</option>
+                                        <option value="{{ele.univers}}">BACK OFFICHE</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="row row-sm mg-b-0 mb-3">
+
+                                <div class="col-12 form-group">
+                                    {{ form.description.label(class="form-label mg-b-5 text-white") }}
+                                    <textarea name="description" id="description" cols="30" rows="5"
+                                        class="form-control wd-380 is-invalid">{{ele.description}}</textarea>
+                                </div>
+                            </div>
+                            </br>
+                            <div class="mg-t-30">
+                                <button type="submit" id="bouton" class="btn btn-block btn-az-primary pd-x-20"><i
+                                        class="fa-solid fa-pen-to-square"></i>
+                                    Editer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {# Add User Modal #}
+    <div class=" modal fade pt-0" id="addPlateauModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered az-content-body" role="document">
+            <div class=" border border-3 border-white modal-content text-white card bd-10 w-50 mx-auto rounded col-12"
+                style="background:url('/static/img/2.png');">
+                <div class="modal-header border-bottom-0 d-flex justify-content-end ">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Nouveau Plateau</h1>
+                    <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0 text-white ">
+                    <div class="d-flex flex-column card-body mx-0 px-0">
+                        <form method="POST" target="cadre2">
+
+                            {{ form.hidden_tag() }}
+
+                            <div class="row row-sm mg-b-0 mb-3">
+                                <div class="col-12 form-group">
+                                    {{ form.libelle.label(class="form-label mg-b-5 text-white") }}
+                                    {# <label for="" class="form-label mg-b-5 text-white">Libellé</label> #}
+                                    <input type="text" name="libelle" class="form-control wd-380 is-invalid" ,
+                                        placeholder="saisir libelle">
+
+                                </div>
+                            </div>
+                            <div class="row row-sm mg-b-0 mb-3">
+                                <div class="col-12 form-group">
+                                    {{ form.libelle.label(class="form-label mg-b-5 text-white") }}
+                                    {# <label for="" class="form-label mg-b-5 text-white">Univers</label> #}
+                                    <select name="univers" class="form-control wd-380 is-invalid">
+                                        <option value="FRONT_OFFICE">FRONT_OFFICE</option>
+                                        <option value="BACK_OFFICE">BACK_OFFICE</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="row row-sm mg-b-0 mb-3">
+
+                                <div class="col-12 form-group">
+                                    {{ form.description.label(class="form-label mg-b-5 text-white") }}
+                                    {# <label for="" class="form-label mg-b-5 text-white">Description</label> #}
+                                    <textarea name="description" id="" cols="30" rows="5"
+                                        class="form-control wd-380 is-invalid" , placeholder="description"></textarea>
+                                </div>
+                            </div>
+                            </br>
+                            <div class="mg-t-30">
+                                <button type="submit" id="bouton" class="btn btn-block btn-az-primary pd-x-20"><i
+                                        class="fas fa-save"></i>
+                                    Valider</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

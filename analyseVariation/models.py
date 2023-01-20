@@ -59,13 +59,13 @@ class Cause(db.Model):
     __tablename__='causes'
     id = db.Column(db.Integer, primary_key=True)
     libelle = db.Column(db.String(80))
-    desciption = db.Column(db.String(80))
-    pourquoi = db.Column(db.String(80))
+    description = db.Column(db.String(255))
+    # pourquoi = db.Column(db.String(80))
 
-    def __init__(self, libelle, description, pourquoi):
+    def __init__(self, libelle, description):
         self.libelle = libelle
         self.description = description
-        self.pourquoi = pourquoi
+        # self.pourquoi = pourquoi
 
 class Statut(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
@@ -147,5 +147,22 @@ class Profil(UserMixin, db.Model):
     def __init__(self, libelle):
         self.libelle = libelle
 
+class Plateau(UserMixin, db.Model):
+    __table_args__ = {'extend_existing': True} 
+    __tablename__='plateaux'
+    id=db.Column(db.Integer,primary_key=True, autoincrement=True)
+    libelle = db.Column(db.String(100))
+    description = db.Column(db.String(255))
+    # UNIV = (
+    #     ('FRONT OFFICE','FRONT OFFICE'),
+    #     ('BACK OFFICE','BACK OFFICE'),
+    # )
+    univers  =db.Column(db.String(255))
+    # metrique = models.ManyToManyField(Metrique)
+    
+    def __init__(self, libelle, description, univers):
+        self.libelle = libelle
+        self.description = description
+        self.univers = univers
 
 init_base()

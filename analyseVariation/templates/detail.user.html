@@ -3,49 +3,58 @@
 
 <div class="container-lg">
     <div class="jumbotron p-3 tx-center">
-        <h2>Information de LAMINE THIAME:</h2>
+        <h2>Information de {{ user.prenom }} {{ user.nom }}:</h2>
     </div>
-    <div class="card border-0 jumbotron mt-2">
+    <div class="card border-0 mt-2">
         <div class="card-body d-flex flex-column p-2 ">
             <div class="matricul">
 
-                <h2><em class="float-left">Matricule:</em>
+                <h3><em class="float-left">Matricule:</em>
                     <p class="float-right">{{ user.username }}</p>
-                </h2>
+                </h3>
             </div>
+            <hr class="border">
             <div class="prenom">
 
-                <h2><em class="float-left">Prenom:</em>
+                <h3><em class="float-left">Prenom:</em>
                     <p class="float-right">{{ user.prenom }}</p>
-                </h2>
+                </h3>
+                
             </div>
+            <hr class="border">
             <div class="nom">
 
-                <h2><em class="float-left">Nom:</em>
+                <h3><em class="float-left">Nom:</em>
                     <p class="float-right">{{ user.nom }}</p>
-                </h2>
+                </h3>
+                
             </div>
+            <hr class="border">
             <div class="email">
 
-                <h2><em class="float-left">Email:</em>
+                <h3><em class="float-left">Email:</em>
                     <p class="float-right">{{ user.email }}</p>
-                </h2>
+                </h3>
             </div>
+            <hr class="border">
             <div class="profil">
 
-                <h2><em class="float-left">Profil:</em>
+                <h3><em class="float-left">Profil:</em>
                     <p class="float-right">Admin</p>
-                </h2>
+                </h3>
             </div>
+            <hr class="border">
             <div class="tel">
 
-                <h2><em class="float-left">N°tel:</em>
+                <h3><em class="float-left">N°tel:</em>
                     <p class="float-right">77 123 23 24</p>
-                </h2>
+                </h3>
             </div>
 
         </div>
+        
     </div>
+    <div class="border border-5 mt-3"></div>
 
 
 

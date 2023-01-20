@@ -45,9 +45,16 @@ $('#changepwd').on('click', function(e) {
   })
 });
 
-$('#edituser').on('click', function(e) {  
+$('#addcause').on('click', function(e) {  
 	e.preventDefault();           
-	$('#modaledit').modal('show');
+	$('#addCauseModal').modal('show');
+  	$(function () {
+    	$('[data-toggle="tooltip"]').tooltip()
+  })
+});
+$('#addPlateau').on('click', function(e) {  
+	e.preventDefault();           
+	$('#addPlateauModal').modal('show');
   	$(function () {
     	$('[data-toggle="tooltip"]').tooltip()
   })
