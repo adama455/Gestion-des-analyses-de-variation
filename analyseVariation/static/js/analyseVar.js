@@ -8,20 +8,22 @@ const pourquoi = document.querySelectorAll("pourquois");
 const pourquoiSuivant = document.getElementById("pourquoi-suivant");
 var pourqw = document.querySelectorAll(".pourqw");
 
-// const pourquoi1=document.getElementById('pourquoi1');
-// var pourqw;
+const pourquoi1=document.getElementById('pourquoi1');
+var pourqw;
 
-// console.log("pourquoi : ",pourquoi);
+console.log("pourquoi : ",pourquoi);
 
-ajoutAnalyse.addEventListener("click", () => {
+ajoutAnalyse.addEventListener("click", (e) => {
+  e.preventDefault()
   section2.classList.toggle("show2");
 });
 
-definirAction.addEventListener("click", () => {
-  section3.classList.toggle("show3");
-});
+//definirAction.addEventListener("click", (e) => {
+  //e.preventDefault()
+  //section3.classList.toggle("show3");
+//});
 
-pourquoiSuivant.addEventListener("click", () => {
+/*pourquoiSuivant.addEventListener("click", () => {
   //   var pourqw = document.querySelectorAll(".pourqw");
   const pourquoi = document.querySelectorAll(".pourquois");
   //   console.log(pourqw);
@@ -62,7 +64,7 @@ pourquoiSuivant.addEventListener("click", () => {
       prq.appendChild(input);
     });
   });
-});
+});/*/
 
 // Pour le premier Pourquoi qui apparait par défaut:::::::::
 pourquoi.forEach((element) => {
@@ -76,3 +78,127 @@ pourquoi.forEach((element) => {
     prq.appendChild(input);
   });
 });
+
+////////////////////////////////////////////////////////////////////////
+
+enregistrement_cause = document.getElementById('enregistrement_cause');
+console.log('enreg ',enregistrement_cause)
+
+var div_parent;
+var duplique_input;
+
+function cre_boutton_plus_input(parent, id){
+  duplique_input = document.createElement('div')
+  //label = document.createElement('label')
+  //label.textContent = `Pourquoi : ${i}`
+  duplique_input.className = 'col-1 icon-add'
+  i = document.createElement('i')
+  i.className = 'fa-solid fa-circle-plus fs-4 pourqois'
+  duplique_input.setAttribute("id", `bouton_plus_${id}`)
+  i.style.cursor = 'pointer'
+  duplique_input.appendChild(i)
+  parent.appendChild(duplique_input)
+  //duplique_input.style.visibility = 'hidden'
+}
+
+function cre_bloc(parent, i){
+  div_parent = document.createElement('div')
+  Input = document.createElement('div')
+  div_parent.className = 'col-12 d-flex row  mg-x-0'
+  labels = document.createElement('label')
+  labels.textContent = `Pourquoi : ${i}`
+  labels.className = 'col-2 fs-5'
+  divinput=document.createElement('div')
+  input = document.createElement('input')
+  divinput.className = 'col  pe-0'
+  Input.className = 'col d-flex row  p-0'
+  Input.style.justifyContent = 'space-between'
+  input.className = 'col pe-0 me-2 fs-5'
+  Input.setAttribute('id', `input_${i}`)
+  Input.appendChild(input)
+  divinput.appendChild(Input)
+  div_parent.appendChild(labels)
+  div_parent.appendChild(divinput)
+  div_parent.className = ' d-flex row'
+  parent.appendChild(div_parent)
+  var liste1 = []
+  var liste2 = []
+  if (i>=2){
+    console.log('cool')
+    cre_boutton_plus_input(divinput, i)
+    id_bouton = document.getElementById(`bouton_plus_${i}`)
+    id_input = document.getElementById(`input_${i}`)
+    liste1.push(id_input)
+    liste2.push(id_bouton)
+    console.log('this ',id_input)
+    liste1.forEach((elem)=>{
+      //elem.addEventListener('click', (e)=>{
+        //e.preventDefault()
+        //console.log('this ',id_bouton, elem, liste1);
+        liste2.forEach((el)=>{
+          //el.style.visibility='visible';
+          el.addEventListener('click', (e)=>{
+            e.preventDefault()
+            
+            liste2 = liste2.filter((element) => element !== el)
+            //liste1 = liste1.filter((element) => element !== elem)
+            console.log('dfghj')
+            //elem.firstChild.className='col-5'
+            
+            cre_input(elem)
+            if (el.id=='bouton_plus_2'){
+              console.log(el)
+              el.style.visibility = 'hidden'
+            }else if (elem.childNodes.length==4){
+              el.style.visibility = 'hidden'
+            }
+          })
+        })
+      //})
+    }) 
+  }
+}
+
+function cre_input(parent){
+  input = document.createElement('input')
+  input.className = 'col me-2 fs-5'
+  parent.appendChild(input)
+}
+
+function cre_boutton(parent){
+  div = document.createElement('div')
+  //label = document.createElement('label')
+  //label.textContent = `Pourquoi : ${i}`
+  div.className = 'col-1 icon-add'
+  i = document.createElement('i')
+  i.className = 'fa-solid fa-circle-plus fs-4 pourqois'
+  i.setAttribute("id", "")
+  i.style.cursor = 'pointer'
+  div.appendChild(i)
+  parent.appendChild(div)
+  console.log(div)
+  var i = parent.childNodes.length-1
+  div.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if (i<5){
+      bloc = cre_bloc(enregistrement_cause, i)
+      console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
+      parent.removeChild(div_parent.previousSibling)
+      cre_boutton(enregistrement_cause);
+    }else if(i==5){
+      bloc = cre_bloc(enregistrement_cause, i)
+      console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
+      parent.removeChild(div_parent.previousSibling)
+    }
+    
+  })
+}
+
+
+
+
+var i = 1;
+cre_bloc(enregistrement_cause, i);
+cre_boutton(enregistrement_cause);
+
+

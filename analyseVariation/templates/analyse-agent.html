@@ -4,15 +4,96 @@
 <div class="az-content-label mg-b-5">ANALYSE VARIATION </div>
 <p class="mg-b-20 "><span class="text-primary"></span></p>
 
-<form method="POST">
-    <div style="white-space: nowrap;overflow-x: auto; width: 950px;" class="position-relative container ">
+<form class="border">
+    <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container border ">
 
-        <div class="d-inline-block px-2">
+        <div class="section1 mb-3">
+            <div class="row mb-3">
+                <div class="col-4 d-flex flex-column">
+                    <label for="reference_av">Recherche AV</label>
+                    <input type="text" name="reference_av" id="reference_av">
+                </div>
+                <div class="col-4 d-flex flex-column">
+                    <label for="libelle_av">Libellé AV</label>
+                    <input type="text" name="libelle_av" id="libelle_av">
+                </div>
+                <div class="col-4 d-flex flex-column">
+                    <label for="responsable_av">Responssable AV</label>
+                    <input type="text" name="responsable_av" id="responsable_av">
+                </div>
+            </div>
+
+            <div class="btn-icon-list">
+                <a href="#" id="add-analyse">
+                    <button class="btn btn-primary  border-0 rounded" title="analyse">Ajouter
+                        Analyse</i></button></a>
+                &nbsp;&nbsp;
+            </div>
+        </div>
+        <div class="analyse-cause section2 " id="section2">
+            <div class="row mb-2">
+                <div class="col-3 d-flex flex-column">
+                    <label for="identifiant" class="tx-center">Identifient</label>
+                    <input type="text" name="identifiant" id="identifiant">
+                </div>
+                <div class="col-9 d-flex flex-column">
+                    <label for="axes_analyse " class="tx-center">Axes d'analyse des causes</label>
+                    <select name="axes_analyse" id="axes_analyse" class="bg-white border p-1">
+                        <option value="" disabled>choisir un  Axe</option>
+                        <option value="">bndfghjklm</option>
+                        <option value="">bndfghjklm</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="row probleme mb-2">
+                    <label for="identifiant" class="col-3">Probleme</label>
+                    <div class="col-9 ">
+                        <input type="text" name="probleme" id="probleme" class="col-12 border border-primary">
+                    </div>
+                </div>
+            </div>
+            <div id="enregistrement_cause">
+
+            </div>
+            <div class="d-flex justify-content-end">
+                <div class="d-flex col-10 justify-content-between ">
+                    <div class="btn-icon-list mb-3 mg-l-20">
+                        <a href="#" id="definir-action_1" data.toggle="modal" data.target="#Modal_action">
+                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
+                                Action</i></button></a>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div class="btn-icon-list mb-3">
+                        <a href="#" id="definir-action_">
+                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
+                                Action</i></button></a>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div class="btn-icon-list mb-3">
+                        <a href="#" id="definir-action">
+                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
+                                Action</i></button></a>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div class="btn-icon-list mb-3 mg-r-20">
+                        <a href="#" id="definir-action">
+                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
+                                Action</i></button></a>
+                        &nbsp;&nbsp;
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <!--<div class="d-inline-block px-2">
             <div style="height:250px"></div>
             <div class="form-group ">
                 <label class="form-label">Pourquoi 1: <span class="tx-danger">*</span></label>
                 <input type="text" name="pourquoi_1" class="form-control wd-350" placeholder="Pourquoi 1" required>
-            </div><!-- form-group -->
+            </div> form-group 
         </div>
 
         <div class="d-inline-block px-2">
@@ -20,12 +101,12 @@
             <div class="form-group">
                 <label class="form-label">Pourquoi 2: <span class="tx-danger">*</span></label>
                 <input type="text" name="pourquoi_21" class="form-control wd-350" placeholder="Pourquoi 2" required>
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:220px"></div>
             <div class="form-group ">
                 <label class="form-label">Pourquoi 2: <span class="tx-danger">*</span></label>
                 <input type="text" name="pourquoi_22" class="form-control wd-350" placeholder="Pourquoi 2" required>
-            </div><!-- form-group -->
+            </div><!-- form-group 
         </div>
 
 
@@ -34,22 +115,22 @@
             <div class="form-group">
                 <label class="form-label">Pourquoi 3:  </label>
                 <input type="text" name="pourquoi_31" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 3:  </label>
                 <input type="text" name="pourquoi_32" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group ">
                 <label class="form-label">Pourquoi 3:  </label>
                 <input type="text" name="pourquoi_33" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 3:  </label>
                 <input type="text" name="pourquoi_34" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
         </div>
 
 
@@ -58,22 +139,22 @@
             <div class="form-group">
                 <label class="form-label">Pourquoi 4:  </label>
                 <input type="text" name="pourquoi_41" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 4:  </label>
                 <input type="text" name="pourquoi_42" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 4:  </label>
                 <input type="text" name="pourquoi_43" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 4:  </label>
                 <input type="text" name="pourquoi_44" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             
         </div>
 
@@ -83,22 +164,22 @@
             <div class="form-group">
                 <label class="form-label">Pourquoi 5:  </label>
                 <input type="text" name="pourquoi_51" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 5:  </label>
                 <input type="text" name="pourquoi_52" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 5:  </label>
                 <input type="text" name="pourquoi_53" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Pourquoi 5:  </label>
                 <input type="text" name="pourquoi_54" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             
         </div>
 
@@ -111,7 +192,7 @@
                       <option value="{{cause.libelle}}">{{cause.libelle}}</option>
                     {% endfor%}
                     </select>
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
@@ -120,7 +201,7 @@
                       <option value="{{cause.libelle}}">{{cause.libelle}}</option>
                     {% endfor%}
                     </select>
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
@@ -129,7 +210,7 @@
                       <option value="{{cause.libelle}}">{{cause.libelle}}</option>
                     {% endfor%}
                     </select>
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div style="height:80px"></div>
             <div class="form-group">
                 <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
@@ -138,7 +219,7 @@
                       <option value="{{cause.libelle}}">{{cause.libelle}}</option>
                     {% endfor%}
                     </select>
-            </div><!-- form-group -->
+            </div><!-- form-group 
             
         </div>
         
@@ -147,36 +228,36 @@
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_1" placeholder="Action"  class="form-control wd-350 "
                 >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_2" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_3" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_4" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_5" placeholder="Action"  class="form-control wd-350 "
                   placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_6" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_7" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Actions:  </label>
                 <input type="text" name="action_8" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             
         </div>
 
@@ -184,35 +265,35 @@
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_1" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_2" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_3" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_4" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_5" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_6" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_7" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Porteurs:  </label>
                 <input type="text" name="porteur_8" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
     
         </div>
 
@@ -221,49 +302,91 @@
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_1" placeholder="Échéance"  class="form-control wd-350 fc-datepicker"
                   placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_2" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_3" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_4" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_5" placeholder="Échéance"  class="form-control wd-350 fc-datepicker"
                   placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_6" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_7" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             <div class="form-group">
                 <label class="form-label">Échéance:  </label>
                 <input type="text" name="echeance_8" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group -->
+            </div><!-- form-group 
             
-        </div>
+        </div>-->
        
         
         
     </div>
-    <div class="">
+    <!--<div class="">
         <div class="d-flex flex-row-reverse mt-5">
             <input type="submit" value="Valider" class="btn btn-primary px-5">
-        </div><!-- form-group -->
-    </div>
+        </div> form-group 
+    </div>-->
     
 </form>
+
+<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-bottom-0 d-flex justify-content-end">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-title text-center">
+            <h4>Saisir le libelle et charger le fichier</h4>
+          </div>
+          <div class="d-flex flex-column text-center">
+            <form action="{{ url_for('upload_file') }}" method="POST">
+                <div class="row mb-3">
+                    <div class="col-3 d-flex flex-column">
+                        <label for="reference_ac">Ref action</label>
+                        <input type="text" name="reference_ac" id="reference_ac">
+                    </div>
+                    <div class="col-3 d-flex flex-column">
+                        <label for="libelle_av">Libellé action</label>
+                        <input type="text" name="libelle_av" id="libelle_av">
+                    </div>
+                    <div class="col-3 d-flex flex-column">
+                        <label for="porteur">Porteur</label>
+                        <input type="text" name="porteur" id="porteur">
+                    </div>
+                    <div class="col-3 d-flex flex-column">
+                        <label for="delai">Delai</label>
+                        <input type="text" name="delai" id="delai">
+                    </div>
+                </div>
+
+              <button type="submit" class="btn btn-info btn-block btn-round">Fichier</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 
 
 
@@ -271,14 +394,19 @@
 {% block javascript %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    $( ".fc-datepicker" ).datepicker();
-    $( ".fc-datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-    
-  } );
+<!-- BS JavaScript -->
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<!-- Have fun using Bootstrap JS -->
+<script type="text/javascript">
+
+  $('#definir-action_1').on('click', function(e) {  
+	e.preventDefault();           
+	$('#modal_action').modal('show');
+  	$(function () {
+    	$('[data-toggle="tooltip"]').tooltip()
+  })
+});
 
   </script>
 {% endblock javascript %}

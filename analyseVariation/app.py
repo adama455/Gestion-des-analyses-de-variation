@@ -193,8 +193,7 @@ def miseAjourAc():
 def rejeterAv():
     form = RegistrationForm()
     return render_template('rejeterAv.html',title='Analyse Cause', form=form)  
- 
- 
+
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil", methods=('GET', 'POST'))
 @login_required
@@ -232,25 +231,21 @@ def logout():
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
     fichier = request.args.get('filename')
-    test= 0
     if fichier :
         reference = '000012'
         data = pd.read_excel(fichier)
         mesures = data.Mesures.dropna()
         data = data.dropna()
         data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
-        #data['Mesures'] = data['Mesures'].apply(lambda x : float(x[:]))
         max = pd.to_numeric(mesures, errors='coerce').max()
         min = pd.to_numeric(mesures, errors='coerce').min()
         nbr_va_sou_perf = data[data["Mesures"]<650].Nom.count()
         nbr_va_sur_perf = data[data["Mesures"]>1000].Nom.count()
         data = data[(data["Mesures"]<650)|(data['Mesures']>1000)]
-        print(data)
         prenom = current_user.prenom
         nom = current_user.nom
         Date = date.today()
-        print(prenom)
-        print(Date)
+        
         analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).all()
         
         if not analyse_variation:
@@ -265,9 +260,7 @@ def synthese_av():
             
         return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
     if request.method=='POST':
-        print('nombre :', data.count())
-        
-        return redirect(url_for('listeVa'), data=data, prenom=prenom, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+        return redirect(url_for('listeVa'))  
     return render_template('synthese-av.html')
 
 @app.route('/uploader', methods = ['GET', 'POST']) 

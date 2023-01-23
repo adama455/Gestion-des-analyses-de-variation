@@ -52,3 +52,4 @@ $('#edituser').on('click', function(e) {
     	$('[data-toggle="tooltip"]').tooltip()
   })
 });
+
