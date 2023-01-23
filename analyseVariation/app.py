@@ -11,8 +11,8 @@ from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV
 from analyseVariation import app, db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 import os
-from tkinter import filedialog
 from tkinter import *
+from tkinter import filedialog
 import pandas as pd
 from datetime import date
 
@@ -230,14 +230,11 @@ def supprimerPlateau(id):
     data = Plateau.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('plateau.html', title='Plateau', form=form, plateaux=data) 
 
-
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
-@app.route("/change-password")
-@login_required
-def changepassword():
-    
-    return render_template('changepassword.html')    
-
+# @app.route("/change-password")
+# @login_required
+# def changepassword():
+    #return render_template('changepassword.html')    
 
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
@@ -268,7 +265,7 @@ def listeVa():
     ref = request.args.get('ref')
     liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
     n = len(liste)
-    print("data = ", liste[1].nom_cc, n)
+    # print("data = ", liste[1].nom_cc, n)
     return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n)  
 
 #Permet d'enregistrer une cause
@@ -305,9 +302,7 @@ def profil():
 @app.route("/analyse_agent")
 @login_required
 def analyse_agent():
-    
     return render_template('analyse-agent.html')    
-
 
 @app.route("/demarrer-av")
 @login_required

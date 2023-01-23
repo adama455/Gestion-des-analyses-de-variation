@@ -7,7 +7,6 @@ from analyseVariation import db, init_base, login_manager
 from sqlalchemy.orm import *
 from flask_login import UserMixin
 
-
 @login_manager.user_loader
 def load_user(user_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
@@ -25,12 +24,12 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(120), nullable=False)
     
 
-    def __init__(self,nom, prenom, username,email,password):
-        self.nom=nom
-        self.prenom=prenom
-        self.username=username
-        self.email=email
-        self.password=password
+    def __init__(self, nom, prenom, username, email, password):
+        self.nom = nom
+        self.prenom = prenom
+        self.username = username
+        self.email = email
+        self.password = password
 
 class ActionProgramme(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
@@ -66,6 +65,7 @@ class Cause(db.Model):
         self.libelle = libelle
         self.description = description
         # self.pourquoi = pourquoi
+
 
 class Statut(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
