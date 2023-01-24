@@ -170,7 +170,7 @@ def listeVa():
     ref = request.args.get('ref')
     liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
     n = len(liste)
-    #print("data = ", liste[1].nom_cc, n)
+    # print("data = ", liste[1].nom_cc, n)
     return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n)  
 
 #Permet d'enregistrer une cause
@@ -247,7 +247,6 @@ def synthese_av():
         Date = date.today()
         
         analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
-        dat = User.query.get('2')
         if not analyse_variation:
             for i in range(data.shape[0]):
                 print(reference, data.index[i])
@@ -275,7 +274,7 @@ def synthese_av():
 @app.route('/uploader', methods = ['GET', 'POST']) 
 def upload_file () : 
     filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
-                                        filetypes=(("Fichier texte","*.txt"), ("Fichier excel","*.xsl"),("Tous les fichiers","*.*")))
+                                        filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
     
     if filename:
         return redirect(url_for('synthese_av', filename=filename))

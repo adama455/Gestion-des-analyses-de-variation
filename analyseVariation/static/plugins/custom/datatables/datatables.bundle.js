@@ -1,6 +1,6 @@
 /*! DataTables 1.10.23
  * ©2008-2020 SpryMedia Ltd - datatables.net/license
- */
+*/
 
 /**
  * @summary     DataTables
@@ -206,7 +206,6 @@
 				) :
 				new _Api( this );
 		};
-		
 		
 		/**
 		 * Add a single new row or multiple rows of data to the table. Please note
@@ -666,8 +665,7 @@
 				.show()
 				.child()[0];
 		};
-		
-		
+	
 		/**
 		 * Change the pagination - provides the internal logic for pagination in a simple API
 		 * function. With this function you can have a DataTables table go to the next,
@@ -4411,7 +4409,6 @@
 		settings.aiDisplay = out;
 	}
 	
-	
 	/**
 	 * Filter the data table based on user input and draw the table
 	 *  @param {object} settings dataTables settings object
@@ -6395,7 +6392,7 @@
 				callback();
 				return;
 			}
-	
+
 			// Number of columns have changed - all bets are off, no restore of settings
 			if ( s.columns && columns.length !== s.columns.length ) {
 				callback();
@@ -7546,7 +7543,7 @@
 	 *  * `end` - Display index for the last record shown on the current page
 	 *  * `length` - Display length (number of records). Note that generally `start
 	 *    + length = end`, but this is not always true, for example if there are
-	 *    only 2 records to show on the final page, with a length of 10.
+	 *    only 2 records to show on the final page, with a length of 2.
 	 *  * `recordsTotal` - Full data set length
 	 *  * `recordsDisplay` - Data set length once the current filtering criterion
 	 *    are applied.
@@ -9045,7 +9042,6 @@
 		} );
 	} );
 	
-	
 	/**
 	 * Attach a sort listener to an element for a given column
 	 *
@@ -9226,8 +9222,7 @@
 	
 		return true;
 	};
-	
-	
+
 	/**
 	 * Check if a `<table>` node is a DataTable table already or not.
 	 *
@@ -10681,7 +10676,6 @@
 		 */
 		"bSortClasses": true,
 	
-	
 		/**
 		 * Enable or disable state saving. When enabled HTML5 `localStorage` will be
 		 * used to save table display information such as pagination information,
@@ -11285,7 +11279,6 @@
 		 *    } )
 		 */
 		"iDisplayStart": 0,
-	
 	
 		/**
 		 * By default DataTables allows keyboard navigation of the table (sorting, paging,
@@ -12052,7 +12045,6 @@
 		 */
 		"sScrollXInner": "",
 	
-	
 		/**
 		 * Enable vertical scrolling. Vertical scrolling will constrain the DataTable
 		 * to the given height, and enable scrolling for any data which overflows the
@@ -12111,7 +12103,6 @@
 		 *
 		 */
 		"renderer": null,
-	
 	
 		/**
 		 * Set the data property name that DataTables should use to get a row's id

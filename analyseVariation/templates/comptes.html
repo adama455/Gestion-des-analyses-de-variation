@@ -50,7 +50,7 @@
 
         <a id="adduser" href="#">
           <button class="btn btn-icon btn-success pd-x-20" title="Ajouter" id="bouton"><i
-              class="typcn typcn-plus"></i></button></a>
+            class="typcn typcn-plus"></i></button></a>
         &nbsp;&nbsp;
 
 
@@ -92,7 +92,7 @@
                   <div class="col-6 form-group">
                       <label class="form-label mg-b-5 text-white">Prénom</label>
                     
-                      <input type="text" class="form-control wd-380 is-invalid" name="prenom" placeholder="saisir prenom" value="{{user.prenom}}" required>
+                      <input type="text" class="form-control wd-380 is-invalid" name="prenom" placeholder="saisir prenom" value="{{user.prenom}}" required min="3">
 
                   </div>
                 </div>
@@ -100,7 +100,7 @@
                 <div class="row row-sm mg-b-0 mb-3">
                   <div class="col-6 form-group">
                     <label class="form-label mg-b-5 text-white">Nom</label>
-                    <input type="text" class="form-control wd-380 is-invalid" name="nom" placeholder="saisir nom" value="{{user.nom}}" required>
+                    <input type="text" class="form-control wd-380 is-invalid" name="nom" placeholder="saisir nom" value="{{user.nom}}" required min="2">
 
                   </div>
                   <div class="col-6 form-group">

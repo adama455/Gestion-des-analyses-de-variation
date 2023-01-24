@@ -24,3 +24,16 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Connexion')
   
+class CausesForm(FlaskForm):
+    libelle = StringField('Libellé', validators=[DataRequired(), Length(min=5, max=200)  ])
+    description = StringField('Description', validators=[DataRequired(), Length(min=10, max=200)  ])
+      
+    submit = SubmitField('Valider')
+
+class PlateauForm(FlaskForm):
+    libelle = StringField('Libellé', validators=[DataRequired(), Length(min=5, max=200)])
+    description = StringField('Description', validators=[DataRequired(), Length(min=10, max=200)])
+    univers = StringField('Univers', validators=[DataRequired()])
+    
+      
+    submit = SubmitField('Valider')

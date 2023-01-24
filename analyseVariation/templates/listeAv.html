@@ -2,8 +2,8 @@
 {% block content %}
 
 <div class="container">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES ANALYSES DE VARIATION</div>
 
-    <h1 class="text-dark d-flex justify-content-center align-items-center py-1 my-4">LISTE DES ANALYSES DE VARIATION</h1>
     {# <div class="row w-100  recherche mx-0  my-3">
         <div class="col-8 d-flex">
             <input type="search" name="recherche" id="" placeholder="Rechercher une AV"
@@ -27,6 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr>
                         <td>AD004</td>
                         <td>Libelle av</td>
@@ -40,6 +41,7 @@
                             </a>
                         </td>
                     </tr>
+
                     <tr>
                         <td>AD007</td>
                         <td>Libelle av</td>
@@ -67,6 +69,7 @@
                             </a>
                         </td>
                     </tr>
+
                     <tr>
                         <td>AD009</td>
                         <td>Libelle av</td>
@@ -80,6 +83,20 @@
                             </a>
                         </td>
                     </tr>
+                    <tr>
+                        <td>AD009</td>
+                        <td>Libelle av</td>
+                        <td>Lamine THIAME</td>
+                        <td>2023-01-04</td>
+                        <td>
+                            <a href="{{ url_for('home') }}">
+                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                    <i class="fa-solid  fs-2 fa-circle"></i>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
             <br>
