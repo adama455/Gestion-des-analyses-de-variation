@@ -86,13 +86,15 @@ class Enregistrement_AV(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     agent = db.Column(db.String(80))
     reference_av = db.Column(db.String(80))
+    libelle_av = db.Column(db.String(255))
     date = db.Column(db.Date)
     statut_analyse = db.Column(db.String(80))
     commentaire = db.Column(db.String(80), nullable=True)
 
-    def __init__(self, agent, reference_av, date, statut_analyse, commentaire):
+    def __init__(self, agent, reference_av, libelle_av, date, statut_analyse, commentaire):
         self.agent = agent
         self.reference_av = reference_av
+        self.libelle_av = libelle_av
         self.date = date
         self.statut_analyse = statut_analyse
         self.commentaire = commentaire

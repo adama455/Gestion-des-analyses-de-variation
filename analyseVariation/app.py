@@ -170,7 +170,7 @@ def listeVa():
     ref = request.args.get('ref')
     liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
     n = len(liste)
-    print("data = ", liste[1].nom_cc, n)
+    #print("data = ", liste[1].nom_cc, n)
     return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n)  
 
 #Permet d'enregistrer une cause
@@ -246,22 +246,31 @@ def synthese_av():
         nom = current_user.nom
         Date = date.today()
         
-        analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).all()
-        
+        analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
+        dat = User.query.get('2')
         if not analyse_variation:
             for i in range(data.shape[0]):
                 print(reference, data.index[i])
                 valeur_aberante = ValeursAberrante(reference, data['Nom'][data.index[i]], data['Mesures'][data.index[i]])
                 db.session.add(valeur_aberante)
                 db.session.commit()
-            av = Enregistrement_AV(prenom +' '+ nom, reference, Date, 'Statut en cour','')
+            av = Enregistrement_AV(prenom +' '+ nom, reference, '', Date, 'Statut en cour','')
             db.session.add(av)
             db.session.commit()
-            
-        return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+        
     if request.method=='POST':
-        return redirect(url_for('listeVa'))  
-    return render_template('synthese-av.html')
+        libelle = request.form['libelle']
+        statut = request.form['statut']
+        print(analyse_variation.agent)
+        analyse_variation.agent = prenom +' '+ nom
+        analyse_variation.reference_av = reference
+        analyse_variation.libelle_av = libelle
+        analyse_variation.date = Date
+        analyse_variation.statut_analyse = statut
+        db.session.commit()
+        return redirect(url_for('listeVa', ref=reference))  
+    return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+
 
 @app.route('/uploader', methods = ['GET', 'POST']) 
 def upload_file () : 
