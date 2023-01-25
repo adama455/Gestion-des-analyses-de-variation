@@ -1,94 +1,118 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="az-content-label mg-b-5">ANALYSE VARIATION </div>
-<p class="mg-b-20 "><span class="text-primary"></span></p>
+<div class="container-lg">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-20">ANALYSE VARIATION</div>
 
-<form class="border">
-    <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container border ">
+    {# <p class="mg-b-20 "><span class="text-primary"></span></p> #}
 
-        <div class="section1 mb-3">
-            <div class="row mb-3">
-                <div class="col-4 d-flex flex-column">
-                    <label for="reference_av">Recherche AV</label>
-                    <input type="text" name="reference_av" id="reference_av">
+    <form class="">
+        <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container ">
+
+            <div class="section1 mb-3">
+                <div class="row mb-3">
+                    <div class="col-4 d-flex flex-column">
+                        <label for="reference_av">Recherche AV</label>
+                        <input type="text" name="reference_av" id="reference_av">
+                    </div>
+                    <div class="col-4 d-flex flex-column">
+                        <label for="libelle_av">Libellé AV</label>
+                        <input type="text" name="libelle_av" id="libelle_av">
+                    </div>
+                    <div class="col-4 d-flex flex-column">
+                        <label for="responsable_av">Responssable AV</label>
+                        <input type="text" name="responsable_av" id="responsable_av">
+                    </div>
                 </div>
-                <div class="col-4 d-flex flex-column">
-                    <label for="libelle_av">Libellé AV</label>
-                    <input type="text" name="libelle_av" id="libelle_av">
-                </div>
-                <div class="col-4 d-flex flex-column">
-                    <label for="responsable_av">Responssable AV</label>
-                    <input type="text" name="responsable_av" id="responsable_av">
+
+                <div class="btn-icon-list">
+                    <a href="#" id="add-analyse">
+                        <button class="btn btn-primary  border-0 rounded" title="analyse">Ajouter
+                            Analyse</i></button></a>
+                    &nbsp;&nbsp;
                 </div>
             </div>
+            <div class="analyse-cause section2 " id="section2">
+                <div class="row mb-2">
+                    <div class="col-3 d-flex flex-column">
+                        <label for="identifiant" class=" fs-5 tx-center">Identifient</label>
+                        <input type="text" name="identifiant" id="identifiant" class="fs-5">
+                    </div>
+                    <div class="col-9 d-flex flex-column">
+                        <label for="axes_analyse " class=" fs-5 tx-center">Axes d'analyse des causes</label>
+                        <select name="axes_analyse" id="axes_analyse" class="bg-white border p-1 fs-5">
+                            <option value="" disabled>choisir un Axe</option>
+                            <option value="">bndfghjklm</option>
+                            <option value="">bndfghjklm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="row probleme mb-2">
+                        <label for="identifiant" class="col-3 fs-5">Probleme</label>
+                        <div class="col-9 ">
+                            <input type="text" name="probleme" id="probleme" class="col-12 border border-primary fs-5">
+                        </div>
+                    </div>
+                </div>
+                <div id="enregistrement_cause">
 
-            <div class="btn-icon-list">
-                <a href="#" id="add-analyse">
-                    <button class="btn btn-primary  border-0 rounded" title="analyse">Ajouter
-                        Analyse</i></button></a>
-                &nbsp;&nbsp;
-            </div>
-        </div>
-        <div class="analyse-cause section2 " id="section2">
-            <div class="row mb-2">
-                <div class="col-3 d-flex flex-column">
-                    <label for="identifiant" class="tx-center">Identifient</label>
-                    <input type="text" name="identifiant" id="identifiant">
+
                 </div>
-                <div class="col-9 d-flex flex-column">
-                    <label for="axes_analyse " class="tx-center">Axes d'analyse des causes</label>
-                    <select name="axes_analyse" id="axes_analyse" class="bg-white border p-1">
-                        <option value="" disabled>choisir un  Axe</option>
-                        <option value="">bndfghjklm</option>
-                        <option value="">bndfghjklm</option>
-                    </select>
+                <div class="d-flex flex-column">
+                <div class="d-flex justify-content-end">
+                    <div class="div-btn d-flex col-10 justify-content-between " id="div-btn">
+                        <div class="btn-icon-list mb-3 mg-l-20">
+                            <a href="#" id="definir-action_1" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="btn-icon-list mb-3">
+                            <a href="#" id="definir-action_2" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="btn-icon-list mb-3">
+                            <a href="#" id="definir-action_3" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="btn-icon-list mb-3 mg-r-20">
+                            <a href="#" id="definir-action_4" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <div class="row probleme mb-2">
-                    <label for="identifiant" class="col-3">Probleme</label>
-                    <div class="col-9 ">
-                        <input type="text" name="probleme" id="probleme" class="col-12 border border-primary">
+
+                <div class="d-flex justify-content-end ">
+                    <div class="d-flex col-10 justify-content-between p-0">
+                        <div class=" mt-5 row w-100 ms-1">
+                            <div class="col-4 d-flex justify-content-start p-0">
+                                <div class="btn  tx-white btn-final rounded">Valider action</div>
+                            </div>
+
+                            <div class="col-4 d-flex justify-content-center p-0">
+                                <div class="btn  tx-white btn-final rounded">Sortir</div>
+                            </div>
+
+                            <div class="col-4 d-flex justify-content-end p-0">
+                                <div class="btn  tx-white btn-final rounded">Valider l'Enrégistrement des détails</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="enregistrement_cause">
-
             </div>
-            <div class="d-flex justify-content-end">
-                <div class="d-flex col-10 justify-content-between ">
-                    <div class="btn-icon-list mb-3 mg-l-20">
-                        <a href="#" id="definir-action_1" data.toggle="modal" data.target="#Modal_action">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="btn-icon-list mb-3">
-                        <a href="#" id="definir-action_">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="btn-icon-list mb-3">
-                        <a href="#" id="definir-action">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="btn-icon-list mb-3 mg-r-20">
-                        <a href="#" id="definir-action">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
+                    {# <span class="py-1 px-2 bg-danger  rounded-circle">
+            <span class="tx-white">2</span>
+        </span> #}
 
-
-        <!--<div class="d-inline-block px-2">
+                    <!--<div class="d-inline-block px-2">
             <div style="height:250px"></div>
             <div class="form-group ">
                 <label class="form-label">Pourquoi 1: <span class="tx-danger">*</span></label>
@@ -334,89 +358,102 @@
             </div><!-- form-group 
             
         </div>-->
-       
-        
-        
-    </div>
-    <!--<div class="">
+
+
+
+                </div>
+                <!--<div class="">
         <div class="d-flex flex-row-reverse mt-5">
             <input type="submit" value="Valider" class="btn btn-primary px-5">
         </div> form-group 
     </div>-->
-    
-</form>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button> #}
 
-{# <div class="modal fade bd-example-modal-lg" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      ...
-    </div>
-  </div>
-</div> #}
+    </form>
+    <!-- Modal -->
+    <div class="modal fade" id="modal_action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Définir action</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column">
+                    <h3 class="modal-title fs-5 py-2" id="exampleModalLabel">action_n°1</h3>
+                    <div class="d-flex flex-column text-center">
+                        <form action="{{ url_for('upload_file') }}" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="reference_ac" class="d-flex justify-content-start">Ref action</label>
+                                    <input type="text" name="reference_ac" id="reference_ac" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="libelle_av" class="d-flex justify-content-start">Libellé action</label>
+                                    <input type="text" name="libelle_av" id="libelle_av" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="porteur" class="d-flex justify-content-start">Porteur</label>
+                                    <input type="text" name="porteur" id="porteur" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="delai" class="d-flex justify-content-start">Delai</label>
+                                    <input type="text" name="delai" id="delai" class="fs-5">
+                                </div>
+                            </div>
 
-<div class="modal fade " id="modal_action" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header border-bottom-0 d-flex justify-content-end">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-title text-center">
-            <h4>Saisir le libelle et charger le fichier</h4>
-          </div>
-          <div class="d-flex flex-column text-center">
-            <form action="{{ url_for('upload_file') }}" method="POST">
-                <div class="row mb-3">
-                    <div class="col-3 d-flex flex-column">
-                        <label for="reference_ac">Ref action</label>
-                        <input type="text" name="reference_ac" id="reference_ac">
+                        </form>
                     </div>
-                    <div class="col-3 d-flex flex-column">
-                        <label for="libelle_av">Libellé action</label>
-                        <input type="text" name="libelle_av" id="libelle_av">
-                    </div>
-                    <div class="col-3 d-flex flex-column">
-                        <label for="porteur">Porteur</label>
-                        <input type="text" name="porteur" id="porteur">
-                    </div>
-                    <div class="col-3 d-flex flex-column">
-                        <label for="delai">Delai</label>
-                        <input type="text" name="delai" id="delai">
+                    <div class="autre_action" id="autre_action">
+                        <h3 class="modal-title fs-5 py-2 " id="exampleModalLabel">action_n°2</h3>
+                        <form action="{{ url_for('upload_file') }}" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="reference_ac" class="d-flex justify-content-start ">Ref action</label>
+                                    <input type="text" name="reference_ac" id="reference_ac" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="libelle_av" class="d-flex justify-content-start ">Libellé action</label>
+                                    <input type="text" name="libelle_av" id="libelle_av" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="porteur" class="d-flex justify-content-start ">Porteur</label>
+                                    <input type="text" name="porteur" id="porteur" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="delai" class="d-flex justify-content-start ">Delai</label>
+                                    <input type="text" name="delai" id="delai" class="fs-5">
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
-
-              <button type="submit" class="btn btn-info btn-block btn-round">Fichier</button>
-            </form>
-          </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-primary rounded" id="btn_autre_action">Autre act..</button>
+                    <button type="button" class="btn btn-primary rounded" data-bs-dismiss="modal">valider</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
+
 </div>
-
-
-
 {% endblock content %}
 {% block javascript %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <!-- BS JavaScript -->
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <!-- Have fun using Bootstrap JS -->
 <script type="text/javascript">
 
-  $('#definir-action_1').on('click', function(e) {  
-	e.preventDefault();           
-	$('#modal_action').modal('show');
-  	$(function () {
-    	$('[data-toggle="tooltip"]').tooltip()
-  })
-});
+    $('.definir-action').on('click', function (e) {
+        e.preventDefault();
+        $('#modal_action').modal('show');
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    });
 
-  </script>
+</script>
 {% endblock javascript %}
