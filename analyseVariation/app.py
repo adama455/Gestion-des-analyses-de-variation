@@ -4,8 +4,8 @@ sys.path.append('.')
 sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
-from analyseVariation.forms import  RegistrationForm, LoginForm
-from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV
+from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause,Plateau
 from analyseVariation import app, db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 import os
@@ -17,11 +17,8 @@ from threading import Thread
 import pandas as pd
 from datetime import date
 
-
-
 UPLOAD_FOLDER = '/path/to/the/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-
 
 #la racine ou page connexion des utilisateurs
 @app.route('/', methods=('GET', 'POST'))
@@ -39,7 +36,6 @@ def login():
             return redirect(url_for('home'))
         else:
             flash(f'Une erreur s est produit, veillez verifier les information que vous avez saisi', 'danger')
-
     return render_template('login.html', title='Login', form=form)    
 
 #La page acceuil de notre application
@@ -47,7 +43,6 @@ def login():
 @login_required
 def home():
     form = RegistrationForm()
-   
     return render_template('home.html', title='Régister', form=form)    
 
 #Cette page permet a l'administrateur d'ajouter de users
@@ -68,11 +63,8 @@ def addUser():
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé', 'success') 
-
         return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)
-
-
 
 #Cette page permet voir les détail d'un Utilisateur
 @app.route("/detailUser/<int:id>")
@@ -87,7 +79,6 @@ def detailUser(id):
 @app.route("/change-password")
 @login_required
 def changepassword():
-    
     return render_template('changepassword.html')    
 
 #Permet a l'admin de visualiser la liste des Utilisateurs.
@@ -140,7 +131,96 @@ def supprimerUser(id):
         return redirect(url_for('compte'))
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('comptes.html', title='Register', form=form, data=users) 
- 
+
+#Permet de Lister une Cause
+@app.route("/cause", methods=['POST','GET'])
+@login_required
+def cause():
+    form = CausesForm()
+    if request.method =='POST':
+        if form.validate_on_submit():
+            cause = Cause(form.libelle.data, form.description.data)
+            db.session.add(cause)
+            db.session.commit()
+            flash('Une nouvelle Cause vient être ajoutée', 'success') 
+
+        return redirect(url_for('cause'))
+    data = Cause.query.all()
+    return render_template('causes.html', title='Cause', form=form, causes = data)    
+
+#Cette page permet Modifier une Cause
+@app.route("/editCause", methods=['POST','GET'])
+@login_required
+def editCause():
+    if request.method =='POST':
+        data = Cause.query.get(request.form.get('id'))
+        data.libelle = request.form['libelle']
+        data.description = request.form['description']
+        db.session.commit()
+        flash('Cause modifié avec Succès!','success')
+        return redirect(url_for('cause'))
+    return render_template('causes.html', title='Cause')
+
+#Permet de Supprimer une Cause
+@app.route("/supprimerCause/<id>/", methods=('GET', 'POST'))
+@login_required
+def supprimerCause(id):
+    form = CausesForm()
+    if not id or id != 0:
+        oneCause = Cause.query.get(id)
+        db.session.delete(oneCause)
+        db.session.commit()
+        flash('Cause supprimer avec succès', 'success')
+        return redirect(url_for('cause'))
+    data = Cause.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('causes.html', title='Cause', form=form, causes=data) 
+
+#C'est ici qu'on voit les plateaux
+@app.route("/plateau", methods=('GET', 'POST'))
+@login_required
+def plateau():
+    form = PlateauForm()
+    if request.method =='POST':
+        # if form.validate_on_submit():
+            print('form.libelle.data')
+            plateau = Plateau(form.libelle.data, form.description.data, form.univers.data)
+            db.session.add(plateau)
+            db.session.commit()
+            flash('Un nouveau Plateau vient être ajoutée', 'success') 
+
+            return redirect(url_for('plateau'))
+    data = Plateau.query.all()
+    return render_template('plateau.html', tiltle='Plateau', form=form, plateaux=data)    
+
+#Cette page permet Modifier une Cause
+@app.route("/editPlateau", methods=['POST','GET'])
+@login_required
+def editPlateau():
+    if request.method =='POST':
+        data = Plateau.query.get(request.form.get('id'))
+        data.libelle = request.form['libelle']
+        data.description = request.form['description']
+        data.univers= request.form['univers']
+    
+        db.session.commit()
+        flash('Plateau modifié avec Succès!','success')
+        return redirect(url_for('plateau'))
+    return render_template('plateau.html', title='Plateau')
+
+#Permet de Supprimer une Cause
+@app.route("/supprimerPlateau/<id>/", methods=('GET', 'POST'))
+@login_required
+def supprimerPlateau(id):
+    form = PlateauForm()
+    if not id or id != 0:
+        onePlateau = Plateau.query.get(id)
+        db.session.delete(onePlateau)
+        db.session.commit()
+        flash('Plateau supprimer avec succès', 'success')
+        return redirect(url_for('plateau'))
+    data = Plateau.query.all() #Récuperation de l'enssemble des utilisateurs::
+    return render_template('plateau.html', title='Plateau', form=form, plateaux=data) 
+
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
 @login_required
@@ -160,8 +240,7 @@ def listepa():
 def editpa():
     form = LoginForm()
     return render_template('editpa.html', title='Register', form=form)  
- 
- 
+
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa", methods=('POST', 'GET'))
 @login_required
@@ -171,7 +250,7 @@ def listeVa():
     liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
     n = len(liste)
     # print("data = ", liste[1].nom_cc, n)
-    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n)  
+    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, reference=ref)  
 
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
@@ -206,16 +285,12 @@ def profil():
 @app.route("/analyse_agent")
 @login_required
 def analyse_agent():
+    reference = request.args.get('reference')
+    data = Enregistrement_AV.query.filter_by(reference_av=reference).first()
+    libelle = data.libelle_av
     
-    return render_template('analyse-agent.html')    
-
-#Analyse des causes par le MO
-@app.route("/cause")
-@login_required
-def cause():
-    
-    return render_template('causes.html')    
-
+    agent = data.agent
+    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent)    
 
 @app.route("/demarrer-av")
 @login_required
@@ -269,7 +344,6 @@ def synthese_av():
         db.session.commit()
         return redirect(url_for('listeVa', ref=reference))  
     return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
-
 
 @app.route('/uploader', methods = ['GET', 'POST']) 
 def upload_file () : 

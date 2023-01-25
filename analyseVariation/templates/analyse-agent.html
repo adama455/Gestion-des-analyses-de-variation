@@ -10,16 +10,17 @@
         <div class="section1 mb-3">
             <div class="row mb-3">
                 <div class="col-4 d-flex flex-column">
-                    <label for="reference_av">Recherche AV</label>
-                    <input type="text" name="reference_av" id="reference_av">
+                    <label class="fs-5" for="reference_av">Reference AV</label>
+                    <div class="border border-1 border-dark fs-5 px-2"> {{ reference }}</div>
+                   <!-- <input type="text" name="reference_av" id="reference_av">-->
                 </div>
                 <div class="col-4 d-flex flex-column">
-                    <label for="libelle_av">Libellé AV</label>
-                    <input type="text" name="libelle_av" id="libelle_av">
+                    <label class="fs-5" for="libelle_av">Libellé AV</label>
+                    <input class="fs-5 px-2" type="text" name="libelle_av" id="libelle_av" value="{{ libelle }}">
                 </div>
                 <div class="col-4 d-flex flex-column">
-                    <label for="responsable_av">Responssable AV</label>
-                    <input type="text" name="responsable_av" id="responsable_av">
+                    <label class="fs-5" for="responsable_av">Responssable AV</label>
+                    <input class="fs-5 px-2" type="text" name="responsable_av" id="responsable_av" value="{{ agent }}">
                 </div>
             </div>
 
@@ -34,7 +35,7 @@
             <div class="row mb-2">
                 <div class="col-3 d-flex flex-column">
                     <label for="identifiant" class="tx-center">Identifient</label>
-                    <input type="text" name="identifiant" id="identifiant">
+                    <input class="fs-5 px-2" type="text" name="identifiant" id="identifiant">
                 </div>
                 <div class="col-9 d-flex flex-column">
                     <label for="axes_analyse " class="tx-center">Axes d'analyse des causes</label>

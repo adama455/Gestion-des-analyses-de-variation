@@ -70,16 +70,16 @@
           <li class="nav-item">
             <a href="" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
             <nav class="nav-sub">
-              <a href="" class="nav-sub-link">Causes</a>
+              <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
               <a href="" class="nav-sub-link">Métriques</a>
-              <a href="">Plateaux</a>
+              <a href="{{ url_for('plateau') }}">Plateaux</a>
             </nav>
           </li><!-- nav-item -->
           <li class="nav-item">
             <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
             <nav class="nav-sub">
-              <a href="" class="nav-sub-link">Comptes</a>
-              <a href="" class="nav-sub-link">Profils</a>
+              <a href="{{ url_for('compte') }}" class="nav-sub-link">Comptes</a>
+              <a href="{{ url_for('profil') }}" class="nav-sub-link">Profils</a>
               <a href="Logs utilisateurs" class="nav-sub-link"
                 onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
             </nav>
