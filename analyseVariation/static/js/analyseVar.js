@@ -114,6 +114,8 @@ function cre_bloc(parent, i){
   Input.className = 'col d-flex row p-0'
   Input.style.justifyContent = 'space-between'
   input.className = 'col pe-0 me-2 fs-5'
+  input.setAttribute('value', "")
+  input.setAttribute('name', `input_${i}`)
   Input.setAttribute('id', `input_${i}`)
   Input.appendChild(input)
   divinput.appendChild(Input)
@@ -139,12 +141,10 @@ function cre_bloc(parent, i){
           //el.style.visibility='visible';
           el.addEventListener('click', (e)=>{
             e.preventDefault()
-            
             liste2 = liste2.filter((element) => element !== el)
             //liste1 = liste1.filter((element) => element !== elem)
             console.log('dfghj')
             //elem.firstChild.className='col-5'
-            
             cre_input(elem)
             if (el.id=='bouton_plus_2'){
               console.log(el)
@@ -167,6 +167,7 @@ function cre_bloc(parent, i){
 function cre_input(parent){
   input = document.createElement('input')
   input.className = 'col me-2 fs-5'
+  input.setAttribute('value', "")
   parent.appendChild(input)
 }
 

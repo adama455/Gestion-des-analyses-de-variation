@@ -86,13 +86,15 @@ class Enregistrement_AV(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     agent = db.Column(db.String(80))
     reference_av = db.Column(db.String(80))
+    libelle_av = db.Column(db.String(255))
     date = db.Column(db.Date)
     statut_analyse = db.Column(db.String(80))
     commentaire = db.Column(db.String(80), nullable=True)
 
-    def __init__(self, agent, reference_av, date, statut_analyse, commentaire):
+    def __init__(self, agent, reference_av, libelle_av, date, statut_analyse, commentaire):
         self.agent = agent
         self.reference_av = reference_av
+        self.libelle_av = libelle_av
         self.date = date
         self.statut_analyse = statut_analyse
         self.commentaire = commentaire
@@ -119,13 +121,25 @@ class Fichier(UserMixin, db.Model):
     def Importer(self, ):
         pass
 
-class Pourquoi(db.Model):
-    __tablename__='pourquoi'
+class AnalyseApporter(db.Model):
+    __tablename__='analyse_apporter'
     id = db.Column(db.Integer, primary_key=True)
-    libelle = db.Column(db.String(80))
+    identifiant = db.Column(db.String(255))
+    axe_analyse = db.Column(db.String(50))
+    pourquoi_1 = db.Column(db.String(500))
+    pourquoi_2 = db.Column(db.String(500))
+    pourquoi_3 = db.Column(db.String(500))
+    pourquoi_4 = db.Column(db.String(500))
+    pourquoi_5 = db.Column(db.String(500))
 
-    def __init__(self, libelle):
-        self.libelle = libelle
+    def __init__(self, identifiant, axe_analuse, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
+        self.identifiant = identifiant
+        self.axe_analyse = axe_analuse
+        self.pourquoi_1 = pourquoi_1
+        self.pourquoi_2 = pourquoi_2
+        self.pourquoi_3 = pourquoi_3
+        self.pourquoi_4 = pourquoi_4
+        self.pourquoi_5 = pourquoi_5
 
 class ValeursAberrante(UserMixin, db.Model):    
     __table_args__ = {'extend_existing': True}

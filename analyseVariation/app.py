@@ -5,22 +5,20 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm
-from analyseVariation.models import User,Cause,Plateau
-from analyseVariation.forms import  RegistrationForm, LoginForm
-from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause,Plateau
 from analyseVariation import app, db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 import os
-from tkinter import *
 from tkinter import filedialog
+from tkinter import *
+from openpyxl import load_workbook
+import csv
+from threading import Thread
 import pandas as pd
 from datetime import date
 
-
-
 UPLOAD_FOLDER = '/path/to/the/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-
 
 #la racine ou page connexion des utilisateurs
 @app.route('/', methods=('GET', 'POST'))
@@ -38,7 +36,6 @@ def login():
             return redirect(url_for('home'))
         else:
             flash(f'Une erreur s est produit, veillez verifier les information que vous avez saisi', 'danger')
-
     return render_template('login.html', title='Login', form=form)    
 
 #La page acceuil de notre application
@@ -46,7 +43,6 @@ def login():
 @login_required
 def home():
     form = RegistrationForm()
-   
     return render_template('home.html', title='Régister', form=form)    
 
 #Cette page permet a l'administrateur d'ajouter de users
@@ -67,11 +63,8 @@ def addUser():
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé', 'success') 
-
         return redirect(url_for('login'))
     return render_template('add-user.html', title='Register', form=form)
-
-
 
 #Cette page permet voir les détail d'un Utilisateur
 @app.route("/detailUser/<int:id>")
@@ -86,7 +79,6 @@ def detailUser(id):
 @app.route("/change-password")
 @login_required
 def changepassword():
-    
     return render_template('changepassword.html')    
 
 #Permet a l'admin de visualiser la liste des Utilisateurs.
@@ -164,7 +156,6 @@ def editCause():
         data = Cause.query.get(request.form.get('id'))
         data.libelle = request.form['libelle']
         data.description = request.form['description']
-    
         db.session.commit()
         flash('Cause modifié avec Succès!','success')
         return redirect(url_for('cause'))
@@ -230,12 +221,6 @@ def supprimerPlateau(id):
     data = Plateau.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('plateau.html', title='Plateau', form=form, plateaux=data) 
 
-#C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
-# @app.route("/change-password")
-# @login_required
-# def changepassword():
-    #return render_template('changepassword.html')    
-
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
 @login_required
@@ -255,8 +240,7 @@ def listepa():
 def editpa():
     form = LoginForm()
     return render_template('editpa.html', title='Register', form=form)  
- 
- 
+
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa", methods=('POST', 'GET'))
 @login_required
@@ -266,7 +250,7 @@ def listeVa():
     liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
     n = len(liste)
     # print("data = ", liste[1].nom_cc, n)
-    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n)  
+    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, reference=ref)  
 
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
@@ -301,7 +285,19 @@ def profil():
 @app.route("/analyse_agent")
 @login_required
 def analyse_agent():
-    return render_template('analyse-agent.html')    
+    reference = request.args.get('reference')
+    data = Enregistrement_AV.query.filter_by(reference_av=reference).first()
+    causes = Cause.query.all()
+    cause = []
+    for elem in causes:
+        cause.append(elem.libelle)
+    libelle = data.libelle_av
+    valeurs_aberante = ValeursAberrante.query.all()
+    nom_conseiller = valeurs_aberante[int(request.args.get('n'))].nom_cc
+    agent = data.agent
+    #if request.method=='POST':
+
+    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=nom_conseiller)    
 
 
 
@@ -334,27 +330,34 @@ def synthese_av():
         nom = current_user.nom
         Date = date.today()
         
-        analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).all()
-        
+        analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
         if not analyse_variation:
             for i in range(data.shape[0]):
                 print(reference, data.index[i])
                 valeur_aberante = ValeursAberrante(reference, data['Nom'][data.index[i]], data['Mesures'][data.index[i]])
                 db.session.add(valeur_aberante)
                 db.session.commit()
-            av = Enregistrement_AV(prenom +' '+ nom, reference, Date, 'Statut en cour','')
+            av = Enregistrement_AV(prenom +' '+ nom, reference, '', Date, 'Statut en cour','')
             db.session.add(av)
             db.session.commit()
-            
-        return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+        
     if request.method=='POST':
-        return redirect(url_for('listeVa'))  
-    return render_template('synthese-av.html')
+        libelle = request.form['libelle']
+        statut = request.form['statut']
+        print(analyse_variation.agent)
+        analyse_variation.agent = prenom +' '+ nom
+        analyse_variation.reference_av = reference
+        analyse_variation.libelle_av = libelle
+        analyse_variation.date = Date
+        analyse_variation.statut_analyse = statut
+        db.session.commit()
+        return redirect(url_for('listeVa', ref=reference))  
+    return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
 
 @app.route('/uploader', methods = ['GET', 'POST']) 
 def upload_file () : 
     filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
-                                        filetypes=(("Fichier texte","*.txt"), ("Fichier excel","*.xsl"),("Tous les fichiers","*.*")))
+                                        filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
     
     if filename:
         return redirect(url_for('synthese_av', filename=filename))
