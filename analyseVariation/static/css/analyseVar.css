@@ -15,6 +15,15 @@
     font-size: 1.5rem;
 }
 
+.ajout_analyse{
+    background-color: #FF7900;
+}
+
+.ajout_analyse:hover{
+    background-color: #009088;
+    color: white;
+}
+
 .bouton:hover{
     background-color:#009088;
     font-size: 1.5rem;
@@ -29,7 +38,43 @@
     font-size: 1.5rem;
 }
 
+.autre_action{
+    /* visibility: hidden; */
+    display: none;
+}
+.autre_action_show{
+    display: block;
 
+    /* visibility: visible; */
+
+}
+.icon-add{
+    margin-left: -1rem;
+}
+
+.div-btn{
+    visibility: hidden;
+}
+.div-btn-show{
+    visibility: visible;
+}
+
+.btn-final,.definir-action{
+    background-color: #FF7900;
+    border-radius: 5px;
+}
+.btn-final:hover,.definir-action:hover{
+    background-color: #009088;color: white;
+    border-radius: 5px;
+}
+
+/* .spanCpt{
+    background-color: red;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+
+} */
 
 
 

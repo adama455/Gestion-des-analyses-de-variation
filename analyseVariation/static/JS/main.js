@@ -60,3 +60,9 @@ $('#addPlateau').on('click', function(e) {
   })
 });
 
+bntAutreAct = document.getElementById('btn_autre_action')
+autreAction = document.getElementById('autre_action')
+bntAutreAct.addEventListener('click', () => {
+	// alert('OKK')
+	autreAction.classList.toggle('autre_action_show')
+})

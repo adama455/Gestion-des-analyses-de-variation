@@ -1,423 +1,186 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="az-content-label mg-b-5">ANALYSE VARIATION </div>
-<p class="mg-b-20 "><span class="text-primary"></span></p>
+<div class="card container-lg border border-grey rounded-2 p-0 bg-gray-100 shadow">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-20">ANALYSE VARIATION</div>
+    <form action="" method="POST">
+        <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container ">
 
-<form class="border">
-    <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container border ">
-
-        <div class="section1 mb-3">
-            <div class="row mb-3">
-                <div class="col-4 d-flex flex-column">
-                    <label class="fs-5" for="reference_av">Reference AV</label>
-                    <div class="border border-1 border-dark fs-5 px-2"> {{ reference }}</div>
-                   <!-- <input type="text" name="reference_av" id="reference_av">-->
-                </div>
-                <div class="col-4 d-flex flex-column">
-                    <label class="fs-5" for="libelle_av">Libellé AV</label>
-                    <input class="fs-5 px-2" type="text" name="libelle_av" id="libelle_av" value="{{ libelle }}">
-                </div>
-                <div class="col-4 d-flex flex-column">
-                    <label class="fs-5" for="responsable_av">Responssable AV</label>
-                    <input class="fs-5 px-2" type="text" name="responsable_av" id="responsable_av" value="{{ agent }}">
-                </div>
-            </div>
-
-            <div class="btn-icon-list">
-                <a href="#" id="add-analyse">
-                    <button class="btn btn-primary  border-0 rounded" title="analyse">Ajouter
-                        Analyse</i></button></a>
-                &nbsp;&nbsp;
-            </div>
-        </div>
-        <div class="analyse-cause section2 " id="section2">
-            <div class="row mb-2">
-                <div class="col-3 d-flex flex-column">
-                    <label for="identifiant" class="tx-center">Identifient</label>
-                    <input class="fs-5 px-2" type="text" name="identifiant" id="identifiant">
-                </div>
-                <div class="col-9 d-flex flex-column">
-                    <label for="axes_analyse " class="tx-center">Axes d'analyse des causes</label>
-                    <select name="axes_analyse" id="axes_analyse" class="bg-white border p-1">
-                        <option value="" disabled>choisir un  Axe</option>
-                        <option value="">bndfghjklm</option>
-                        <option value="">bndfghjklm</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="row probleme mb-2">
-                    <label for="identifiant" class="col-3">Probleme</label>
-                    <div class="col-9 ">
-                        <input type="text" name="probleme" id="probleme" class="col-12 border border-primary">
-                    </div>
-                </div>
-            </div>
-            <div id="enregistrement_cause">
-
-            </div>
-            <div class="d-flex justify-content-end">
-                <div class="d-flex col-10 justify-content-between ">
-                    <div class="btn-icon-list mb-3 mg-l-20">
-                        <a href="#" id="definir-action_1" data.toggle="modal" data.target="#Modal_action">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="btn-icon-list mb-3">
-                        <a href="#" id="definir-action_">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="btn-icon-list mb-3">
-                        <a href="#" id="definir-action">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="btn-icon-list mb-3 mg-r-20">
-                        <a href="#" id="definir-action">
-                            <button class="btn btn-primary  border-0 rounded" title="analyse">Définir
-                                Action</i></button></a>
-                        &nbsp;&nbsp;
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-
-
-        <!--<div class="d-inline-block px-2">
-            <div style="height:250px"></div>
-            <div class="form-group ">
-                <label class="form-label">Pourquoi 1: <span class="tx-danger">*</span></label>
-                <input type="text" name="pourquoi_1" class="form-control wd-350" placeholder="Pourquoi 1" required>
-            </div> form-group 
-        </div>
-
-        <div class="d-inline-block px-2">
-            <div style="height:120px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 2: <span class="tx-danger">*</span></label>
-                <input type="text" name="pourquoi_21" class="form-control wd-350" placeholder="Pourquoi 2" required>
-            </div><!-- form-group 
-            <div style="height:220px"></div>
-            <div class="form-group ">
-                <label class="form-label">Pourquoi 2: <span class="tx-danger">*</span></label>
-                <input type="text" name="pourquoi_22" class="form-control wd-350" placeholder="Pourquoi 2" required>
-            </div><!-- form-group 
-        </div>
-
-
-        <div class="d-inline-block px-2">
-            <div style="height:40px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 3:  </label>
-                <input type="text" name="pourquoi_31" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 3:  </label>
-                <input type="text" name="pourquoi_32" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group ">
-                <label class="form-label">Pourquoi 3:  </label>
-                <input type="text" name="pourquoi_33" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 3:  </label>
-                <input type="text" name="pourquoi_34" class="form-control wd-350" placeholder="Pourquoi 3" >
-            </div><!-- form-group 
-        </div>
-
-
-        <div class="d-inline-block px-2">
-            <div style="height:40px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 4:  </label>
-                <input type="text" name="pourquoi_41" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 4:  </label>
-                <input type="text" name="pourquoi_42" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 4:  </label>
-                <input type="text" name="pourquoi_43" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 4:  </label>
-                <input type="text" name="pourquoi_44" class="form-control wd-350" placeholder="Pourquoi 4" >
-            </div><!-- form-group 
-            
-        </div>
-
-        
-        <div class="d-inline-block px-2">
-            <div style="height:40px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 5:  </label>
-                <input type="text" name="pourquoi_51" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 5:  </label>
-                <input type="text" name="pourquoi_52" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 5:  </label>
-                <input type="text" name="pourquoi_53" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Pourquoi 5:  </label>
-                <input type="text" name="pourquoi_54" class="form-control wd-350" placeholder="Pourquoi 5" >
-            </div><!-- form-group 
-            
-        </div>
-
-        <div class="d-inline-block px-2">
-            <div style="height:40px"></div>
-            <div class="form-group">
-                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
-                <select class="form-control wd-350 " name="cause_1" data-placeholder="Choose one" >
-                    {% for cause in causes %}
-                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
-                    {% endfor%}
-                    </select>
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
-                <select class="form-control select2" data-placeholder="Choose one" name="cause_2" >
-                    {% for cause in causes %}
-                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
-                    {% endfor%}
-                    </select>
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
-                <select class="form-control select2" name="cause_3" data-placeholder="Choose one" >
-                    {% for cause in causes %}
-                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
-                    {% endfor%}
-                    </select>
-            </div><!-- form-group 
-            <div style="height:80px"></div>
-            <div class="form-group">
-                <label class="form-label">Famille de cause : <span class="tx-danger">*</span></label>
-                <select class="form-control select2" name="cause_4" data-placeholder="Choose one" >
-                    {% for cause in causes %}
-                      <option value="{{cause.libelle}}">{{cause.libelle}}</option>
-                    {% endfor%}
-                    </select>
-            </div><!-- form-group 
-            
-        </div>
-        
-        <div class="d-inline-block px-2">
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_1" placeholder="Action"  class="form-control wd-350 "
-                >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_2" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_3" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_4" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_5" placeholder="Action"  class="form-control wd-350 "
-                  placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_6" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_7" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Actions:  </label>
-                <input type="text" name="action_8" class="form-control wd-350" placeholder="Action" >
-            </div><!-- form-group 
-            
-        </div>
-
-        <div class="d-inline-block px-2">
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_1" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_2" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_3" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_4" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_5" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_6" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_7" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Porteurs:  </label>
-                <input type="text" name="porteur_8" class="form-control wd-350" placeholder="Porteurs" >
-            </div><!-- form-group 
-    
-        </div>
-
-        <div class="d-inline-block px-2">
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_1" placeholder="Échéance"  class="form-control wd-350 fc-datepicker"
-                  placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_2" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_3" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_4" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_5" placeholder="Échéance"  class="form-control wd-350 fc-datepicker"
-                  placeholder="DD/MM/YYYY" date-format="yyyy-mm-dd" autocomplete="off">
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_6" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_7" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group 
-            <div class="form-group">
-                <label class="form-label">Échéance:  </label>
-                <input type="text" name="echeance_8" class="form-control wd-350 fc-datepicker" placeholder="Échéance" >
-            </div><!-- form-group 
-            
-        </div>-->
-       
-        
-        
-    </div>
-    <!--<div class="">
-        <div class="d-flex flex-row-reverse mt-5">
-            <input type="submit" value="Valider" class="btn btn-primary px-5">
-        </div> form-group 
-    </div>-->
-    
-</form>
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button> #}
-
-{# <div class="modal fade bd-example-modal-lg" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      ...
-    </div>
-  </div>
-</div> #}
-
-<div class="modal fade " id="modal_action" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header border-bottom-0 d-flex justify-content-end">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-title text-center">
-            <h4>Saisir le libelle et charger le fichier</h4>
-          </div>
-          <div class="d-flex flex-column text-center">
-            <form action="{{ url_for('upload_file') }}" method="POST">
+            <div class="section1 mb-3">
                 <div class="row mb-3">
-                    <div class="col-3 d-flex flex-column">
-                        <label for="reference_ac">Ref action</label>
-                        <input type="text" name="reference_ac" id="reference_ac">
+                    <div class="col-4 d-flex flex-column">
+                        <label class="fs-5" for="reference_av">Reference AV</label>
+                        <div class="border border-1 border-dark fs-5 px-2"> {{ reference }}</div>
+                       <!-- <input type="text" name="reference_av" id="reference_av">-->
                     </div>
-                    <div class="col-3 d-flex flex-column">
-                        <label for="libelle_av">Libellé action</label>
-                        <input type="text" name="libelle_av" id="libelle_av">
+                    <div class="col-4 d-flex flex-column">
+                        <label class="fs-5" for="libelle_av">Libellé AV</label>
+                        <input class="fs-5 px-2" type="text" name="libelle_av" id="libelle_av" value="{{ libelle }}">
                     </div>
-                    <div class="col-3 d-flex flex-column">
-                        <label for="porteur">Porteur</label>
-                        <input type="text" name="porteur" id="porteur">
-                    </div>
-                    <div class="col-3 d-flex flex-column">
-                        <label for="delai">Delai</label>
-                        <input type="text" name="delai" id="delai">
+                    <div class="col-4 d-flex flex-column">
+                        <label class="fs-5" for="responsable_av">Responssable AV</label>
+                        <input class="fs-5 px-2" type="text" name="responsable_av" id="responsable_av" value="{{ agent }}">    
                     </div>
                 </div>
 
-              <button type="submit" class="btn btn-info btn-block btn-round">Fichier</button>
-            </form>
-          </div>
+                <div class="btn-icon-list">
+                    <a href="#" id="add-analyse">
+                        <button class="btn border-0 rounded ajout_analyse tx-white" title="analyse">Ajouter
+                            Analyse</i></button></a>
+                    &nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="analyse-cause section2 " id="section2">
+                <div class="row mb-2">
+                    <div class="col-3 d-flex flex-column">
+                        <label for="identifiant" class=" fs-5 tx-center">Identifient</label>
+                        <input type="text" name="identifiant" id="identifiant" class="px-2 fs-5 border border-info text-white" style="background-color: #009088;" value="{{ nom_conseiller }}">
+                    </div>
+                    <div class="col-9 d-flex flex-column">
+                        <label for="axes_analyse " class=" fs-5 tx-center">Axes d'analyse des causes</label>
+                        <select name="axes_analyse" id="axes_analyse" class="bg-white border p-1 fs-5">
+                            <option value="" disabled>choisir un Axe</option>
+                            {% for elem in cause %}
+                            <option value="">{{ elem }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="row probleme mb-2">
+                        <label for="identifiant" class="col-3 fs-5">Probleme</label>
+                        <div class="col-9 ">
+                            <input type="text" name="probleme" id="probleme" class="col-12 border border-primary fs-5">
+                        </div>
+                    </div>
+                </div>
+                <div id="enregistrement_cause">
+                </div>
+                <div class="d-flex flex-column">
+                <div class="d-flex justify-content-end">
+                    <div class="div-btn d-flex col-10 justify-content-between " id="div-btn">
+                        <div class="btn-icon-list mb-3 mg-l-20">
+                            <a href="#" id="definir-action_1" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="btn-icon-list mb-3">
+                            <a href="#" id="definir-action_2" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="btn-icon-list mb-3">
+                            <a href="#" id="definir-action_3" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                        <div class="btn-icon-list mb-3 mg-r-20">
+                            <a href="#" id="definir-action_4" class="definir-action">
+                                <button class="btn tx-white  border-0 rounded" title="analyse">Définir
+                                    Action</i></button></a>
+                            &nbsp;&nbsp;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end ">
+                    <div class="d-flex col-10 justify-content-end p-0">
+                            <div class="col-4 d-flex justify-content-end p-0">
+                                <div class="btn  tx-white btn-final rounded">Sortir</div>
+                            </div>
+
+                            <div class="col-4 d-flex justify-content-end p-0">
+                                <button type="submit" class="btn  tx-white btn-final rounded">Valider l'Enrégistrement des détails</button type="submit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
+    </form>
+    <!-- Modal -->
+    <div class="modal fade" id="modal_action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Définir action</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column">
+                    <h3 class="modal-title fs-5 py-2" id="exampleModalLabel">action_n°1</h3>
+                    <div class="d-flex flex-column text-center">
+                        <form action="{{ url_for('upload_file') }}" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="reference_ac" class="d-flex justify-content-start">Ref action</label>
+                                    <input type="text" name="reference_ac" id="reference_ac" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="libelle_av" class="d-flex justify-content-start">Libellé action</label>
+                                    <input type="text" name="libelle_av" id="libelle_av" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="porteur" class="d-flex justify-content-start">Porteur</label>
+                                    <input type="text" name="porteur" id="porteur" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="delai" class="d-flex justify-content-start">Delai</label>
+                                    <input type="text" name="delai" id="delai" class="fs-5">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="autre_action" id="autre_action">
+                        <h3 class="modal-title fs-5 py-2 " id="exampleModalLabel">action_n°2</h3>
+                        <form action="{{ url_for('upload_file') }}" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="reference_ac" class="d-flex justify-content-start ">Ref action</label>
+                                    <input type="text" name="reference_ac" id="reference_ac" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="libelle_av" class="d-flex justify-content-start ">Libellé action</label>
+                                    <input type="text" name="libelle_av" id="libelle_av" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="porteur" class="d-flex justify-content-start ">Porteur</label>
+                                    <input type="text" name="porteur" id="porteur" class="fs-5">
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <label for="delai" class="d-flex justify-content-start ">Delai</label>
+                                    <input type="text" name="delai" id="delai" class="fs-5">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-primary rounded" id="btn_autre_action">Autre act..</button>
+                    <button type="button" class="btn btn-primary rounded" data-bs-dismiss="modal">valider</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-
-{% endblock content %}
-{% block javascript %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <!-- BS JavaScript -->
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <!-- Have fun using Bootstrap JS -->
 <script type="text/javascript">
 
-  $('#definir-action_1').on('click', function(e) {  
-	e.preventDefault();           
-	$('#modal_action').modal('show');
-  	$(function () {
-    	$('[data-toggle="tooltip"]').tooltip()
-  })
-});
-
-  </script>
-{% endblock javascript %}
+    $('.definir-action').on('click', function (e) {
+        e.preventDefault();
+        $('#modal_action').modal('show');
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    });
+</script>
+{% endblock content %}

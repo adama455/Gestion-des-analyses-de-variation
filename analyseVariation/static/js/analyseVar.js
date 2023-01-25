@@ -86,12 +86,12 @@ console.log('enreg ',enregistrement_cause)
 
 var div_parent;
 var duplique_input;
-
+var labels;
 function cre_boutton_plus_input(parent, id){
   duplique_input = document.createElement('div')
   //label = document.createElement('label')
   //label.textContent = `Pourquoi : ${i}`
-  duplique_input.className = 'col-1 icon-add'
+  duplique_input.className = 'col-1 icon-add py-1 px-0'
   i = document.createElement('i')
   i.className = 'fa-solid fa-circle-plus fs-4 pourqois'
   duplique_input.setAttribute("id", `bouton_plus_${id}`)
@@ -110,10 +110,12 @@ function cre_bloc(parent, i){
   labels.className = 'col-2 fs-5'
   divinput=document.createElement('div')
   input = document.createElement('input')
-  divinput.className = 'col  pe-0'
-  Input.className = 'col d-flex row  p-0'
+  divinput.className = 'col  pe-0 '
+  Input.className = 'col d-flex row p-0'
   Input.style.justifyContent = 'space-between'
   input.className = 'col pe-0 me-2 fs-5'
+  input.setAttribute('value', "")
+  input.setAttribute('name', `input_${i}`)
   Input.setAttribute('id', `input_${i}`)
   Input.appendChild(input)
   divinput.appendChild(Input)
@@ -139,12 +141,10 @@ function cre_bloc(parent, i){
           //el.style.visibility='visible';
           el.addEventListener('click', (e)=>{
             e.preventDefault()
-            
             liste2 = liste2.filter((element) => element !== el)
             //liste1 = liste1.filter((element) => element !== elem)
             console.log('dfghj')
             //elem.firstChild.className='col-5'
-            
             cre_input(elem)
             if (el.id=='bouton_plus_2'){
               console.log(el)
@@ -154,6 +154,11 @@ function cre_bloc(parent, i){
             }
           })
         })
+        if (elem.id=='input_5') {
+          // alert('Siuuus')
+          divBt=document.getElementById('div-btn')
+          divBt.className='div-btn-show d-flex col-10 justify-content-between'
+        }
       //})
     }) 
   }
@@ -162,6 +167,7 @@ function cre_bloc(parent, i){
 function cre_input(parent){
   input = document.createElement('input')
   input.className = 'col me-2 fs-5'
+  input.setAttribute('value', "")
   parent.appendChild(input)
 }
 
@@ -194,7 +200,9 @@ function cre_boutton(parent){
   })
 }
 
-
+// if (labels.textContent=="Pourquoi : 5") {
+//   alert('okkk')
+// }
 
 
 var i = 1;

@@ -287,10 +287,19 @@ def profil():
 def analyse_agent():
     reference = request.args.get('reference')
     data = Enregistrement_AV.query.filter_by(reference_av=reference).first()
+    causes = Cause.query.all()
+    cause = []
+    for elem in causes:
+        cause.append(elem.libelle)
     libelle = data.libelle_av
-    
+    valeurs_aberante = ValeursAberrante.query.all()
+    nom_conseiller = valeurs_aberante[int(request.args.get('n'))].nom_cc
     agent = data.agent
-    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent)    
+    #if request.method=='POST':
+
+    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=nom_conseiller)    
+
+
 
 @app.route("/demarrer-av")
 @login_required
