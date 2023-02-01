@@ -1,11 +1,17 @@
 import sys
+import jwt
+import os
+from time import time
 sys.path.append('.')
 sys.path.append('..')
 # from sqlalchemy import Boolean, Column, String, Integer
-from analyseVariation import db, init_base, login_manager
-#import Model1.ActionProgramme as mod
+from flask import current_app #<---HERE
+from analyseVariation import bcrypt, db, init_base, login_manager,app
 from sqlalchemy.orm import *
 from flask_login import UserMixin
+import enum
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -13,6 +19,11 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+class TypeProfil(enum.Enum):
+    ADMIN = "ADMIN"
+    MO ="MANAGER_OPERATIONNEL"
+    SO = "SUPEVISEUR_OPERATIONNEL"
+    
 class User(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='users'
@@ -21,15 +32,100 @@ class User(UserMixin, db.Model):
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
+    profil = db.Column(db.Enum(TypeProfil))
     password = db.Column(db.String(120), nullable=False)
-    
+    # Relationships
+    roles = db.relationship('Role', secondary='user_roles',
+            backref=db.backref('users', lazy='dynamic'),cascade="all,save-update, merge, delete")
 
-    def __init__(self, nom, prenom, username, email, password):
+    def has_roles(self, *args):
+        return set(args).issubset({role.name for role in self.roles})
+
+    # -----------------------Token------
+    def set_password(self, password, commit=False):
+        # self.password_hash = generate_password_hash(password)
+        self.hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
+        
+
+        if commit:
+            db.session.commit()
+
+    def verify_password(self, password):
+        return bcrypt.check_password_hash(self.hashed_password, password)
+
+    def get_reset_token(self, expires=500):
+        return jwt.encode({'reset_password': self.email,
+                           'exp': time() + expires},
+                           key = 'my_super_secret') 
+        
+    @staticmethod
+    def verify_reset_token(token):
+        try:
+            email = jwt.decode(token, key=os.getenv('SECRET_KEY_FLASK'))['reset_password']
+            print(email)
+        except Exception as e:
+            print(e)
+            return
+        return User.query.filter_by(email=email).first()
+
+    # @staticmethod
+    # def create_user(username, password, email):
+
+    #     user_exists = User.query.filter_by(username=username).first()
+    #     if user_exists:
+    #         return False
+
+    #     user = User()
+
+    #     user.username = username
+    #     user.password = user.set_password(password)
+    #     user.email = email
+
+    #     db.session.add(user)
+    #     db.session.commit()
+
+    #     return True
+
+    # @staticmethod
+    # def login_user(username, password):
+
+    #     user = User.query.filter_by(username=username).first()
+
+    #     if user:
+    #         if user.verify_password(password):
+    #             return True
+
+    #     return False
+
+    @staticmethod
+    def verify_email(email):
+
+        user = User.query.filter_by(email=email).first()
+
+        return user
+    
+    # -----------------------Token------
+
+    def __init__(self, nom, prenom, username, email, profil, password):
         self.nom = nom
         self.prenom = prenom
         self.username = username
         self.email = email
+        self.profil = profil
         self.password = password
+# /////////////////////////////////////
+# Define the Role data model
+class Role(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+
+# Define the UserRoles data model
+class UserRoles(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+   
+# /////////////////////////////////////////////////////////////////////////////////////
 
 class ActionProgramme(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
