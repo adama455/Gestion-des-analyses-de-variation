@@ -49,66 +49,68 @@
   <div class="wrapper d-flex align-items-stretch ">
 
     <!-- Le menu sidebar -->
-
-    <nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
-      <div class="p-4 pt-4">
-        <div class="az-sidebar-loggedin">
-          <div class="az-img-user online" data-toggle="tooltip" data-placement="top" title="{{session.matricule}} "><img
-              src="/static/img/perso.PNG" alt=""></div>
-          <div class="media-body">
-            <h6>Moussa Dembele</h6>
-            <span>GROUP1</span>
-          </div><!-- media-body -->
-        </div><!-- az-sidebar-loggedin -->
-        <ul class="nav">
-          <li class="nav-label">Menu Principal</li>
-          <li class="nav-item">
-            <a href="" class="nav-link with-sub text-red"><i class="typcn typcn-th-large"></i>Analyses</a>
-            <nav class="nav-sub">
-              <a href="" class="nav-sub-link text-red">Importer des données</a>
-              <a href="" class="nav-sub-link">Analyser les données</a>
-              <a href="" class="nav-sub-link">Suivi plans d'actions</a>
-            </nav>
-          </li><!-- nav-item -->
-          <li class="nav-item">
-            <a href="#" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
-            <nav class="nav-sub">
-              <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
-              <a href="" class="nav-sub-link">Métriques</a>
-              <a href="{{ url_for('plateau') }}">Plateaux</a>
-            </nav>
-          </li><!-- nav-item -->
-          <li class="nav-item">
-            <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
-            <nav class="nav-sub">
-              <a href="{{ url_for('compte') }}" class="nav-sub-link">Comptes</a>
-              <a href="{{ url_for('profil') }}" class="nav-sub-link">Profils</a>
-              <a href="Logs utilisateurs" class="nav-sub-link"
-                onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
-            </nav>
-          </li><!-- nav-item -->
-          <li class="nav-item"><a href="" class="nav-link with-sub"><i
-                class="typcn typcn-clipboard"></i>Documentation</a>
-            <nav class="nav-sub">
-              <a href="Documentation" class="nav-sub-link"
-                onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
-              <a href="Documentation" class="nav-sub-link"
-                onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
-            </nav>
-          </li><!-- nav-item -->
-        </ul><!-- nav -->
-
-        <div class="footer pt-5">
-          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;
-            <script>document.write(new Date().getFullYear());</script> All rights reserved | This application is made with
-            <i class="icon-heart" aria-hidden="true"></i> by <a href="https://www.orange.sn"
-              target="_blank">www.orange.sn</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          </p>
+      {% if current_user.is_authenticated and (current_user.profil.name)=='ADMIN' %}
+        
+      <nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
+        <div class="p-4 pt-4">
+          <div class="az-sidebar-loggedin">
+            <div class="az-img-user online" data-toggle="tooltip" data-placement="top" title="{{session.matricule}} "><img
+                src="/static/img/perso.PNG" alt=""></div>
+            <div class="media-body">
+              <h6>Moussa Dembele</h6>
+              <span>GROUP1</span>
+            </div><!-- media-body -->
+          </div><!-- az-sidebar-loggedin -->
+          <ul class="nav">
+            <li class="nav-label">Menu Principal</li>
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub text-red"><i class="typcn typcn-th-large"></i>Analyses</a>
+              <nav class="nav-sub">
+                <a href="" class="nav-sub-link text-red">Importer des données</a>
+                <a href="" class="nav-sub-link">Analyser les données</a>
+                <a href="" class="nav-sub-link">Suivi plans d'actions</a>
+              </nav>
+            </li><!-- nav-item -->
+            <li class="nav-item">
+              <a href="#" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
+              <nav class="nav-sub">
+                <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
+                <a href="" class="nav-sub-link">Métriques</a>
+                <a href="{{ url_for('plateau') }}">Plateaux</a>
+              </nav>
+            </li><!-- nav-item -->
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
+              <nav class="nav-sub">
+                <a href="{{ url_for('compte') }}" class="nav-sub-link">Comptes</a>
+                <a href="{{ url_for('profil') }}" class="nav-sub-link">Profils</a>
+                <a href="Logs utilisateurs" class="nav-sub-link"
+                  onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
+              </nav>
+            </li><!-- nav-item -->
+            <li class="nav-item"><a href="" class="nav-link with-sub"><i
+                  class="typcn typcn-clipboard"></i>Documentation</a>
+              <nav class="nav-sub">
+                <a href="Documentation" class="nav-sub-link"
+                  onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
+                <a href="Documentation" class="nav-sub-link"
+                  onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
+              </nav>
+            </li><!-- nav-item -->
+          </ul><!-- nav -->
+  
+          <div class="footer pt-5">
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              Copyright &copy;
+              <script>document.write(new Date().getFullYear());</script> All rights reserved | This application is made with
+              <i class="icon-heart" aria-hidden="true"></i> by <a href="https://www.orange.sn"
+                target="_blank">www.orange.sn</a>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+      {% endif %}
 
     <!-- Page Content  -->
 
@@ -117,15 +119,16 @@
       <!-- le menu entete  -->
 
       <div class="sticky-top">
-        <nav class=" navbar-expand-lg navbar-light bg-primary py-2">
+        <nav class=" navbar-expand-lg navbar-light bg-primary py-2 m-0">
           <div class="d-flex flex-row col-12">
 
             <!-- notre bouton toggle du menu sidebar -->
-
-            <button type="button" id="sidebarCollapse" class="btn btn-primary">
-              <i class="fa fa-bars"></i>
-              <span class="sr-only">Toggle Menu</span>
-            </button>
+            {% if current_user.is_authenticated and (current_user.profil.name)=='ADMIN' %}
+              <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+              </button>
+            {% endif %}
             <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
               data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
               aria-label="Toggle navigation">
@@ -135,11 +138,13 @@
             <!-- le logo SO'VAR -->
 
             <div class="div-logo col-2 d-flex align-items-center ">
-              <h1 class="az-content-title mg-b-0 mg-b-lg-4 text-center" style="font-size: 0.7em;">
-                <i class="typcn typcn-chart-bar text-dark"></i>&nbsp;
-                <span class="text-white"> SO</span>'
-                <span style="color: #009088; ">VAR</span>
-              </h1>
+              <a href="{{ url_for('home')}}">
+                <h1 class="az-content-title mg-b-0 mg-b-lg-4 text-center" style="font-size: 0.7em;">
+                  <i class="typcn typcn-chart-bar text-dark"></i>&nbsp;
+                  <span class="text-white"> SO</span>'
+                  <span style="color: #009088; ">VAR</span>
+                </h1>
+              </a>
             </div>
 
             <!-- le menu -->
@@ -195,7 +200,7 @@
 
         <!-- l'image de fond contsnant le titre -->
 
-        <div class="col-12 border bg-image p-0 pb-0 baniere mb-4 "
+        <div class="col-12 bg-image p-0 pb-0 baniere mt-0 mb-4 "
           style="background: url('/static/img/sass-3-banner-image.png'); width: 100%; height: 20vh; position: relative;">
           <div>
             {# <h2 class="az-content-title mg-b-5 mg-b-lg-8"><i class="typcn typcn-chart-bar text-dark"></i>&nbsp;<span class="text-primary"> SO</span>' <span style="color: #009088;">VAR</span></h2> #}
@@ -236,7 +241,7 @@
       <span>
         <img src="/static/img/orange_logo.svg" width="20" height="20" alt="" title="SONATEL"> SONATEL -
         DESC/DIS/ISCC</span>
-      <span class="mask" style="background-color: rgba(0, 0, 0, 0.6)">&copy; 2022 SO'VAR : Contrôle des KCRP au niveau
+      <span class="mask">&copy; 2022 SO'VAR : Contrôle des KCRP au niveau
         le plus près de l’activité avec un dispositif de pilotage</span>
     </div> <!--container -->
   </div> <!-- az-footer -->

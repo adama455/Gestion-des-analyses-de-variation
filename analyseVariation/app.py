@@ -2,12 +2,15 @@
 import sys
 sys.path.append('.')
 sys.path.append('..')
-from flask import Flask, render_template, url_for, request, redirect, flash, abort
+from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm
-from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause,Plateau, AnalyseApporter, ActionProgramme
-from analyseVariation import app, db, bcrypt
-from flask_login import login_user, login_required, logout_user, current_user
+from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role 
+from analyseVariation import app, db, bcrypt, mail
+from flask_login import login_required, login_user, logout_user, current_user
+from flask_user import login_required, UserManager, SQLAlchemyAdapter
+from flask_user import roles_required
+from functools import wraps
 import os
 from tkinter import filedialog
 from tkinter import *
@@ -16,6 +19,19 @@ import csv
 from threading import Thread
 import pandas as pd
 from datetime import date
+# from .email import send_email
+# from flask_mail import Message
+from threading import Thread
+
+
+
+
+# Setup Flask-User
+db_adapter = SQLAlchemyAdapter(db, User)        # Register the User model
+user_manager = UserManager(db_adapter, app)     # Initialize Flask-User
+
+# user_datastore = SQLAlchemyUserDatastore(db,User,Role)
+# security = Security(app,user_datastore)
 
 UPLOAD_FOLDER = '/path/to/the/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -81,38 +97,81 @@ def detailUser(id):
 def changepassword():
     return render_template('changepassword.html')    
 
+
+
 #Permet a l'admin de visualiser la liste des Utilisateurs.
+
+# def login_required(test):
+#     @wraps(test)
+#     def wrap(*args, **kwargs):
+#         if 'logged_in' in session:
+#             return test(*args, **kwargs)
+#         else:
+#             flash("Vous êtes pas autorisé à acceder à cette ressource.", "warning")
+#             return redirect(url_for('login'))
+#     return wrap
+
 @app.route("/compte", methods=('GET', 'POST'))
 @login_required 
+@roles_required('admin')
 def compte():
     form = RegistrationForm()
     if form.validate_on_submit():
         if request.method=='POST':
             password = 'Sovar@2023'
-            print('test ', form.prenom.data)
+            print('test ', form.profil.data)
             hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
-            user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, hashed_password)
+            user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, form.profil.data, hashed_password)
+            if user.profil=='ADMIN':
+                
+                user.roles.append(Role(name='admin'))
+            elif user.profil=='SO':    
+                user.roles.append(Role(name='so'))
+            else:
+                user.roles.append(Role(name='mo'))
+              
+            emailUser = User.query.filter_by(email=request.form.get('email')).first()
+            if emailUser:
+                flash('Email que vous avez entrez exist déjas','danger')
+                return redirect(url_for('compte'))
+
+            
             print(user)
             db.session.add(user)
             db.session.commit()
             flash('Votre compte a été bien créé','success')
             return redirect(url_for('compte'))
-            
+    
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
-    return render_template('comptes.html', title='Register', form=form, data=users) 
+    # print('profil',users.profil.value)
+    return render_template('comptes.html', title='Register', form=form,data=users) 
 
 #Cette page permet voir les détail d'un Utilisateur
 @app.route("/editUser", methods=['GET', 'POST'])
-@login_required
+# @login_required
 def editUser():
 
     if request.method =='POST':
         data = User.query.get(request.form.get('id'))
+        data = Role.query.get(request.form.get('id'))
         data.username = request.form['username']
         data.prenom = request.form['prenom']
         data.nom = request.form['nom']
         data.email = request.form['email']
-    
+        data.profil = request.form['profil']
+        if data.profil=='ADMIN':
+            data.roles.clear()
+            data.roles.append(Role(name='admin'))   
+                    
+        elif data.profil=='SO':
+            data.roles.clear()
+            data.roles.append(Role(name='so'))
+            
+        else :
+            data.roles.clear()
+            data.roles.append(Role(name='mo'))
+
+            
         db.session.commit()
         flash('Utilisateur modifié avec Succès!','success')
         return redirect(url_for('compte'))
@@ -490,6 +549,75 @@ def upload_file () :
     except:
         flash('Erreur de chargement du fichier ')
     abort(404)
+
+
+
+def send_email(user):
+
+    token = user.get_reset_token()
+    form = RequestResetForm()
+    msg = Message()
+    msg.subject = "Flask App Password Reset"
+    msg.sender = os.getenv('MAIL_USERNAME')
+    msg.recipients = [user.email]
+    msg.html = render_template('reset_request.html', user=user, token=token,form=form)
+    # Thread(target=send_email, args=(app, msg)).start()
+
+    mail.send(msg)
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    
+    if request.method == 'GET':
+        return render_template('reset_request.html',form=form)
+
+    if request.method == 'POST':
+
+        email = request.form.get('email')
+        user = User.verify_email(email)
+
+        if user:
+            send_email(user)
+
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Password',form=form)
+    
+    # if request.method == 'POST':
+    #     if form.validate_on_submit():
+    #         user = User.query.filter_by(email=form.email.data).first()            
+    #         send_reset_email(user)
+    #         print('user::',user)
+    #         flash('an email has been sent to your email with reset instructions')
+    #         return redirect(url_for('users.login'))
+    # return render_template('reset_request.html', title='Reset Password',form=form)
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    
+    password = request.form.get('password')
+    if password:
+        user.set_password(password, commit=True)
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form=form)
+
+    # if form.validate_on_submit():
+    #     if request.method == 'POST':
+    #         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+    #         user.password = hashed_password
+    #         db.session.commit()
+    #         flash('Your password has been updated! You are now able to log in', 'success')
+    #     return redirect(url_for('login'))
+    # return render_template('reset_token.html', title='Reset Password', form=form)
 
 if __name__=='__main__':
     app.run()

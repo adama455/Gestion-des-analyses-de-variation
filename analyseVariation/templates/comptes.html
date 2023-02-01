@@ -17,7 +17,8 @@
             <th class="wd-15p text-dark">Matricule</th>
             <th class="wd-15p text-dark">Email</th>
             <th class="wd-15p text-dark">Profil</th>
-            <th class="wd-10p text-dark">Action</th>
+            <th class="wd-5p text-dark tx-center">Role</th>
+            <th class="wd-5p text-dark">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +28,12 @@
             <td>{{ user.nom }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
-            <td>Admin</td>
+            <td>{{ user.profil.value }}</td>
+            <td>
+              {% for role in user.roles %}
+                {{role.name}}
+              {% endfor %}
+            </td>
             <td class="text-center">
               <a href="/editUser/{{user.id}}" class="text-center" title="edit" id="edituser" data-toggle="modal"
                 data-target="#modalEdit{{user.id}}">
@@ -41,6 +47,7 @@
               </a>
             </td>
           </tr>
+
           {% endfor %}
         </tbody>
       </table>
@@ -114,12 +121,7 @@
                   <div class="col-12">
                     <br>
                     <label class="form-label mg-b-10 text-white">Profil : <span class="tx-danger">*</span></label>
-                    <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
-                      <option label="Choisir le profil"></option>
-                      <option value="">Admin</option>
-                      <option value="">Responsable</option>
-                      <option value="">SO</option>
-                    </select>
+                    <input type="text" class="form-control wd-380 is-invalid" name="profil" value="{{user.profil.name}}" required>
                   </div><!-- col-4 -->
                 </div>
                 </br>
@@ -247,12 +249,16 @@
                 <div class="col-12">
                   <br>
                   <label class="form-label mg-b-10 text-white">Profil : <span class="tx-danger">*</span></label>
-                  <select name="profil" class="form-control select2" data-placeholder="Choisir plateau" required>
-                    <option label="Choisir le profil"></option>
-                    <option value="">Admin</option>
-                    <option value="">Responsable</option>
-                    <option value="">SO</option>
-                  </select>
+                  {% if form.profil.errors %}
+                  {{ form.profil(class="form-control wd-380 is-invalid", placeholder="saisir maticule") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.profil.errors %}
+                    <span> {{ error }} </span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.profil(class="form-control wd-380", placeholder="saisir maticule") }}
+                  {% endif %}
                 </div><!-- col-4 -->
               </div>
               </br>
