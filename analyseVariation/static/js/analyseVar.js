@@ -67,7 +67,7 @@ ajoutAnalyse.addEventListener("click", (e) => {
 });/*/
 
 // Pour le premier Pourquoi qui apparait par défaut:::::::::
-pourquoi.forEach((element) => {
+/*/pourquoi.forEach((element) => {
   element.addEventListener("click", (e) => {
     const prq = e.target.parentElement.parentElement.children[1];
     const input = document.createElement("input");
@@ -77,7 +77,7 @@ pourquoi.forEach((element) => {
     input.type = "text";
     prq.appendChild(input);
   });
-});
+});/*/
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -117,6 +117,7 @@ function cre_bloc(parent, i){
   input.setAttribute('value', "")
   input.setAttribute('name', `input_${i}`)
   Input.setAttribute('id', `input_${i}`)
+  Input.setAttribute('name', `input_${i}`)
   Input.appendChild(input)
   divinput.appendChild(Input)
   div_parent.appendChild(labels)
@@ -145,29 +146,36 @@ function cre_bloc(parent, i){
             //liste1 = liste1.filter((element) => element !== elem)
             console.log('dfghj')
             //elem.firstChild.className='col-5'
-            cre_input(elem)
             if (el.id=='bouton_plus_2'){
+              cre_input(elem, 'input_21', 'input_21')
               console.log(el)
               el.style.visibility = 'hidden'
             }else if (elem.childNodes.length==4){
               el.style.visibility = 'hidden'
+            }else {
+              n=Number(elem.lastElementChild.id.split('_').pop())+1
+              cre_input(elem, `input_${el.id.split('_').pop()+n}`, `input_${el.id.split('_').pop()+n}`)
+              console.log(el.id.split('_').pop())
+              console.log(n)
             }
           })
         })
         if (elem.id=='input_5') {
           // alert('Siuuus')
           divBt=document.getElementById('div-btn')
-          divBt.className='div-btn-show d-flex col-10 justify-content-between'
+          //divBt.className='div-btn-show d-flex col-10 justify-content-between'
         }
       //})
     }) 
   }
 }
 
-function cre_input(parent){
+function cre_input(parent, id, name){
   input = document.createElement('input')
   input.className = 'col me-2 fs-5'
   input.setAttribute('value', "")
+  input.setAttribute('id', id)
+  input.setAttribute('name', name)
   parent.appendChild(input)
 }
 
@@ -187,18 +195,33 @@ function cre_boutton(parent){
   div.addEventListener('click', (e)=>{
     e.preventDefault();
     if (i<5){
-      bloc = cre_bloc(enregistrement_cause, i)
-      console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
+      cre_bloc(enregistrement_cause, i)
+      //console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
       parent.removeChild(div_parent.previousSibling)
       cre_boutton(enregistrement_cause);
     }else if(i==5){
-      bloc = cre_bloc(enregistrement_cause, i)
-      console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
+      cre_bloc(enregistrement_cause, i)
+      //console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
       parent.removeChild(div_parent.previousSibling)
     }
-    
   })
 }
+
+valider = document.getElementById('bouton_valider_action')
+valider.addEventListener('click', (e)=>{
+  e.preventDefault()
+})
+
+//document.getElementById("enregistrement_de_detail").addEventListener('click', (e)=>{
+//  e.preventDefault()
+//  document.getElementById('div-btn').className='div-btn-show d-flex col-10 justify-content-between'
+//})
+
+//document.querySelectorAll('.definir_action').forEach((element)=>{
+//  element.addEventListener('click', (e)=>{
+//    e.preventDefault()
+//  })
+//})
 
 // if (labels.textContent=="Pourquoi : 5") {
 //   alert('okkk')
@@ -209,4 +232,42 @@ var i = 1;
 cre_bloc(enregistrement_cause, i);
 cre_boutton(enregistrement_cause);
 
+form = document.getElementById('form_action')
+function sendData() {
+  var XHR = new XMLHttpRequest();
 
+  // Liez l'objet FormData et l'élément form
+  var FD = new FormData(form);
+  //FD.append(form)
+
+  // Définissez ce qui se passe si la soumission s'est opérée avec succès
+  XHR.addEventListener("load", function(event) {
+    alert(event.target.responseText);
+  });
+
+  // Definissez ce qui se passe en cas d'erreur
+  XHR.addEventListener("error", function(event) {
+    alert('Oups! Quelque chose s\'est mal passé.');
+  });
+
+  // Configurez la requête
+  XHR.open("POST", "http://127.0.0.1:5000/analyse_agent?reference=000012&n=9");
+
+  // Les données envoyées sont ce que l'utilisateur a mis dans le formulaire
+  XHR.send(FD);
+  for (const [key, value] of FD) {
+    console.log((`${key}: ${value}\n`));
+    
+  }
+}
+
+// Accédez à l'élément form …
+var bouton_form = document.getElementById("bouton_form");
+
+// … et prenez en charge l'événement submit.
+/*bouton_form.addEventListener("click", function (event) {
+  event.preventDefault();
+  console.log("Hello!");
+  sendData();
+ 
+});*/

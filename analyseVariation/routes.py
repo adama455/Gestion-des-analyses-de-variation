@@ -4,18 +4,11 @@ from analyseVariation.forms import  RegistrationForm, LoginForm
 from analyseVariation import  app, db
 from analyseVariation.models import User
 
-#from config import get_config
-
-# app = Flask(__name__)
-
-# app.config['SECRET_KEY'] = '7540d096a1af7602423becbadf2f2df8'
-
-
 #La page acceuil de notre application
 @app.route("/home")
 def home():
     form = RegistrationForm()
-   
+
     return render_template('home.html', title='Régister', form=form)    
 
 #Cette page permet a l'administrateur d'ajouter de users

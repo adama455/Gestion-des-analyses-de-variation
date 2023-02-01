@@ -60,9 +60,37 @@ $('#addPlateau').on('click', function(e) {
   })
 });
 
+$('.definir-action').on('click', function (e) {
+	e.preventDefault();
+	$('#modal_action').modal('show');
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+});
+
 bntAutreAct = document.getElementById('btn_autre_action')
 autreAction = document.getElementById('autre_action')
-bntAutreAct.addEventListener('click', () => {
-	// alert('OKK')
+bntAutreAct.addEventListener('click', ()=>{
 	autreAction.classList.toggle('autre_action_show')
+	document.getElementById('reference_autre_action').value = document.getElementById('reference_action').value+'2'
+})
+
+document.getElementById('action1').addEventListener('click', (e)=>{
+	//e.preventDefault()
+	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P1ACT1'
+})
+
+document.getElementById('action2').addEventListener('click', (e)=>{
+	e.preventDefault()
+	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P2ACT1'
+})
+
+document.getElementById('action3').addEventListener('click', (e)=>{
+	e.preventDefault()
+	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P3ACT1'
+})
+
+document.getElementById('action4').addEventListener('click', (e)=>{
+	e.preventDefault()
+	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P4ACT1'
 })
