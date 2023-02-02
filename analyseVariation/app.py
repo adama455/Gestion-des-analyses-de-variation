@@ -6,7 +6,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
 from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role 
-from analyseVariation import app, db, bcrypt, mail
+from analyseVariation import app, db, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_user import login_required, UserManager, SQLAlchemyAdapter
 from flask_user import roles_required
@@ -16,14 +16,8 @@ from tkinter import filedialog
 from tkinter import *
 from openpyxl import load_workbook
 import csv
-from threading import Thread
 import pandas as pd
 from datetime import date
-# from .email import send_email
-# from flask_mail import Message
-from threading import Thread
-
-
 
 
 # Setup Flask-User
@@ -194,6 +188,7 @@ def supprimerUser(id):
 #Permet de Lister une Cause
 @app.route("/cause", methods=['POST','GET'])
 @login_required
+@roles_required('admin')
 def cause():
     form = CausesForm()
     if request.method =='POST':
@@ -210,6 +205,7 @@ def cause():
 #Cette page permet Modifier une Cause
 @app.route("/editCause", methods=['POST','GET'])
 @login_required
+@roles_required('admin')
 def editCause():
     if request.method =='POST':
         data = Cause.query.get(request.form.get('id'))
@@ -237,6 +233,7 @@ def supprimerCause(id):
 #C'est ici qu'on voit les plateaux
 @app.route("/plateau", methods=('GET', 'POST'))
 @login_required
+@roles_required('admin')
 def plateau():
     form = PlateauForm()
     if request.method =='POST':
@@ -254,6 +251,7 @@ def plateau():
 #Cette page permet Modifier une Cause
 @app.route("/editPlateau", methods=['POST','GET'])
 @login_required
+@roles_required('admin')
 def editPlateau():
     if request.method =='POST':
         data = Plateau.query.get(request.form.get('id'))
@@ -369,7 +367,7 @@ def demarrerav():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect('login')    
+    return redirect('login')  
 
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
@@ -423,74 +421,6 @@ def upload_file () :
     else:
         flash("Aucun fichier selectionne! ")
 
-
-
-def send_email(user):
-
-    token = user.get_reset_token()
-    form = RequestResetForm()
-    msg = Message()
-    msg.subject = "Flask App Password Reset"
-    msg.sender = os.getenv('MAIL_USERNAME')
-    msg.recipients = [user.email]
-    msg.html = render_template('reset_request.html', user=user, token=token,form=form)
-    # Thread(target=send_email, args=(app, msg)).start()
-
-    mail.send(msg)
-
-@app.route("/reset_password", methods=['GET', 'POST'])
-def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RequestResetForm()
-    
-    if request.method == 'GET':
-        return render_template('reset_request.html',form=form)
-
-    if request.method == 'POST':
-
-        email = request.form.get('email')
-        user = User.verify_email(email)
-
-        if user:
-            send_email(user)
-
-        return redirect(url_for('login'))
-    return render_template('reset_request.html', title='Reset Password',form=form)
-    
-    # if request.method == 'POST':
-    #     if form.validate_on_submit():
-    #         user = User.query.filter_by(email=form.email.data).first()            
-    #         send_reset_email(user)
-    #         print('user::',user)
-    #         flash('an email has been sent to your email with reset instructions')
-    #         return redirect(url_for('users.login'))
-    # return render_template('reset_request.html', title='Reset Password',form=form)
-
-@app.route("/reset_password/<token>", methods=['GET', 'POST'])
-def reset_token(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    user = User.verify_reset_token(token)
-    if user is None:
-        flash('That is an invalid or expired token', 'warning')
-        return redirect(url_for('reset_request'))
-    form = ResetPasswordForm()
-    
-    password = request.form.get('password')
-    if password:
-        user.set_password(password, commit=True)
-        return redirect(url_for('login'))
-    return render_template('reset_token.html', title='Reset Password', form=form)
-
-    # if form.validate_on_submit():
-    #     if request.method == 'POST':
-    #         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-    #         user.password = hashed_password
-    #         db.session.commit()
-    #         flash('Your password has been updated! You are now able to log in', 'success')
-    #     return redirect(url_for('login'))
-    # return render_template('reset_token.html', title='Reset Password', form=form)
 
 if __name__=='__main__':
     app.run()
