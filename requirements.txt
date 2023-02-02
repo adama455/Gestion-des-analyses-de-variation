@@ -6,7 +6,7 @@ Werkzeug>2.1.1
 flask-bcrypt
 mysqlclient
 flask-login==0.6.2
-Flask-Mail==3.11.0
+#Flask-Mail==3.11.0
 openpyxl==3.0.10
 pycryptodome==3.16.0
 flask-user
