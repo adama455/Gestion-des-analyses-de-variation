@@ -75,7 +75,7 @@ bntAutreAct.addEventListener('click', ()=>{
 	document.getElementById('reference_autre_action').value = document.getElementById('reference_action').value+'2'
 })
 
-document.getElementById('action1').addEventListener('click', (e)=>{
+/*/document.getElementById('action1').addEventListener('click', (e)=>{
 	//e.preventDefault()
 	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P1ACT1'
 })
@@ -93,4 +93,4 @@ document.getElementById('action3').addEventListener('click', (e)=>{
 document.getElementById('action4').addEventListener('click', (e)=>{
 	e.preventDefault()
 	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P4ACT1'
-})
+})/*/

@@ -89,8 +89,6 @@ var duplique_input;
 var labels;
 function cre_boutton_plus_input(parent, id){
   duplique_input = document.createElement('div')
-  //label = document.createElement('label')
-  //label.textContent = `Pourquoi : ${i}`
   duplique_input.className = 'col-1 icon-add py-1 px-0'
   i = document.createElement('i')
   i.className = 'fa-solid fa-circle-plus fs-4 pourqois'
@@ -98,76 +96,92 @@ function cre_boutton_plus_input(parent, id){
   i.style.cursor = 'pointer'
   duplique_input.appendChild(i)
   parent.appendChild(duplique_input)
-  //duplique_input.style.visibility = 'hidden'
 }
 
 function cre_bloc(parent, i){
   div_parent = document.createElement('div')
-  Input = document.createElement('div')
+  div_Input = document.createElement('div')
+  div_button = document.createElement('div')
   div_parent.className = 'col-12 d-flex row  mg-x-0'
+  div_button.className = 'col d-flex row '
   labels = document.createElement('label')
   labels.textContent = `Pourquoi : ${i}`
   labels.className = 'col-2 fs-5'
-  divinput=document.createElement('div')
+  div_input_button=document.createElement('div')
   input = document.createElement('input')
-  divinput.className = 'col  pe-0 '
-  Input.className = 'col d-flex row p-0'
-  Input.style.justifyContent = 'space-between'
+  div_input_button.className = 'col  pe-0 '
+  div_Input.className = 'col d-flex row p-0'
+  div_Input.style.justifyContent = 'space-between'
   input.className = 'col pe-0 me-2 fs-5'
   input.setAttribute('value', "")
   input.setAttribute('name', `input_${i}`)
-  Input.setAttribute('id', `input_${i}`)
-  Input.setAttribute('name', `input_${i}`)
-  Input.appendChild(input)
-  divinput.appendChild(Input)
+  input.setAttribute('id', `input_${i}`)
+  div_Input.setAttribute('id', `input_${i}`)
+  div_Input.setAttribute('name', `input_${i}`)
+  div_Input.appendChild(input)
+  div_input_button.appendChild(div_Input)
+  div_input_button.appendChild(div_button)
   div_parent.appendChild(labels)
-  div_parent.appendChild(divinput)
+  div_parent.appendChild(div_input_button)
   div_parent.className = ' d-flex row'
   parent.appendChild(div_parent)
   var liste1 = []
   var liste2 = []
-  if (i>=2){
+  var liste3 = []
+  //if (i>=2){
     console.log('cool')
-    cre_boutton_plus_input(divinput, i)
-    id_bouton = document.getElementById(`bouton_plus_${i}`)
+    cre_boutton_plus_input(div_button, i)
+    cre_boutton_moins_input(div_button, i)
+    id_bouton_plus = document.getElementById(`bouton_plus_${i}`)
+    id_bouton_moins = document.getElementById(`bouton_moins_${i}`)
     id_input = document.getElementById(`input_${i}`)
     liste1.push(id_input)
-    liste2.push(id_bouton)
+    liste2.push(id_bouton_plus)
+    liste3.push(id_bouton_moins)
     console.log('this ',id_input)
-    liste1.forEach((elem)=>{
-      //elem.addEventListener('click', (e)=>{
-        //e.preventDefault()
-        //console.log('this ',id_bouton, elem, liste1);
-        liste2.forEach((el)=>{
-          //el.style.visibility='visible';
-          el.addEventListener('click', (e)=>{
+    liste1.forEach((elements)=>{
+      liste3.forEach((el)=>{
+        liste2.forEach((elem)=>{
+          ///Ecouter chaque bouton plus pour ajouter des input au besoin
+          elem.addEventListener('click', (e)=>{
             e.preventDefault()
-            liste2 = liste2.filter((element) => element !== el)
-            //liste1 = liste1.filter((element) => element !== elem)
-            console.log('dfghj')
-            //elem.firstChild.className='col-5'
-            if (el.id=='bouton_plus_2'){
-              cre_input(elem, 'input_21', 'input_21')
-              console.log(el)
-              el.style.visibility = 'hidden'
-            }else if (elem.childNodes.length==4){
-              el.style.visibility = 'hidden'
+            liste2 = liste2.filter((element) => element !== elem)
+            if (elements.childNodes.length>=1){
+              el.style.visibility = 'visible'
+            }
+            if (elements.childNodes.length==10){
+              elem.style.visibility = 'hidden'
             }else {
-              n=Number(elem.lastElementChild.id.split('_').pop())+1
-              cre_input(elem, `input_${el.id.split('_').pop()+n}`, `input_${el.id.split('_').pop()+n}`)
-              console.log(el.id.split('_').pop())
-              console.log(n)
+              n=Number(elements.lastElementChild.id.split('_').pop())+1
+              cre_input(elements, `input_${elem.id.split('_').pop()+n}`, `input_${elem.id.split('_').pop()+n}`)
             }
           })
+
+          ////Ecouter chaque bouton moin pour pouvoir supprimer des inputs
+        el.addEventListener('click', (e)=>{
+          e.preventDefault()
+          if (elements.childNodes.length<=2){
+            el.style.visibility = 'hidden'
+            console.log('n',elements.childNodes.length);
+          }
+          elem.style.visibility = 'visible'
+          elements.removeChild(elements.lastElementChild)
+          liste3 = liste3.filter((element) => element !== el)
+          n=Number(elements.lastElementChild.id.split('_').pop())+1
         })
-        if (elem.id=='input_5') {
-          // alert('Siuuus')
+
+      })
+    })
+
+        if (elements.id=='input_5') {
           divBt=document.getElementById('div-btn')
-          //divBt.className='div-btn-show d-flex col-10 justify-content-between'
+          for (let i = 1; i < 5; i++) {
+           bloc_pourquoi = document.getElementById(`input_${i}`)
+           nbre_fils = bloc_pourquoi.childNodes.length
+           console.log(nbre_fils)
+          }
         }
-      //})
     }) 
-  }
 }
 
 function cre_input(parent, id, name){
@@ -181,8 +195,6 @@ function cre_input(parent, id, name){
 
 function cre_boutton(parent){
   div = document.createElement('div')
-  //label = document.createElement('label')
-  //label.textContent = `Pourquoi : ${i}`
   div.className = 'col-1 icon-add'
   i = document.createElement('i')
   i.className = 'fa-solid fa-circle-plus fs-4 pourqois'
@@ -196,15 +208,26 @@ function cre_boutton(parent){
     e.preventDefault();
     if (i<5){
       cre_bloc(enregistrement_cause, i)
-      //console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
       parent.removeChild(div_parent.previousSibling)
       cre_boutton(enregistrement_cause);
     }else if(i==5){
       cre_bloc(enregistrement_cause, i)
-      //console.log('plus',parent.childNodes.length-5, parent.lastElementChild.previousSibling, div_parent.previousSibling)
       parent.removeChild(div_parent.previousSibling)
+      localStorage.setItem('tests','1234')
     }
   })
+}
+
+function cre_boutton_moins_input(parent, id){
+  delete_input = document.createElement('div')
+  delete_input.className = 'col-1 icon-add py-1 px-0'
+  i = document.createElement('i')
+  i.className = 'fa-solid fa-circle-minus fs-4 pourqois'
+  i.style.cursor = 'pointer'
+  delete_input.setAttribute("id", `bouton_moins_${id}`)
+  delete_input.appendChild(i)
+  delete_input.style.visibility = 'hidden'
+  parent.appendChild(delete_input)
 }
 
 valider = document.getElementById('bouton_valider_action')
@@ -212,20 +235,102 @@ valider.addEventListener('click', (e)=>{
   e.preventDefault()
 })
 
-//document.getElementById("enregistrement_de_detail").addEventListener('click', (e)=>{
-//  e.preventDefault()
-//  document.getElementById('div-btn').className='div-btn-show d-flex col-10 justify-content-between'
-//})
+localStorage.setItem('test','13')
+//localStorage.removeItem('test')
+var pourquoi_1 = []
+var valeur_1 = []
+var pourquoi_1 = []
+var pourquoi_2 = []
+var valeur_2 = []
+var pourquoi_3 = []
+var valeur_3 = []
+var pourquoi_4 = []
+var valeur_4 = []
+var pourquoi_5 = []
+var valeur_5 = []
 
-//document.querySelectorAll('.definir_action').forEach((element)=>{
-//  element.addEventListener('click', (e)=>{
-//    e.preventDefault()
-//  })
-//})
+document.getElementById("enregistrement_de_detail").addEventListener('click', (e)=>{
+  //e.preventDefault()
+  //divBt=document.getElementById('div-btn')
+      for (let i = 1; i < 6; i++) {
+        identifiant = document.getElementById('identifiant').value
+        probleme = document.getElementById('probleme').value
+        bloc_pourquoi = document.getElementById(`input_${i}`)
+        nbre_fils = bloc_pourquoi.childNodes.length
+        localStorage.setItem(`pourquoi${i}`,nbre_fils)
+        localStorage.setItem('tests','1234')
+        if (i==1){
+          console.log(bloc_pourquoi.childNodes)
+          bloc_pourquoi.childNodes.forEach((elem)=>{
+            console.log(elem.getAttribute('id'),elem.value);
+            var id = elem.getAttribute('id')
+            pourquoi_1.push(elem.getAttribute('id'))
+            valeur_1.push(elem.value)
+            var valeur = elem.value
+            console.log(pourquoi);
+          })
+        }else if (i==2) {
+          console.log(bloc_pourquoi.childNodes)
+          bloc_pourquoi.childNodes.forEach((elem)=>{
+            console.log(elem.getAttribute('id'),elem.value);
+            var id = elem.getAttribute('id')
+            pourquoi_2.push(elem.getAttribute('id'))
+            valeur_2.push(elem.value)
+            var valeur = elem.value
+            console.log(pourquoi);
+          })
+        }else if (i==3) {
+          console.log(bloc_pourquoi.childNodes)
+          bloc_pourquoi.childNodes.forEach((elem)=>{
+            console.log(elem.getAttribute('id'),elem.value);
+            var id = elem.getAttribute('id')
+            pourquoi_3.push(elem.getAttribute('id'))
+            valeur_3.push(elem.value)
+            var valeur = elem.value
+            console.log(pourquoi);
+          })
+        }else if (i==4) {
+          console.log(bloc_pourquoi.childNodes)
+          bloc_pourquoi.childNodes.forEach((elem)=>{
+            console.log(elem.getAttribute('id'),elem.value);
+            var id = elem.getAttribute('id')
+            pourquoi_4.push(elem.getAttribute('id'))
+            valeur_4.push(elem.value)
+            var valeur = elem.value
+            console.log('ontest',elem.value);
+          })
+        }else if (i==5) {
+          console.log(bloc_pourquoi.childNodes)
+          bloc_pourquoi.childNodes.forEach((elem)=>{
+            console.log(elem.getAttribute('id'),elem.value);
+            var id = elem.getAttribute('id')
+            pourquoi_5.push(elem.getAttribute('id'))
+            valeur_5.push(elem.value)
+            var valeur = elem.value
+            console.log(pourquoi);
+          })
+        }
+      }
 
-// if (labels.textContent=="Pourquoi : 5") {
-//   alert('okkk')
-// }
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/analyse_agent?reference=000012&n=1",
+        data: {
+          identifiant :identifiant,
+          probleme :probleme,
+          valeur_1 :valeur_1,
+          valeur_2 :valeur_2,
+          //pourquoi_3 :pourquoi_3,
+          valeur_3 :valeur_3,
+          //pourquoi_4 :pourquoi_4,
+          valeur_4 :valeur_4,
+          //pourquoi_5 :pourquoi_5,
+          valeur_5 :valeur_5
+        }
+      })
+      //e.preventDefault()
+
+})
 
 
 var i = 1;
@@ -233,41 +338,16 @@ cre_bloc(enregistrement_cause, i);
 cre_boutton(enregistrement_cause);
 
 form = document.getElementById('form_action')
-function sendData() {
-  var XHR = new XMLHttpRequest();
 
-  // Liez l'objet FormData et l'élément form
-  var FD = new FormData(form);
-  //FD.append(form)
-
-  // Définissez ce qui se passe si la soumission s'est opérée avec succès
-  XHR.addEventListener("load", function(event) {
-    alert(event.target.responseText);
-  });
-
-  // Definissez ce qui se passe en cas d'erreur
-  XHR.addEventListener("error", function(event) {
-    alert('Oups! Quelque chose s\'est mal passé.');
-  });
-
-  // Configurez la requête
-  XHR.open("POST", "http://127.0.0.1:5000/analyse_agent?reference=000012&n=9");
-
-  // Les données envoyées sont ce que l'utilisateur a mis dans le formulaire
-  XHR.send(FD);
-  for (const [key, value] of FD) {
-    console.log((`${key}: ${value}\n`));
-    
-  }
-}
 
 // Accédez à l'élément form …
 var bouton_form = document.getElementById("bouton_form");
 
-// … et prenez en charge l'événement submit.
-/*bouton_form.addEventListener("click", function (event) {
-  event.preventDefault();
-  console.log("Hello!");
-  sendData();
- 
-});*/
+
+
+let xhr = new XMLHttpRequest();
+
+let json = JSON.stringify({
+  "name": "John",
+  "surname": "Smith"
+});
