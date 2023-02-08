@@ -7,7 +7,7 @@ flask-bcrypt
 mysqlclient
 flask-login==0.6.2
 openpyxl==3.0.10
-flask-user==0.6.15
+flask-user 
 
 Flask-Session==0.4.0
 pycryptodome==3.16.0

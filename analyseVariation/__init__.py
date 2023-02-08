@@ -1,9 +1,9 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask import Flask
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
@@ -21,12 +21,6 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category= 'danger'
-
-# from .models import User
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))
-# _jwt.init_app(app)
 
 def init_base():
     with app.app_context():

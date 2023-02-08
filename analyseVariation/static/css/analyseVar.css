@@ -38,15 +38,11 @@
     font-size: 1.5rem;
 }
 
-.autre_action{
-    /* visibility: hidden; */
-    display: none;
-}
-.autre_action_show{
+#recaputilatif{
+    /* display: none; */
+} 
+.recaputilatif-show{
     display: block;
-
-    /* visibility: visible; */
-
 }
 .icon-add{
     margin-left: -1rem;
