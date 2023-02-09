@@ -477,6 +477,7 @@ def ajouter_action():
         pourquoi_3 = [ elem for elem in datacc.pourquoi_3.split(' _/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_4 = [ elem for elem in datacc.pourquoi_4.split(' _/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split(' _/_') if not [el for el in car_exclu if el==elem]]
+        
         return render_template('ajouter-action.html', n=n, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=id, 
                            pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5)    
     
