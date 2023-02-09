@@ -16,7 +16,6 @@ from tkinter import filedialog
 from tkinter import *
 from openpyxl import load_workbook
 import csv
-from threading import Thread
 import pandas as pd
 from datetime import date
 # from .email import send_email
@@ -156,7 +155,7 @@ def editUser():
         data.profil = request.form['profil']
         if data.profil=='ADMIN':
             data.roles.clear()
-            data.roles.append(Role(name='admin'))   
+            data.roles.append(Role(name='admin'))
                     
         elif data.profil=='SO':
             data.roles.clear()
@@ -189,6 +188,7 @@ def supprimerUser(id):
 #Permet de Lister une Cause
 @app.route("/cause", methods=['POST','GET'])
 @login_required
+@roles_required('admin')
 def cause():
     form = CausesForm()
     if request.method =='POST':
@@ -205,6 +205,7 @@ def cause():
 #Cette page permet Modifier une Cause
 @app.route("/editCause", methods=['POST','GET'])
 @login_required
+@roles_required('admin')
 def editCause():
     if request.method =='POST':
         data = Cause.query.get(request.form.get('id'))
@@ -232,6 +233,7 @@ def supprimerCause(id):
 #C'est ici qu'on voit les plateaux
 @app.route("/plateau", methods=('GET', 'POST'))
 @login_required
+@roles_required('admin')
 def plateau():
     form = PlateauForm()
     if request.method =='POST':
@@ -249,6 +251,7 @@ def plateau():
 #Cette page permet Modifier une Cause
 @app.route("/editPlateau", methods=['POST','GET'])
 @login_required
+@roles_required('admin')
 def editPlateau():
     if request.method =='POST':
         data = Plateau.query.get(request.form.get('id'))
@@ -516,7 +519,7 @@ def synthese_av():
         Date = date.today()
 
     except:
-        flash('Aucun fichier ou format non compatible')
+        flash('Aucun fichier ou format non compatible','warning')
 
     analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
     if not analyse_variation:
@@ -554,7 +557,7 @@ def upload_file () :
         #flash("Fichier charge avec succes ! ")
         return redirect(url_for('synthese_av', filename=filename))
     except:
-        flash('Erreur de chargement du fichier ')
+        flash('Erreur de chargement du fichier ','danger')
     #abort(404)
 
 if __name__=='__main__':

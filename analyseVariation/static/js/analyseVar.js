@@ -351,3 +351,11 @@ let json = JSON.stringify({
   "name": "John",
   "surname": "Smith"
 });
+// … et prenez en charge l'événement submit.
+/*bouton_form.addEventListener("click", function (event) {
+  event.preventDefault();
+  console.log("Hello!");
+  sendData();
+ 
+});*/
+
