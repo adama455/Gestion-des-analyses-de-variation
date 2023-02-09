@@ -188,20 +188,7 @@ bntAutreAct.addEventListener('click', ()=>{
 	document.getElementById('reference_autre_action').value = document.getElementById('reference_action').value+'2'
 })
 
-// definir_action = document.querySelectorAll('.definir_action');
-// definir_action.forEach((def_act) => {
-// 	def_act.addEventListener('click',(e)=>{
-// 		e.preventDefault();
-// 		for (let i = 0; i < 10; i++) {	
-// 			console.log(
-// 				document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+`P${i}ACT1`
-// 			);
-// 			document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+`P${i}ACT1`
-// 		}
-// 	})
-// });
-
-document.getElementById('action1').addEventListener('click', (e)=>{
+/*/document.getElementById('action1').addEventListener('click', (e)=>{
 	//e.preventDefault()
 	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P1ACT1'
 })
@@ -219,4 +206,4 @@ document.getElementById('action3').addEventListener('click', (e)=>{
 document.getElementById('action4').addEventListener('click', (e)=>{
 	e.preventDefault()
 	document.getElementById('reference_action').value = document.getElementById('reference_av_act').value+document.getElementById('identifiant_act').value+'P4ACT1'
-})
+})/*/

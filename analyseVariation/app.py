@@ -119,13 +119,11 @@ def compte():
             hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, form.profil.data, hashed_password)
             if user.profil=='ADMIN':
-                
                 user.roles.append(Role(name='admin'))
             elif user.profil=='SO':    
                 user.roles.append(Role(name='so'))
             else:
                 user.roles.append(Role(name='mo'))
-              
             emailUser = User.query.filter_by(email=request.form.get('email')).first()
             if emailUser:
                 flash('Email que vous avez entrez exist déjas','danger')
@@ -137,7 +135,7 @@ def compte():
             db.session.commit()
             flash('Votre compte a été bien créé','success')
             return redirect(url_for('compte'))
-    
+
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
     # print('profil',users.profil.value)
     return render_template('comptes.html', title='Register', form=form,data=users) 
@@ -162,7 +160,7 @@ def editUser():
         elif data.profil=='SO':
             data.roles.clear()
             data.roles.append(Role(name='so'))
-            
+
         else :
             data.roles.clear()
             data.roles.append(Role(name='mo'))
@@ -172,7 +170,7 @@ def editUser():
         flash('Utilisateur modifié avec Succès!','success')
         return redirect(url_for('compte'))
     return render_template('comptes.html', title='Register')
- 
+
 #Permet de Supprimer un utilisateur
 @app.route("/supprimerUser/<id>/", methods=('GET', 'POST'))
 @login_required
@@ -260,7 +258,7 @@ def editPlateau():
         data.libelle = request.form['libelle']
         data.description = request.form['description']
         data.univers= request.form['univers']
-    
+
         db.session.commit()
         flash('Plateau modifié avec Succès!','success')
         return redirect(url_for('plateau'))
@@ -286,19 +284,19 @@ def supprimerPlateau(id):
 def listeAv():
     form = LoginForm()
 
-    return render_template('listeAv.html', title='Register', form=form)  
- 
+    return render_template('listeAv.html', title='Register', form=form)
+
 @app.route("/listepa")
 @login_required
 def listepa():
     form = LoginForm()
-    return render_template('listepa.html', title='Register', form=form)  
- 
+    return render_template('listepa.html', title='Register', form=form)
+
 @app.route("/editpa")
 @login_required
 def editpa():
     form = LoginForm()
-    return render_template('editpa.html', title='Register', form=form)  
+    return render_template('editpa.html', title='Register', form=form)
 
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa", methods=('POST', 'GET'))
@@ -308,37 +306,38 @@ def listeVa():
     ref = request.args.get('ref')
     liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
     n = len(liste)
+    statut_action = 'En attente'
     # print("data = ", liste[1].nom_cc, n)
-    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, reference=ref)  
+    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, reference=ref,statut_action=statut_action)
 
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
 @login_required
 def analyseCause():
     form = RegistrationForm()
-    return render_template('analyse-cause.html',title='Analyse Cause', form=form)  
- 
+    return render_template('analyse-cause.html',title='Analyse Cause', form=form)
+
 #Permet de Méttre à jours une action :::::::::::::::::
 @app.route("/miseAjourAc")
 @login_required
 def miseAjourAc():
     form = RegistrationForm()
-    return render_template('mise-a-jour-action.html',title='Analyse Cause', form=form)  
- 
+    return render_template('mise-a-jour-action.html',title='Analyse Cause', form=form)
+
 #Permet de Méttre à jours une action :::::::::::::::::
 @app.route("/rejeterAv")
 @login_required
 def rejeterAv():
     form = RegistrationForm()
-    return render_template('rejeterAv.html',title='Analyse Cause', form=form)  
+    return render_template('rejeterAv.html',title='Analyse Cause', form=form)
 
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil", methods=('GET', 'POST'))
 @login_required
 def profil():
     form = RegistrationForm()
-
-    return render_template('profil.html',title='Analyse Cause', form=form)    
+    #request_data = request.get_json()
+    return render_template('profil.html',title='Analyse Cause', form=form)
 
 #enregistrement d'une AV par le MO
 @app.route("/analyse_agent", methods=('GET', 'POST'))
@@ -355,49 +354,43 @@ def analyse_agent():
     valeurs_aberante = ValeursAberrante.query.all()
     n = request.args.get('n')
     nom_conseiller = valeurs_aberante[int(n)].nom_cc[-20:-2]
+    valeurs_aberante_cc = valeurs_aberante[int(n)].valeurs
     agent = data.agent
     initial = agent.split(' ')[0][0] + agent.split(' ')[-1][0]
+    #name = request_data['name']
+    #print(name)
     if request.method=='POST':
+        #request_data = request.get_json()
+        #print(request.form)
         try:
-            # recuperation des differents pourquoi saisis sur le formulaire
+            tableau_pourquoi = []
+            for i in range(1,6):
+                j = 1
+                valeur = ''
+                for elem in request.form.getlist(f'valeur_{i}[]'):
+                    print(elem)
+                    valeur = valeur +f'{j}.'+' _/_'+elem+' _/_'
+                    j+=1
+                tableau_pourquoi.append(valeur)
+            print(request.form.getlist('pourquoi_2[]'), tableau_pourquoi)
             identifiant = request.form['identifiant']
-            axes_analyse = request.form['axes_analyse']
+            #axes_analyse = request.form['axes_analyse']
             probleme = request.form['probleme']
-            pourquoi1 = request.form['input_1']
-            pourquoi2 = request.form['input_2']
-            pourquoi21 = request.form['input_21']
-            pourquoi3 = request.form['input_3']
-            pourquoi31 = request.form['input_31']
-            pourquoi32 = request.form['input_332']
-            pourquoi33 = request.form['input_3333']
-            pourquoi4 = request.form['input_4']
-            pourquoi41 = request.form['input_41']
-            pourquoi42 = request.form['input_442']
-            pourquoi43 = request.form['input_4443']
-            pourquoi5 = request.form['input_5']
-            pourquoi51 = request.form['input_51']
-            pourquoi52 = request.form['input_552']
-            pourquoi53 = request.form['input_5553']
-            
-            id = identifiant+axes_analyse[:4]+initial
-            datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
-            print('pourquoi',pourquoi1, datacc)
-            if not datacc :
-                #pourquoi = AnalyseApporter(id, axes_analyse, probleme, pourquoi1, pourquoi2, pourquoi3, pourquoi4, pourquoi5)
-                pourquoi = AnalyseApporter(id, axes_analyse, probleme, pourquoi1, '1.'+' _/_'+pourquoi2 +' _/_2.'+ ' _/_'+pourquoi21, 
-                            '1.'+' _/_'+pourquoi3+' _/_'+'2.'+' _/_'+pourquoi31+' _/_'+'3.'+' _/_'+pourquoi32+' _/_'+'4.'+' _/_'+pourquoi33,
-                            '1.'+' _/_'+pourquoi4+' _/_'+'2.'+' _/_'+pourquoi41+' _/_'+'3.'+' _/_'+pourquoi42+' _/_'+'4.'+' _/_'+pourquoi43,
-                            '1.'+' _/_'+pourquoi5+' _/_'+'2.'+' _/_'+pourquoi51+' _/_'+'3.'+' _/_'+pourquoi52+' _/_'+'4.'+' _/_'+pourquoi53)
 
-                db.session.add(pourquoi)
-                db.session.commit()
-                return redirect(url_for('ajouter_action', reference=reference, n=n, id=id))
-            else:
-                flash('Axe deja analyser pour cet identifiant')
+            id = identifiant+initial
+            datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
+            #print('pourquoi',pourquoi1, datacc)
+            #if not datacc and probleme and tableau_pourquoi[0]:
+            pourquoi = AnalyseApporter(id, "axes_analyse", probleme, tableau_pourquoi[0], tableau_pourquoi[1], tableau_pourquoi[2], tableau_pourquoi[3], tableau_pourquoi[4])
+            db.session.add(pourquoi)
+            db.session.commit()
+            return redirect(url_for('ajouter_action', reference=reference, n=n, id=id))
+            #else:
+            #    flash('Axe deja analyser pour cet identifiant')
         except:
             flash("Une erreur s'est produit")
-    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=nom_conseiller)    
- 
+    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=nom_conseiller, valeurs_aberante_cc=valeurs_aberante_cc)    
+
 
 @app.route("/ajouter_action", methods=('GET', 'POST'))
 @login_required
@@ -416,8 +409,11 @@ def ajouter_action():
     agent = data.agent
     id = request.args.get('id')
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
-    #reference_action = reference+id
     
+
+    #print(request.form['valeur'])
+    #reference_action = reference+id
+
     #print('id ',id,datacc,pourquoi_2, request.form['probleme_act'])
     if request.method=='POST':
         try:
@@ -431,7 +427,7 @@ def ajouter_action():
             return redirect(url_for('listeVa', ref=reference))
         except:
             flash("Pas de modifications apportées sur les pourquoi saisis")
-        
+
         # recuperation des differents actions saisis sur le formulaire
         try:
             reference_action = request.form['reference_action']
@@ -471,36 +467,38 @@ def ajouter_action():
         except:
             flash("Une erreur s'est produit")
     if datacc:
-        pourquoi_1 = datacc.pourquoi_1
-        car_exclu = ['2.', '1.', '3.', '4.', '']
+        car_exclu = ['2.', '1.', '3.', '4.', '','5.','6.','7.','8.','9.','10.']
+        pourquoi_1 = [ elem for elem in datacc.pourquoi_1.split(' _/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_2 = [ elem for elem in datacc.pourquoi_2.split(' _/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_3 = [ elem for elem in datacc.pourquoi_3.split(' _/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_4 = [ elem for elem in datacc.pourquoi_4.split(' _/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split(' _/_') if not [el for el in car_exclu if el==elem]]
+        nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
         
-        return render_template('ajouter-action.html', n=n, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=id, 
-                           pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5)    
-    
+        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=id, 
+                            pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5)    
+
     #abort(500)
 
 
-@app.route("/reset_request")
+@app.route("/reset_request", methods=('POST', 'GET'))
 @login_required
 def reset_request():
-   
-    return render_template('reset_request.html')    
+    request_data = request.get_json()
+
+    return render_template('reset_request.html')
 
 @app.route("/demarrer-av")
 @login_required
 def demarrerav():
-   
-    return render_template('demarrer-av.html')    
+
+    return render_template('demarrer-av.html')
 
 
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect('login')  
+    return redirect('login')
 
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
@@ -519,20 +517,21 @@ def synthese_av():
         prenom = current_user.prenom
         nom = current_user.nom
         Date = date.today()
+
     except:
         flash('Aucun fichier ou format non compatible','warning')
 
     analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
     if not analyse_variation:
         for i in range(data.shape[0]):
-            print(reference, data.index[i])
+            #print(reference, data.index[i])
             valeur_aberante = ValeursAberrante(reference, data['Nom'][data.index[i]], data['Mesures'][data.index[i]])
             db.session.add(valeur_aberante)
             db.session.commit()
         av = Enregistrement_AV(prenom +' '+ nom, reference, '', Date, 'Statut en cour','')
         db.session.add(av)
         db.session.commit()
-        
+
     if request.method=='POST':
         libelle = request.form['libelle']
         statut = request.form['statut']
@@ -543,16 +542,19 @@ def synthese_av():
         analyse_variation.date = Date
         analyse_variation.statut_analyse = statut
         db.session.commit()
-        return redirect(url_for('listeVa', ref=reference))  
-    return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+        return redirect(url_for('listeVa', ref=reference)) 
+    try:
+        return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+    except:
+        return render_template('home.html')
 
-@app.route('/uploader', methods = ['GET', 'POST']) 
+@app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file () : 
     try:
         filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
                                             filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
-        
-        flash("Fichier charge avec succes ! ", 'success')
+
+        #flash("Fichier charge avec succes ! ")
         return redirect(url_for('synthese_av', filename=filename))
     except:
         flash('Erreur de chargement du fichier ','danger')

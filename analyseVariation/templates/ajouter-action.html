@@ -46,13 +46,14 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="d-flex row mg-b-20">
+                <div id="enregistrement_action">
+                     <div class="d-flex row mg-b-20">
                         <label for="" class="col-2 fs-5">Pourquoi: 1</label>
                         <div class="col pe-0">
                             <div class="col d-flex row p-0">
-                                <input class="col pe-0 me-2 fs-5" id="input_1_act" name="input_1_act"
-                                    value="{{ pourquoi_1 }}">
+                                {%  for i in range(1,nbre_pourquoi[0]+1) %}
+                                    <input  class="col pe-0 me-2 fs-5" id="input_{{ i }}_act" name="input_{{ i }}_act" value="{{ pourquoi_1[i-1] }}">
+                                {%  endfor %}
                             </div>
                         </div>
                     </div>
@@ -60,10 +61,9 @@
                         <label for="" class="col-2 fs-5">Pourquoi: 2</label>
                         <div class="col pe-0">
                             <div class="col d-flex row p-0">
-                                <input class="col pe-0 me-2 fs-5" id="input_2_act" name="input_2_act"
-                                    value="{{ pourquoi_2[0] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_21_act" name="input_21_act"
-                                    value="{{ pourquoi_2[1] }}">
+                                {%  for i in range(1,nbre_pourquoi[1]+1) %}
+                                    <input  class="col pe-0 me-2 fs-5" id="input_{{ i }}_act" name="input_{{ i }}_act" value="{{ pourquoi_2[i-1] }}">
+                                {%  endfor %}
                             </div>
                         </div>
                     </div>
@@ -71,14 +71,9 @@
                         <label for="" class="col-2 fs-5">Pourquoi: 3</label>
                         <div class="col pe-0">
                             <div class="col d-flex row p-0">
-                                <input class="col pe-0 me-2 fs-5" id="input_3_act" name="input_3_act"
-                                    value="{{ pourquoi_3[0] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_31_act" name="input_31_act"
-                                    value="{{ pourquoi_3[1] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_32_act" name="input_32_act"
-                                    value="{{ pourquoi_3[2] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_33_act" name="input_33_act"
-                                    value="{{ pourquoi_3[3] }}">
+                                {%  for i in range(1,nbre_pourquoi[2]+1) %}
+                                    <input  class="col pe-0 me-2 fs-5" id="input_{{ i }}_act" name="input_{{ i }}_act" value="{{ pourquoi_3[i-1] }}">
+                                {%  endfor %}
                             </div>
                         </div>
                     </div>
@@ -86,29 +81,37 @@
                         <label for="" class="col-2 fs-5">Pourquoi: 4</label>
                         <div class="col pe-0">
                             <div class="col d-flex row p-0">
-                                <input class="col pe-0 me-2 fs-5" id="input_4_act" name="input_4_act"
-                                    value="{{ pourquoi_4[0] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_41_act" name="input_41_act"
-                                    value="{{ pourquoi_4[1] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_42_act" name="input_42_act"
-                                    value="{{ pourquoi_4[2] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_43_act" name="input_43_act"
-                                    value="{{ pourquoi_4[3] }}">
+                                {%  for i in range(1,nbre_pourquoi[3]+1) %}
+                                    <input  class="col pe-0 me-2 fs-5" id="input_{{ i }}_act" name="input_{{ i }}_act" value="{{ pourquoi_4[i-1] }}">
+                                {%  endfor %}
                             </div>
                         </div>
                     </div>
                     <div class="d-flex row mg-b-20">
                         <label for="" class="col-2 fs-5">Pourquoi: 5</label>
-                        <div class="col pe-0">
+                        <div class="col">
                             <div class="col d-flex row p-0">
-                                <input class="col pe-0 me-2 fs-5" id="input_5_act" name="input_5_act"
-                                    value="{{ pourquoi_5[0] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_51_act" name="input_51_act"
-                                    value="{{ pourquoi_5[1] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_52_act" name="input_52_act"
-                                    value="{{ pourquoi_5[2] }}">
-                                <input class="col pe-0 me-2 fs-5" id="input_53_act" name="input_53_act"
-                                    value="{{ pourquoi_5[3] }}">
+                                {%  for i in range(1,nbre_pourquoi[4]+1) %}
+                                <div class="col pe-0 me-2">
+                                    <div class="col p-0 fs-5 border mg-b-10">
+                                        <input  class="col " id="input_{{ i }}_act" name="input_{{ i }}_act" value="{{ pourquoi_5[i-1] }}">
+                                    </div>
+                                    <div class="col d-flex flex-column p-0 mg-b-10">
+                                        <select name="axes_{{ i }}_analyse" id="axes_{{ i }}_analyse" class="bg-white border p-1 fs-5">
+                                            <option label="choisir un Axe" ></option>
+                                            {% for elem in cause %}
+                                                <option value="{{ elem }}">{{ elem }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col pe-0 me-4 btn-icon-list mb-3">
+                                        <a href="#" id="definir-action_4" class="w-100 definir-action fs-5 ">
+                                            <button class=" btn tx-white text-center  border-0 rounded definir_action " id="action4" title="analyse">Définir
+                                                Action</i></button></a>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                </div>
+                                {%  endfor %}
                             </div>
                         </div>
                     </div>
@@ -116,7 +119,7 @@
                 <div class="d-flex flex-column">
                     <div class="d-flex justify-content-end">
                         <div class=" d-flex col-10 justify-content-between " id="div-btn">
-                            <div class="btn-icon-list mb-3 mg-l-20">
+                            <!-- <div class="btn-icon-list mb-3 mg-l-20">
                                 <a href="#" id="definir-action_1" class="definir-action">
                                     <button class="btn tx-white  border-0 rounded definir_action" id="action1"
                                         title="analyse">Définir
@@ -136,14 +139,8 @@
                                         title="analyse">Définir
                                         Action</i></button></a>
                                 &nbsp;&nbsp;
-                            </div>
-                            <div class="btn-icon-list mb-3 mg-r-20">
-                                <a href="#" id="definir-action_4" class="definir-action">
-                                    <button class="btn tx-white  border-0 rounded definir_action" id="action4"
-                                        title="analyse">Définir
-                                        Action</i></button></a>
-                                &nbsp;&nbsp;
-                            </div>
+                            </div>--> 
+                            
                         </div>
                     </div>
                 </div>
@@ -310,4 +307,5 @@
 
 
 </div>
+<script src="{{ url_for('static', filename='js/ajoutAction.js') }}"></script>
 {% endblock content %}

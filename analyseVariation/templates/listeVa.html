@@ -10,6 +10,7 @@
                         <th class="wd-20p text-dark">Identifiant</th>
                         <th class="wd-10p text-dark">Valeur</th>
                         <th class="wd-5p text-dark">Analyse</th>
+                        <th class="wd-5p text-dark">Statut</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,12 +19,16 @@
                             <td>{{ liste[i].nom_cc }}</td>
                             <td>{{ liste[i].valeurs }}</td>
                             <td>
-                                <a class="d-flex justify-content-center" href="{{ url_for('analyse_agent', reference=reference, n=i ) }}">
-                                    <i class="fa-solid fa-pen-to-square fs-5"></i>
+                                <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', reference=reference, n=i ) }}">
+                                    <i class="fa-solid fa-pen-to-square fs-5 lien_analyse"></i>
                                     <!--<div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </div>-->
                                 </a>
+                            </td>
+                            
+                            <td>
+                                {{ statut_action }}
                             </td>
                         </tr>
                     {% endfor %}
@@ -39,4 +44,24 @@
         </div>
     </div>
 </div>
+<script>
+    var lien = document.querySelectorAll('.lien_analyse')
+    //console.log('liste element',lien);
+    lien.forEach((elem)=>{
+        elem.addEventListener('click', (e)=>{
+            //e.preventDefault()
+            
+            elem.parentNode.parentNode.nextElementSibling.textContent = 'En cours'
+            alert('on est bon')
+            console.log(elem.parentNode.parentNode.nextElementSibling.textContent);
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:5000/listeVa?ref=000012",
+                data: {
+                    statut : "En cours"
+                }
+            })
+        })
+    })
+</script>
 {% endblock content %}
