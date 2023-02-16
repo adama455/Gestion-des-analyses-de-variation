@@ -6,7 +6,6 @@ var k = 1;
 var l = 1;
 var nb = 1;
 
-
 function td_input(parent, id_input) {
   let nbr = tbody.childNodes.length;
   td = document.createElement("td");
@@ -117,7 +116,6 @@ plus.addEventListener("click", (e) => {
       cre_tr(td3_tbody, id_input_precdt3 + `${l++}`);
 
       alert("Okk");
-
 
     // td1 = e.target.parentNode.previousSibling.previousSibling;
       // td2 = td1.previousSibling.previousSibling;
