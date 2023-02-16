@@ -409,13 +409,14 @@ def ajouter_action():
     agent = data.agent
     id = request.args.get('id')
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
-    
 
     #print(request.form['valeur'])
     #reference_action = reference+id
 
     #print('id ',id,datacc,pourquoi_2, request.form['probleme_act'])
     if request.method=='POST':
+        print(request.form['nbre_action'])
+
         try:
             datacc.probleme = request.form['probleme_act']
             datacc.pourquoi_1 = request.form['input_1_act']
@@ -559,6 +560,12 @@ def upload_file () :
     except:
         flash('Erreur de chargement du fichier ','danger')
     #abort(404)
+
+@app.route("/action_programme")
+@login_required
+def action_programme():
+    return render_template('action_programme.html')
+
 
 if __name__=='__main__':
     app.run()

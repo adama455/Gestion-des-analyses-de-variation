@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="card container-lg border border-grey rounded-2 p-3 bg-gray-100 shadow mb-3">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-20 mt-2">Action programme</div>
+    <h2 class="modal-title my-3">Libellé Analyse de la variation</h2>
+        <table class="display responsive w-100 nowrap">
+            <thead>
+                <tr class="">
+                    <th class=" border modal-title tx-center py-3 col-3">Cause racine</th>
+                    <th class=" border modal-title tx-center py-3 col-3">Actions</th>
+                    <th class=" border modal-title tx-center py-3 col-3">Porteurs</th>
+                    <th class=" border modal-title tx-center py-3 col-3">Échéance</th>
+                    <th class="col-1"></th>
+                </tr>
+            </thead>
+            <spam class="indication-act-progrm">
+                Cliquer sur le bouton(+) en bas pour ajouter une Cause racine <em><b>ensuite</b></em> Cliquer sur celui de droite pour ajouter une Action(Action, Porteur, Echeance)</spam>
+            <tbody class="" id="corps">
+               <!--<tr class="line" id="line_1">
+                    <td class="border col-3">
+                        <input type="text" id="line_1_input_1" name="cause_racine" class="border-0 tx-center  w-100 fs-5 p-1"
+                            value="aaaaaaaaaaaaaaaa">
+                    </td>
+                    <td class="border col-3 p-0">
+                        <table class="col-12">
+                            <tbody class="tbody2">
+                                <tr style="padding: 0 !important;margin: 0 !important;">
+                                    <td class="border" style="padding: 0 !important;margin: 0 !important;">
+                                        <input type="text" id="line_1_input_2" name="action" class="border-0 tx-center w-100 fs-5 p-1"
+                                            value="aaaaaaaaaaaaaaaa">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="border col-3 p-0">
+                        <table class="col-12">
+                            <tbody class="tbody2">
+                                <tr style="padding: 0 !important;margin: 0 !important;">
+                                    <td class="border" style="padding: 0 !important;margin: 0 !important;">
+                                        <input type="text" id="line_1_input_3" name="action" class="border-0 tx-center w-100 fs-5 p-1"
+                                            value="aaaaaaaaaaaaaaaa">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="border col-2 p-0">
+                        <table class="col-12">
+                            <tbody class="tbody2">
+                                <tr style="padding: 0 !important;margin: 0 !important;">
+                                    <td class="border" style="padding: 0 !important;margin: 0 !important;">
+                                        <input type="date" id="line_1_input_4" name="action" class="border-0 tx-center w-100 fs-5 p-1"
+                                            value="aaaaaaaaaaaaaaaa">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="col-1">
+                        <i class="fa-light fa-plus fs-3 mt-5 tx-danger btn-plus-tr" id="btn-plus-tr_1" style="cursor:pointer"></i>
+                    </td>
+                </tr> -->
+            </tbody>
+        </table>
+    <i class="fa-light fa-plus fs-3" id="btn-plus" style="cursor:pointer"></i>
+</div>
+
+<script src="{{ url_for('static', filename='js/actionProgramme.js') }}"></script>
+
+{% endblock %}
