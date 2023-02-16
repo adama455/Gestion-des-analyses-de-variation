@@ -68,13 +68,15 @@ class ActionProgramme(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='action_programme'
     id=db.Column(db.Integer, primary_key=True)
+    identifiant_cc=db.Column(db.String(80))
     reference_action=db.Column(db.String(80))
     libelle_action=db.Column(db.String(255))
     porteur=db.Column(db.String(80))
     echeance=db.Column(db.String(80))
     status=db.Column(db.String(80))
     commentaire=db.Column(db.String(80))
-    def __init__(self, reference_action, libelle_action, porteur, echeance, statut, commentaire):
+    def __init__(self, identifiant_cc, reference_action, libelle_action, porteur, echeance, statut, commentaire):
+        self.identifiant_cc = identifiant_cc
         self.reference_action = reference_action
         self.libelle_action = libelle_action
         self.porteur = porteur
@@ -160,17 +162,17 @@ class AnalyseApporter(db.Model):
     __tablename__='apporter_analyse'
     id = db.Column(db.Integer, primary_key=True)
     identifiant = db.Column(db.String(255), unique=True, nullable=False)
-    axe_analyse = db.Column(db.String(50))
+    famille_causes = db.Column(db.String(500))
     probleme = db.Column(db.String(100))
-    pourquoi_1 = db.Column(db.String(500))
+    pourquoi_1 = db.Column(db.String(300))
     pourquoi_2 = db.Column(db.String(500))
     pourquoi_3 = db.Column(db.String(500))
     pourquoi_4 = db.Column(db.String(500))
     pourquoi_5 = db.Column(db.String(500))
 
-    def __init__(self, identifiant, axe_analyse, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
+    def __init__(self, identifiant, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
         self.identifiant = identifiant
-        self.axe_analyse = axe_analyse
+        self.famille_causes = famille_causes
         self.probleme = probleme
         self.pourquoi_1 = pourquoi_1
         self.pourquoi_2 = pourquoi_2
