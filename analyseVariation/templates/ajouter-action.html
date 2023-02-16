@@ -267,7 +267,7 @@
         <table class=" border  display responsive col-1">
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 tx-center border" style=" padding: 0 !important;margin: 0 !important;">
-                    CC
+                    {{ nom_conseiller }}
                 </td>
             </tr>
         </table>
@@ -276,19 +276,19 @@
         <table class=" border  display responsive col-1">
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border tx-center" style=" padding: 0 !important;margin: 0 !important;">
-                    456,5
+                    {{ valeurs_aberante_cc }}
                 </td>
             </tr>
         </table>
 
         <!-- Pourquoi 1-->
         <table class=" border  display responsive col-1">
-            {% for pq in  range(1) %}
+            {% for i in  range(1,nbre_pourquoi[0]+1) %}
             <tr style="padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border" style=" padding: 0 !important;margin: 0 !important;">
                     <table class=" border  display responsive col-12">
                         <tr class="w-100 border " style=" padding: 0 !important;margin: 0 !important;">
-                            <p class="tx-center"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit sed error doloribus quis quod</p>
+                            <p class="tx-center"> {{ pourquoi_1[i-1] }}</p>
                         </tr>
                     </table>
                 </td>
@@ -298,12 +298,12 @@
 
        <!-- Pourquoi 2-->
         <table class="border display responsive col-1">
-            {% for pq in  range(1) %}
+            {% for i in  range(1,nbre_pourquoi[1]+1) %}
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border" style=" padding: 0 !important;margin: 0 !important;">
                     <table class=" border  display responsive col-12">
                         <tr class="w-100 border " style=" padding: 0 !important;margin: 0 !important;">
-                            <p class="tx-center"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur fugit pariatur</p>
+                            <p class="tx-center"> {{ pourquoi_2[i-1] }}</p>
                            
                         </tr>
                     </table>
@@ -314,12 +314,12 @@
 
         <!-- Pourquoi 3-->
         <table class=" border  display responsive col-1">
-            {% for pq in  range(2) %}
+            {% for i in  range(1,nbre_pourquoi[2]+1) %}
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border" style=" padding: 0 !important;margin: 0 !important;">
                     <table class=" border  display responsive col-12">
                         <tr class="w-100 border " style=" padding: 0 !important;margin: 0 !important;">
-                            <p class="tx-center"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Porro repellendus sit similique </p>
+                            <p class="tx-center"> {{ pourquoi_3[i-1] }}</p>
                            
                         </tr>
                     </table>
@@ -330,12 +330,12 @@
 
         <!-- Pourquoi 4-->
         <table class=" border  display responsive col-1">
-            {% for pq in  range(4) %}
+            {% for i in  range(1,nbre_pourquoi[3]+1) %}
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border" style=" padding: 0 !important;margin: 0 !important;">
                     <table class=" border display responsive col-12">
                         <tr class="w-100 border " style=" padding: 0 !important;margin: 0 !important;">
-                            <p class="tx-center"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia corporis dolore magnam </p>
+                            <p class="tx-center">{{ pourquoi_4[i-1] }}</p>
                         </tr>
                     </table>
                 </td>
@@ -345,12 +345,12 @@
 
         <!-- Pourquoi 5-->
         <table class=" border  display responsive col-1">
-            {% for pq in  range(4) %}
+            {% for i in  range(1,nbre_pourquoi[4]+1) %}
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border" style=" padding: 0 !important;margin: 0 !important;">
                     <table class=" border  display responsive col-12">
                         <tr class="w-100 border " style=" padding: 0 !important;margin: 0 !important;">
-                           <p class="tx-center"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum mollitia odio molestiae in </p>
+                           <p class="tx-center"> {{ pourquoi_5[i-1] }} </p>
 
                         </tr>
                     </table>
@@ -361,12 +361,12 @@
         <!-- Famille de cause-->
 
         <table class="border  display responsive col-1">
-            {% for pq in  range(4) %}
+            {% for i in  range(6) %}
             <tr style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-1 border" style=" padding: 0 !important;margin: 0 !important;">
                     <table class="border  display responsive col-12">
                         <tr class="" style=" padding: 0 !important;margin: 0 !important;">
-                           <p class="tx-center">FAMILLE</p>
+                           <p class="tx-center">{{ axes_analyse[i] }}</p>
                         </tr>
                     </table>
                 </td>
@@ -376,16 +376,16 @@
 
         <!-- Partie Acyion individuelle de chaque dernier pourquoi-->
 
-        {% for pq in  range(4) %} 
+        {% for i in  range(4) %} 
             <table class="display responsive col-1">
-                {% for pq in  range(4) %} 
+                {% for i in  range(4) %} 
                 <tr style="padding: 0 !important;margin: 0 !important;">
                     <td class="col-1" style="padding: 0 !important;margin: 0 !important;">
                         <table class="display responsive col-12">
-                            {% for pq in  range(3) %} 
+                            {% for i in  range(1) %} 
                                 <tr class="" style=" padding: 0 !important;margin: 0 !important;">
                                     <td class="border " style=" padding: 0 !important;margin: 0 !important;">
-                                        <p class="ms-2 mt-2 ">Lorem ipsum dolor</p>
+                                        <p class="ms-2 mt-2 "></p>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -394,7 +394,7 @@
                 </tr>
                     {# <tr class="d-flex" style=" padding: 0 !important;margin: 0 !important;">
                         <td class="col-12" style=" padding: 0 !important;margin: 0 !important;" >
-                            {% for pq in  range(1) %}
+                            {% for i in  range(1) %}
                             <table class=" border display responsive col-12">
                                     <tr class=" " style="padding: 0 !important;margin: 0 !important;">
                                         <td class="" style="padding: 0 !important;margin: 0 !important;">
@@ -409,10 +409,10 @@
             </table>
         {% endfor %}
         {# <table class="col-1 ">
-            {% for pq in  range(4) %} 
+            {% for i in  range(4) %} 
             <tr class="d-flex" style=" padding: 0 !important;margin: 0 !important;">
                 <td class="col-12" style=" padding: 0 !important;margin: 0 !important;" >
-                    {% for pq in range(5) %}
+                    {% for i in range(5) %}
                     <table class=" border col-12 ">
                         <tr class=" " style=" padding: 0 !important;margin: 0 !important;  ">
                             <td class=" py-2 px-1">
