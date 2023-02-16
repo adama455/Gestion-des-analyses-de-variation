@@ -569,5 +569,11 @@ def upload_file () :
         flash('Erreur de chargement du fichier ','danger')
     #abort(404)
 
+@app.route("/action_programme")
+@login_required
+def action_programme():
+    return render_template('action_programme.html')
+
+
 if __name__=='__main__':
     app.run()

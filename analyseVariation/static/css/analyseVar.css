@@ -38,9 +38,9 @@
     font-size: 1.5rem;
 }
 
-#recaputilatif{
-    /* display: none; */
-} 
+.indication-act-progrm-show{
+    display: none;
+}
 .recaputilatif-show{
     display: block;
 }
