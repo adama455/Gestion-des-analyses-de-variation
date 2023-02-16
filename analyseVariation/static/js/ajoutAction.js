@@ -329,7 +329,7 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
       e.preventDefault();
       method = 'POST'
       data = 'reference_action_11'
-      url = "http://127.0.0.1:5000/ajouter_action?reference=000012&n=2&id=snt_1413_cloy55299AN"
+      url = "http://127.0.0.1:5001/ajouter_action?reference=000012&n=10&id=t_1413_bousso63465SN"
       ajax(method, data, url)
       $('#modal_action').modal('show');
       $(function () {
@@ -375,7 +375,7 @@ $(document).ready(function() {
       }
       method = 'POST'
       data = ACTION.toString()
-      url = "http://127.0.0.1:5000/ajouter_action?reference=000012&n=2&id=snt_1413_cloy55299AN"
+      url = "http://127.0.0.1:5001/ajouter_action?reference=000012&n=10&id=t_1413_bousso63465SN"
       ajax(method, data, url)
       window.location.reload();
     });
