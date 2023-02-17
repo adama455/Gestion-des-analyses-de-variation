@@ -438,17 +438,33 @@ def ajouter_action():
     act_4 = []
     act_5 = []
     act_6 = []
+    
     liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
-    for elem in action_cc:
-            k = elem.reference_action.split('_')[2].split('.')[0]
-            for i in range(1,7):
-                print(i==int(k))
+    for i in range(1,7):
+            ref = []
+            lib = []
+            por = []
+            ech = []
+            n=0
+            for elem in action_cc:
+                
+                k = elem.reference_action.split('_')[2].split('.')[0]
+                #print(i==int(k))
                 if i==int(k):
+                    n+=1
+                    ref.append(elem.reference_action)
+                    lib.append(elem.libelle_action)
+                    por.append(elem.porteur)
+                    ech.append(elem.echeance)
                     champ_act = [elem.reference_action, elem.libelle_action, elem.porteur, elem.echeance]
                     print(elem.reference_action.split('_')[2].split('.')[0])
-                    liste_action[i-1].append(champ_act)
-                    print(liste_action[i-1])
-                    print(liste_action)
+                    liste_action[i-1].append(ref)
+                    liste_action[i-1].append(lib)
+                    liste_action[i-1].append(por)
+                    liste_action[i-1].append(ech)
+                print(n)
+                print(liste_action[0], int(k), n)
+                print(liste_action[int(i)-1][0], n)
 
         #if data_ref:
         #    exist = 1
