@@ -410,8 +410,7 @@ def analyse_agent():
 @login_required
 def ajouter_action():
     exist = 0
-    #test = request.get_json('test')
-    #print(test)
+
     #recuperer la reference de l'AV au niveaude l'url et l'utiliser pour recuperer les infos corespondantes
     reference = request.args.get('reference')
     data = Enregistrement_AV.query.filter_by(reference_av=reference).first()
@@ -427,14 +426,54 @@ def ajouter_action():
     agent = data.agent
     id = request.args.get('id')
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
-    try:
-        ref_act = request.form['data']
-        data_ref = ActionProgramme.query.filter_by(reference_action=ref_act).first()
-        if data_ref:
-            exist = 1
-        print(ref_act, exist)
-    except:
-        print('on a pas pu recuperer les infos correspondant a cette reference')
+
+    #Recuperation de l'ensemble des actions en rapport avec le conseiller pour les afficher sur le tableau recaputilatif
+    #try:
+        #ref_act = request.form['data']
+        #data_ref = ActionProgramme.query.filter_by(reference_action=ref_act).first()
+    act_1 = []
+    action_cc = ActionProgramme.query.filter_by(identifiant_cc=id).all()
+    act_2 = []
+    act_3 = []
+    act_4 = []
+    act_5 = []
+    act_6 = []
+    
+    liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
+    for i in range(1,7):
+            ref = []
+            lib = []
+            por = []
+            ech = []
+            n=0
+            for elem in action_cc:
+                
+                k = elem.reference_action.split('_')[2].split('.')[0]
+                #print(i==int(k))
+                if i==int(k):
+                    n+=1
+                    ref.append(elem.reference_action)
+                    lib.append(elem.libelle_action)
+                    por.append(elem.porteur)
+                    ech.append(elem.echeance)
+                    champ_act = [elem.reference_action, elem.libelle_action, elem.porteur, elem.echeance]
+                    print(elem.reference_action.split('_')[2].split('.')[0])
+                    liste_action[i-1].append(ref)
+                    liste_action[i-1].append(lib)
+                    liste_action[i-1].append(por)
+                    liste_action[i-1].append(ech)
+                print(n)
+                print(liste_action[0], int(k), n)
+                print(liste_action[int(i)-1][0], n)
+
+        #if data_ref:
+        #    exist = 1
+        #print(ref_act, exist)
+    #except:
+    print('on a pas pu recuperer les infos correspondant a cette reference')
+
+    #Insertion des donnees action individuelles au niveau de la base de donnees
+    #On recupere les donnees poster par js sur l'url ajouter-action
     try:
         s_role = request.form['data']
         print(s_role.split('|'))
@@ -458,7 +497,7 @@ def ajouter_action():
         pourquoi_4 = [ elem for elem in datacc.pourquoi_4.split('_/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split('_/_') if not [el for el in car_exclu if el==elem]]
         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
-        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause,axes_analyse=axes_analyse, 
+        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause,axes_analyse=axes_analyse, liste_action=liste_action,
                             pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc)
 
     if request.method=='POST':

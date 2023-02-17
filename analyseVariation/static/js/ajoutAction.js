@@ -329,7 +329,7 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
       e.preventDefault();
       method = 'POST'
       data = 'reference_action_11'
-      url = "http://127.0.0.1:5001/ajouter_action?reference=000012&n=10&id=t_1413_bousso63465SN"
+      url = "http://127.0.0.1:5000/ajouter_action"
       ajax(method, data, url)
       $('#modal_action').modal('show');
       $(function () {
@@ -347,6 +347,10 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
 });
 
 function ajax(method, data, url){
+  var id = document.getElementById('identifiant_act').value
+  var reference = document.getElementById('reference_av_act').value
+  var n= '7'
+  url = url +'?reference='+reference+'&n='+n+'&id='+id
   $.ajax({
     data : { data : data }, //grab text between span tags
     type : method,
@@ -375,7 +379,7 @@ $(document).ready(function() {
       }
       method = 'POST'
       data = ACTION.toString()
-      url = "http://127.0.0.1:5001/ajouter_action?reference=000012&n=10&id=t_1413_bousso63465SN"
+      url = "http://127.0.0.1:5000/ajouter_action"
       ajax(method, data, url)
       window.location.reload();
     });
