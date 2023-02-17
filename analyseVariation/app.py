@@ -457,14 +457,18 @@ def ajouter_action():
                     por.append(elem.porteur)
                     ech.append(elem.echeance)
                     champ_act = [elem.reference_action, elem.libelle_action, elem.porteur, elem.echeance]
-                    print(elem.reference_action.split('_')[2].split('.')[0])
+                    #print(elem.reference_action.split('_')[2].split('.')[0])
                     liste_action[i-1].append(ref)
                     liste_action[i-1].append(lib)
                     liste_action[i-1].append(por)
                     liste_action[i-1].append(ech)
-                print(n)
-                print(liste_action[0], int(k), n)
-                print(liste_action[int(i)-1][0], n)
+                #print('test',n, i)
+                #print(liste_action[int(k)-1], int(k), n )
+                #print(liste_action[int(k)-1][0], n)
+    nbre_act = []
+    for elem in liste_action:
+        nbre_act.append(len(elem[0]))
+        print(len(elem[0]))
 
         #if data_ref:
         #    exist = 1
@@ -498,7 +502,7 @@ def ajouter_action():
         pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split('_/_') if not [el for el in car_exclu if el==elem]]
         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
         return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause,axes_analyse=axes_analyse, liste_action=liste_action,
-                            pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc)
+                            pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act)
 
     if request.method=='POST':
         
