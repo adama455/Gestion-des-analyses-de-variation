@@ -327,6 +327,10 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
   //element.addEventListener('click', ()=>{
   $(element).on('click', function (e) {
       e.preventDefault();
+      var k = element.getAttribute('id').split('_').pop()
+      var modal_title = document.getElementById(`input_5${k}_act`).value
+      title = document.getElementById('modal_title')
+      title.innerHTML = `Pourquoi 5${k} : `+ modal_title
       method = 'POST'
       data = 'reference_action_11'
       url = "http://127.0.0.1:5000/ajouter_action"
@@ -334,29 +338,28 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
       $('#modal_action').modal('show');
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-        bloc_actions(form_input, element.getAttribute('id').split('_').pop());
+        bloc_actions(form_input, k);
         document.getElementById("autre-act").addEventListener('click', ()=>{
           bloc_actions(form_input, element.getAttribute('id').split('_').pop());
         })
       })
-    //})
-    //e.preventDefault()
-    //element.getAttribute('id')
-    
   })
 });
 
+
+
 function ajax(method, data, url){
+  var url = new URL(window.location.href)
   var id = document.getElementById('identifiant_act').value
   var reference = document.getElementById('reference_av_act').value
-  var n= '7'
+  var n = url.searchParams.get("n");
   url = url +'?reference='+reference+'&n='+n+'&id='+id
   $.ajax({
     data : { data : data }, //grab text between span tags
     type : method,
     url : url, //post grabbed text to flask endpoint for saving role
     async : false,
-    success: function (data) { console.log('Sent Successfully') },
+    success: function (data) { console.log('Sent Successfully', url) },
     error: function (e) {console.log('Submission failed...') }
 });
 }
@@ -386,6 +389,7 @@ $(document).ready(function() {
     
 })
 
+console.log('url',window.location.href)
 
 
 /////////////////////////* Récaputilatif *//////////////////////////////////

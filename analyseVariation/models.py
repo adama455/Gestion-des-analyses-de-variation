@@ -87,8 +87,59 @@ class ActionProgramme(UserMixin, db.Model):
     def Valider(self, ):
         pass
 
-    def Operation1(self, ):
-        pass
+    def recup_action(data):
+
+        try:
+            #ref_act = request.form['data']
+            #data_ref = ActionProgramme.query.filter_by(reference_action=ref_act).first()
+            act_1 = []
+            act_2 = []
+            act_3 = []
+            act_4 = []
+            act_5 = []
+            act_6 = []
+                
+            liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
+            for i in range(1,7):
+                ref = []
+                lib = []
+                por = []
+                ech = []
+                n=0
+                for elem in data:
+                    k = elem.reference_action.split('_')[2].split('.')[0]
+                    #print(i==int(k))
+                    if i==int(k):
+                        n+=1
+                        ref.append(elem.reference_action)
+                        lib.append(elem.libelle_action)
+                        por.append(elem.porteur)
+                        ech.append(elem.echeance)
+                        #champ_act = [elem.reference_action, elem.libelle_action, elem.porteur, elem.echeance]
+                        #print(elem.reference_action.split('_')[2].split('.')[0])
+                        liste_action[i-1].append(ref)
+                        liste_action[i-1].append(lib)
+                        liste_action[i-1].append(por)
+                        liste_action[i-1].append(ech)
+                    #print('test',n, i)
+                    #print(liste_action[int(k)-1], int(k), n )
+                    #print(liste_action[int(k)-1][0], n)
+            nbre_act = []
+            for elem in liste_action:
+                if elem:
+                    nbre_act.append(len(elem[0]))
+                else:
+                    nbre_act.append(0)
+            #print(nbre_act)
+            #if data_ref:
+            #    exist = 1
+            #print(ref_act, exist)
+        except:
+            nbre_act = [0, 0, 0, 0, 0, 0]
+            print('on a pas pu recuperer les infos correspondant a cette reference')
+        
+        return liste_action, nbre_act
+
 
 class Cause(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -162,6 +213,7 @@ class AnalyseApporter(db.Model):
     __tablename__='apporter_analyse'
     id = db.Column(db.Integer, primary_key=True)
     identifiant = db.Column(db.String(255), unique=True, nullable=False)
+    # valeur = db.Column(db.String(255), unique=True, nullable=False)
     famille_causes = db.Column(db.String(500))
     probleme = db.Column(db.String(100))
     pourquoi_1 = db.Column(db.String(300))
@@ -170,8 +222,9 @@ class AnalyseApporter(db.Model):
     pourquoi_4 = db.Column(db.String(500))
     pourquoi_5 = db.Column(db.String(500))
 
-    def __init__(self, identifiant, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
+    def __init__(self, identifiant, valeur, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
         self.identifiant = identifiant
+        self.valeur = valeur
         self.famille_causes = famille_causes
         self.probleme = probleme
         self.pourquoi_1 = pourquoi_1
@@ -180,7 +233,20 @@ class AnalyseApporter(db.Model):
         self.pourquoi_4 = pourquoi_4
         self.pourquoi_5 = pourquoi_5
 
-class ValeursAberrante(UserMixin, db.Model):    
+    def traitement_data_analyse_apporter(datacc):
+        car_exclu = ['2.', '1.', '3.', '4.','5.','6.','7.','8.','9.','10.']
+        axes_analyse = [ elem for elem in datacc.famille_causes.split('_/_') if not [el for el in car_exclu if el==elem]]
+        pourquoi_1 = [ elem for elem in datacc.pourquoi_1.split('_/_') if not [el for el in car_exclu if el==elem]]
+        pourquoi_2 = [ elem for elem in datacc.pourquoi_2.split('_/_') if not [el for el in car_exclu if el==elem]]
+        pourquoi_3 = [ elem for elem in datacc.pourquoi_3.split('_/_') if not [el for el in car_exclu if el==elem]]
+        pourquoi_4 = [ elem for elem in datacc.pourquoi_4.split('_/_') if not [el for el in car_exclu if el==elem]]
+        pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split('_/_') if not [el for el in car_exclu if el==elem]]
+        liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
+        nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
+
+        return liste_pourquoi, nbre_pourquoi
+
+class ValeursAberrante(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='valeurs_aberante'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
