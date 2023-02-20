@@ -49,7 +49,7 @@
   <div class="wrapper d-flex align-items-stretch ">
 
     <!-- Le menu sidebar -->
-      {% if current_user.is_authenticated and (current_user.profil.name)=='ADMIN' %}
+      {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
         
       <nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
         <div class="p-4 pt-4">
@@ -123,7 +123,7 @@
           <div class="d-flex flex-row col-12">
 
             <!-- notre bouton toggle du menu sidebar -->
-            {% if current_user.is_authenticated and (current_user.profil.name)=='ADMIN' %}
+            {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
               <button type="button" id="sidebarCollapse" class="btn btn-primary">
                 <i class="fa fa-bars"></i>
                 <span class="sr-only">Toggle Menu</span>

@@ -3,7 +3,7 @@
 
 <div class="container-lg">
 
-  <div class=" jumbotron p-3 tx-center az-content-label mg-b-5">Gestion des Utilisateurs</div>
+  <div class="jumbotron p-3 tx-center az-content-label mg-b-5">Gestion des Utilisateurs</div>
   <p class="mg-b-20">Monitoring et gestion des utilisateurs.</p>
 
   <div class="card bg-gray-100 bd-10">
@@ -28,15 +28,15 @@
             <td>{{ user.nom }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.profil.value }}</td>
+            <td>{{ user.profil }}</td>
             <td>
               {% for role in user.roles %}
                 {{role.name}}
               {% endfor %}
             </td>
             <td class="text-center">
-              <a href="/editUser/{{user.id}}" class="text-center" title="edit" id="edituser" data-toggle="modal"
-                data-target="#modalEdit{{user.id}}">
+              <a href="/editUser/{{user.id}}" class="text-center" title="edit" id="edituser" data-bs-toggle="modal"
+                data-bs-target="#modalEdit{{user.id}}">
                 <i class="fa-solid fa-pen-to-square fs-3 me-3 text-info"></i>
               </a>
               <a href="/detailUser/{{ user.id }}" class="text-center" title="info">
@@ -66,14 +66,14 @@
   </div>
   {# Edit User Modal #}
   {% for user in data %}
-
-    <div class=" modal fade pt-0 " id="modalEdit{{user.id}}" role="dialog">
-      <div class="modal-dialog modal-lg modal-dialog-centered az-content-body" role="document">
-        <div class=" border border-3 border-white modal-content text-white card bd-10 w-50 mx-auto rounded col-12"
+  <div class="modal fade" id="modalEdit{{user.id}}" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class=" border border-3 border-white modal-content text-white card bd-10 mx-auto rounded col-12"
           style="background:url('/static/img/2.png');">
-          <div class="modal-header border-bottom-0 d-flex justify-content-end ">
-            <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Utilisateur</h1>
-            <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-header  border-bottom-0 d-flex justify-content-end">
+              <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Utilisateur</h1>
+              <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body pt-0 text-white ">
             {# <div class="az-content-label mg-b-10 d-flex justify-content-center">Nouvel Utilisateur</div> #}
@@ -88,20 +88,18 @@
               <form action="{{ url_for('editUser') }}" method="POST" target="cadre2">
 
                 <div class="row row-sm mg-b-0 mb-3">
+
                   <div class="col-6 form-group">
                     <label class="form-label mg-b-5 text-white">Username</label>
-                    
                     <input type="hidden" name="id" value="{{user.id}}">
-
                     <input type="text" class="form-control wd-380 is-invalid" name="username" placeholder="saisir maticule" value="{{user.username}}" required>
                   </div>
 
                   <div class="col-6 form-group">
-                      <label class="form-label mg-b-5 text-white">Prénom</label>
-                    
-                      <input type="text" class="form-control wd-380 is-invalid" name="prenom" placeholder="saisir prenom" value="{{user.prenom}}" required min="3">
-
+                    <label class="form-label mg-b-5 text-white">Prénom</label>
+                    <input type="text" class="form-control wd-380 is-invalid" name="prenom" placeholder="saisir prenom" value="{{user.prenom}}" required min="3">
                   </div>
+
                 </div>
 
                 <div class="row row-sm mg-b-0 mb-3">
@@ -113,7 +111,6 @@
                   <div class="col-6 form-group">
                     <label class="form-label mg-b-5 text-white">Email</label>
                     <input type="email" class="form-control wd-380 is-invalid" placeholder="saisir email" name="email" value="{{user.email}}" required>
-
                   </div> 
                 </div>
 
@@ -121,7 +118,12 @@
                   <div class="col-12">
                     <br>
                     <label class="form-label mg-b-10 text-white">Profil : <span class="tx-danger">*</span></label>
-                    <input type="text" class="form-control wd-380 is-invalid" name="profil" value="{{user.profil.name}}" required>
+                    <select name="profil" id="profil" class="form-control wd-380 is-invalid" >
+                    {# <option value="{{user.profil}}">{{user.profil}}</option> #}
+                      <option value="ADMIN" {% if user.profil==ADMIN %} selected {% endif %}>ADMIN</option>
+                      <option value="MANAGER_OPERATIONNEL" {% if user.profil==MANAGER_OPERATIONNEL %} selected {% endif %}>MO</option>
+                      <option value="SUPERVISEUR_OPERATIONNEL" {% if user.profil==SUPERVISEUR_OPERATIONNEL %} selected {% endif %}>SO</option>
+                    </select>
                   </div><!-- col-4 -->
                 </div>
                 </br>
@@ -147,13 +149,14 @@
               </form>
             </div>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
+</div>
+
   {% endfor %}
 
   {# Add User Modal #}
-  <div class=" modal fade pt-0" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal fade pt-0" id="adduserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered az-content-body" role="document">
       <div class=" border border-3 border-white modal-content text-white card bd-10 w-50 mx-auto rounded col-12"
@@ -249,7 +252,12 @@
                 <div class="col-12">
                   <br>
                   <label class="form-label mg-b-10 text-white">Profil : <span class="tx-danger">*</span></label>
-                  {% if form.profil.errors %}
+                  <select name="profil" id="profil" class="form-control wd-380 is-invalid">
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="MANAGER_OPERATIONNEL">MO</option>
+                    <option value="SUPERVISEUR_OPERATIONNEL">SO</option>
+                  </select>
+                  {# {% if form.profil.errors %}
                   {{ form.profil(class="form-control wd-380 is-invalid", placeholder="saisir maticule") }}
                   <div class="invalid-feedback">
                     {% for error in form.profil.errors %}
@@ -257,17 +265,17 @@
                     {% endfor %}
                   </div>
                   {% else %}
-                  {{ form.profil(class="form-control wd-380", placeholder="saisir maticule") }}
-                  {% endif %}
+                  {{ form.profil(class="form-control wd-380", placeholder="saisir profil") }}
+                  {% endif %} #}
                 </div><!-- col-4 -->
               </div>
               </br>
               <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
               <div class="row row-sm mg-b-0">
-                <!-- <div class="col-3 form-inline">
-                        <input type="checkbox" value="all" name="plateaux"/>
-                        <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
-                      </div>-->
+              <!--<div class="col-3 form-inline">
+                    <input type="checkbox" value="all" name="plateaux"/>
+                    <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
+                  </div>-->
                 {% for ele in plateaux %}
                 <div class="col-3 form-inline">
                   <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />

@@ -108,7 +108,7 @@ def changepassword():
 #     return wrap
 
 @app.route("/compte", methods=('GET', 'POST'))
-@login_required 
+@login_required
 @roles_required('admin')
 def compte():
     form = RegistrationForm()
@@ -120,16 +120,15 @@ def compte():
             user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, form.profil.data, hashed_password)
             if user.profil=='ADMIN':
                 user.roles.append(Role(name='admin'))
-            elif user.profil=='SO':    
-                user.roles.append(Role(name='so'))
-            else:
+            elif user.profil=='MANAGER_OPERATIONNEL':    
                 user.roles.append(Role(name='mo'))
+            else:
+                user.roles.append(Role(name='so'))
             emailUser = User.query.filter_by(email=request.form.get('email')).first()
             if emailUser:
                 flash('Email que vous avez entrez exist déjas','danger')
                 return redirect(url_for('compte'))
 
-            
             print(user)
             db.session.add(user)
             db.session.commit()
@@ -144,28 +143,26 @@ def compte():
 @app.route("/editUser", methods=['GET', 'POST'])
 @login_required
 def editUser():
-
+    form = RegistrationForm()   
     if request.method =='POST':
         data = User.query.get(request.form.get('id'))
-        data = Role.query.get(request.form.get('id'))
+        # data_Role = Role.query.get(request.form.get('id'))
         data.username = request.form['username']
         data.prenom = request.form['prenom']
         data.nom = request.form['nom']
         data.email = request.form['email']
-        data.profil = request.form['profil']
+        data.profil = form.profil.data
+        print('profil',data.profil)
         if data.profil=='ADMIN':
             data.roles.clear()
-            data.roles.append(Role(name='admin'))
-                    
-        elif data.profil=='SO':
+            data.roles.append(Role(name='admin'))     
+        elif data.profil=='MANAGER_OPERATIONNEL':
+            data.roles.clear()
+            data.roles.append(Role(name='mo'))
+        else :
             data.roles.clear()
             data.roles.append(Role(name='so'))
 
-        else :
-            data.roles.clear()
-            data.roles.append(Role(name='mo'))
-
-            
         db.session.commit()
         flash('Utilisateur modifié avec Succès!','success')
         return redirect(url_for('compte'))
@@ -439,12 +436,12 @@ def ajouter_action():
     act_5 = []
     act_6 = []
     
-    liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
+    # liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
+    ref = []
+    lib = []
+    por = []
+    ech = []
     for i in range(1,7):
-            ref = []
-            lib = []
-            por = []
-            ech = []
             n=0
             for elem in action_cc:
                 
@@ -456,15 +453,15 @@ def ajouter_action():
                     lib.append(elem.libelle_action)
                     por.append(elem.porteur)
                     ech.append(elem.echeance)
-                    champ_act = [elem.reference_action, elem.libelle_action, elem.porteur, elem.echeance]
-                    print(elem.reference_action.split('_')[2].split('.')[0])
-                    liste_action[i-1].append(ref)
-                    liste_action[i-1].append(lib)
-                    liste_action[i-1].append(por)
-                    liste_action[i-1].append(ech)
-                print(n)
-                print(liste_action[0], int(k), n)
-                print(liste_action[int(i)-1][0], n)
+                    # champ_act = [elem.reference_action, elem.libelle_action, elem.porteur, elem.echeance]
+                    # print(elem.reference_action.split('_')[2].split('.')[0])
+                    # liste_action[i-1].append(ref)
+                    # liste_action[i-1].append(lib)
+                    # liste_action[i-1].append(por)
+                    # liste_action[i-1].append(ech)
+                # print(n)
+                # print(liste_action[0], int(k), n)
+                # print(liste_action[int(i)-1][0], n)
 
         #if data_ref:
         #    exist = 1
@@ -497,7 +494,7 @@ def ajouter_action():
         pourquoi_4 = [ elem for elem in datacc.pourquoi_4.split('_/_') if not [el for el in car_exclu if el==elem]]
         pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split('_/_') if not [el for el in car_exclu if el==elem]]
         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
-        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause,axes_analyse=axes_analyse, liste_action=liste_action,
+        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause,axes_analyse=axes_analyse,refe=ref,
                             pourquoi_1=pourquoi_1, pourquoi_2=pourquoi_2, pourquoi_3=pourquoi_3,pourquoi_4=pourquoi_4, pourquoi_5=pourquoi_5, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc)
 
     if request.method=='POST':
