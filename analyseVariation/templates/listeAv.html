@@ -27,54 +27,19 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    {% for i in range(nbre_av) %}
                     <tr>
-                        <td>AD004</td>
-                        <td>Libelle av</td>
-                        <td>Lamine THIAME</td>
-                        <td>2023-01-04</td>
+                        <td>{{ liste_analyse_variation[i][0] }}</td>
+                        <td>{{ liste_analyse_variation[i][1] }}</td>
+                        <td>{{ liste_analyse_variation[i][2] }}</td>
+                        <td>{{ liste_analyse_variation[i][3] }}</td>
                         <td>
-                            <a href="#" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                            <a href="{{ url_for('recap_value') }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
                             <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
                           </a>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td>AD007</td>
-                        <td>Libelle av</td>
-                        <td>Lamine THIAME</td>
-                        <td>2023-01-04</td>
-                        <td>
-                            <a href="#" class="text-center" title="edit" id="edituser" data-toggle="modal">
-                                <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
-                              </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>AD008</td>
-                        <td>Libelle av</td>
-                        <td>Lamine THIAME</td>
-                        <td>2023-01-04</td>
-                        <td>
-                            <a href="#" class="text-center" title="edit" id="edituser" data-toggle="modal">
-                                <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
-                              </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>AD009</td>
-                        <td>Libelle av</td>
-                        <td>Lamine THIAME</td>
-                        <td>2023-01-04</td>
-                        <td>
-                            <a href="#" class="text-center" title="edit" id="edituser" data-toggle="modal">
-                                <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
-                              </a>
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             <br>
