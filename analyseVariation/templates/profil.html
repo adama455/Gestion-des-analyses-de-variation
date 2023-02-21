@@ -5,9 +5,8 @@
     <div class="col-4 imageProfi tx-center ">
       <img class="col-12" src="{{ url_for('static', filename='img/profil.png') }}">
       <span class="fs-3">{{ current_user.prenom }} {{ current_user.nom }}</span>
+      <div class="fs-3"><em> Role: {{ current_user.profil }} </em></div>
     </div>
-
-    
     <div class="col-8 ">
     {# <div class="az-content-label mg-b-5 "> MON PROFIL - {{ current_user.prenom }} {{ current_user.nom }}</div> #}
     <div class="card- bd-10 bg-white ">
@@ -40,6 +39,7 @@
                     <span>Groupe1</span>
                   </div><!-- media-body -->
                 </div><!-- media -->
+                
               </div><!-- az-profile-work-list -->
             </div><!-- col -->
             <div class="col-md- col-xl-5  p-4 mg-30 d-flex justify-content-end ">
@@ -52,12 +52,18 @@
                     <div>{{ current_user.email }}</div>
                   </div> <!-- media-body -->
                 </div> <!-- media -->
-
+                <div class="media">
+                  <div class="media-logo bg-primary"><i class="fas fa-user-tie"></i></i></div>
+                  <div class="media-body">
+                    <h6>Telephone </h6>
+                    <div>77 *** ** **</div>
+                  </div><!-- media-body -->
+                </div><!-- media -->
                 <div class="media">
                   <div class="media-icon"><i class="fas fa-user-tie"></i></div>
                   <div class="media-body">
-                    <h6>Role</h6>
-                    <div>{{ current_user.profil }}</div>
+                    <h6>Plateau</h6>
+                    <div>{{ current_user.plateau }}</div>
                   </div>
                 </div> <!-- media -->
                 

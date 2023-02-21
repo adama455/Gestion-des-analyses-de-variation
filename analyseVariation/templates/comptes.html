@@ -127,16 +127,16 @@
                   </div><!-- col-4 -->
                 </div>
                 </br>
-                <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
+                <label class="form-label tx-white mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
                 <div class="row row-sm mg-b-0">
-                  <!-- <div class="col-3 form-inline">
-                          <input type="checkbox" value="all" name="plateaux"/>
-                          <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
-                        </div>-->
+                  <div class="col-3 form-inline">
+                    <input type="checkbox" value="all" name="plateau"/>
+                    <label class="form-label tx-white mg-b-10 ml-2">Tous les plateaux</label>
+                  </div>
                   {% for ele in plateaux %}
                   <div class="col-3 form-inline">
-                    <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />
-                    <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
+                    <input type="checkbox" value="{{ele.libelle}}" id="plateau"name="plateau" />
+                    <label class="form-label tx-white mg-b-10 ml-2">{{ele.libelle}}</label>
                   </div>
                   {% endfor %}
                   <br>
@@ -270,16 +270,16 @@
                 </div><!-- col-4 -->
               </div>
               </br>
-              <label class="form-label mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
+              <label class="form-label tx-white mg-b-10">Plateaux : <span class="tx-danger">*</span></label>
               <div class="row row-sm mg-b-0">
-              <!--<div class="col-3 form-inline">
-                    <input type="checkbox" value="all" name="plateaux"/>
-                    <label class="form-label mg-b-10 ml-2">Tous les plateaux</label>
-                  </div>-->
+              <div class="col-3 form-inline">
+                <input type="checkbox" value="all" name="plateaux"/>
+                <label class="form-label tx-white mg-b-10 ml-2">Tous les plateaux</label>
+              </div>
                 {% for ele in plateaux %}
                 <div class="col-3 form-inline">
-                  <input type="checkbox" value="{{ele.libelle}}" name="plateaux" />
-                  <label class="form-label mg-b-10 ml-2">{{ele.libelle}}</label>
+                  <input type="checkbox" value="{{ele.libelle}}" id="plateau" name="plateau" />
+                  <label class="form-label mg-b-10 ml-2 tx-white">{{ele.libelle}}</label>
                 </div>
                 {% endfor %}
                 <br>

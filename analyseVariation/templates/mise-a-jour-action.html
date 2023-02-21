@@ -2,61 +2,47 @@
 {% block content %}
 
 <div class="container-lg ">
-    <div class="jumbotron p-3 bg-primary rounded text-white tx-center az-content-label mg-b-20">Mise à jour d'une action</div>
-
-    {# <h1 class="text-white bg-primary rounded d-flex justify-content-center align-items-center py-1 my-4"></h1> #}
-    {# <div class="row w-100  recherche mx-0  my-3">
-        <div class="col-8 d-flex">
-            <input type="search" name="recherche" id="" placeholder="Rechercher une AV"
-                class="w-50  border border-1 p-3 shadow-lg rounded">
-        </div>
-        <div class="col-4 d-flex justify-content-end">
-            <button class="btn btn-info" class="">Lancer</button>
-        </div>
-    </div> #}
+    <div class="jumbotron p-3 rounded tx-center az-content-label mg-b-20">Mise à jour d'une action</div>
     <div class="card bg-gray-100 bd-10">
-
         <div class="card-body">
             <div class="section1 mb-3">
                 <div class="row mb-3 mx-1">
-                    <div class="col-4 d-flex flex-column">
+                    <div class="col-4 d-flex flex-column fs-5">
                         <label for="reference_av">Recherche AV</label>
-                    <input type="text" name="reference_av" id="reference_av">
+                        <input type="text" name="reference_av" id="reference_av">
                     </div>
-                    <div class="col-4 d-flex flex-column">
+                    <div class="col-4 d-flex flex-column fs-5">
                         <label for="libelle_av">Libellé AV</label>
                         <input type="text" name="libelle_av" id="libelle_av">
                     </div>
-                    <div class="col-4 d-flex flex-column">
+                    <div class="col-4 d-flex flex-column fs-5">
                         <label for="responsable_av">Responssable AV</label>
                         <input type="text" name="responsable_av" id="responsable_av">
                     </div>
                 </div>
 
                 <div class="row mb-3 mx-1 ">
-                    <div class="col-3 d-flex flex-column">
+                    <div class="col-3 d-flex flex-column fs-5">
                         <label for="reference_av">Reference Action</label>
                         <input type="text" name="reference_av" id="reference_av">
                     </div>
-                    <div class="col-3 d-flex flex-column">
+                    <div class="col-3 d-flex flex-column fs-5">
                         <label for="libelle_av">Porteur AV</label>
                         <input type="text" name="libelle_av" id="libelle_av">
                     </div>
-                    <div class="col-3 d-flex flex-column">
+                    <div class="col-3 d-flex flex-column fs-5">
                         <label for="responsable_av">Delai</label>
                         <input type="text" name="responsable_av" id="responsable_av"> 
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-2 d-flex flex-column">
+                    <div class="col-2 d-flex flex-column fs-5">
                         <label for="status-ac">Status</label>
                         <input type="text" name="status-ac" id="status-ac" class="bg-warning border border-warning pb-1 text-center text-white fw-bold"> 
-
-                        {# <button  name="status-ac" id="status-ac" class="btn btn-primary">Valider</button> #}
                     </div>
                 </div>
-                <div class="col-12 d-flex flex-column mb-3">
+                <div class="col-12 d-flex flex-column mb-3 fs-5">
                     <label for="lib-action" class="text-center">Libellé Action</label>
-                    <textarea name="lib-action" id="" cols="30" rows="4"></textarea>
+                    <input type="text" name="libelle_ac" id="libelle_ac"> 
                 </div>
                 <div class="bouttons d-flex row mb-3 mx-3">
                     <button class="btn btn-primary col-3 border-0 rounded fw-bold" title="analyse">Changer le status</i></button>
@@ -67,19 +53,15 @@
                 <div class="col-12 d-flex flex-column mb-3">
                     <textarea name="commentaire" id="" cols="30" rows="4"></textarea>
                 </div>
-
+                
                 <div class="btn-icon-list mx-3">
                     <a href="#" id="add-analyse">
                         <button class="btn btn-primary  border-0 rounded fw-bold" title="analyse">Sortir</i></button>
                     </a>
                     &nbsp;&nbsp;
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 {% endblock content %}

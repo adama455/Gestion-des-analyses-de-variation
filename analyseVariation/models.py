@@ -33,6 +33,7 @@ class User(UserMixin, db.Model):
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
     profil=db.Column(db.String(150), unique=True, nullable=False)
+    plateau=db.Column(db.String(150), unique=True, nullable=False)
     # profil = db.Column(db.Enum(TypeProfil))
     password = db.Column(db.String(120), nullable=False)
     # Relationships
@@ -42,14 +43,14 @@ class User(UserMixin, db.Model):
     def has_roles(self, *args):
         return set(args).issubset({role.name for role in self.roles})
 
-    def __init__(self, nom, prenom, username, email, profil, password,roles):
+    def __init__(self, nom, prenom, username, email, profil, plateau, password):
         self.nom = nom
         self.prenom = prenom
         self.username = username
         self.email = email
         self.profil = profil
         self.password = password
-        self.roles = roles
+        self.plateau = plateau
 # /////////////////////////////////////
 # Define the Role data model
 class Role(db.Model):
@@ -222,9 +223,9 @@ class AnalyseApporter(db.Model):
     pourquoi_4 = db.Column(db.String(500))
     pourquoi_5 = db.Column(db.String(500))
 
-    def __init__(self, identifiant, valeur, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
+    def __init__(self, identifiant, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
         self.identifiant = identifiant
-        self.valeur = valeur
+        #self.valeur = valeur
         self.famille_causes = famille_causes
         self.probleme = probleme
         self.pourquoi_1 = pourquoi_1
@@ -276,12 +277,7 @@ class Plateau(UserMixin, db.Model):
     id=db.Column(db.Integer,primary_key=True, autoincrement=True)
     libelle = db.Column(db.String(100))
     description = db.Column(db.String(255))
-    # UNIV = (
-    #     ('FRONT OFFICE','FRONT OFFICE'),
-    #     ('BACK OFFICE','BACK OFFICE'),
-    # )
-    univers  =db.Column(db.String(255))
-    # metrique = models.ManyToManyField(Metrique)
+    univers=db.Column(db.String(255))
     
     def __init__(self, libelle, description, univers):
         self.libelle = libelle
