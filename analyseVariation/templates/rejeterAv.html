@@ -2,11 +2,11 @@
 {% block content %}
 
 <div class="container-lg ">
-    <div class="jumbotron p-3 bg-primary rounded text-white tx-center az-content-label mg-b-20">Détail d'une analyse de variation</div>
+    <div class="jumbotron p-3 rounded tx-center az-content-label mg-b-20">Détail d'une analyse de variation</div>
 
     {# <h1 class="text-white bg-primary rounded d-flex justify-content-center align-items-center py-1 my-4">Détail d'une analyse de variation</h1> #}
 
-    <div class="card bg-gray-100 bd-10">
+    <div class="card bg-gray-100 bd-10 rounded">
 
         <div class="card-body">
             <div class="section1 mb-3">
@@ -14,31 +14,31 @@
                 <div class="Libelle col-12">
                     <label for="">Libellé</label>
                 </div>
-                <div class="row mb-3 mx-1">
+                <div class="row mb-5 mx-1">
 
                     <div class="col-4 d-flex flex-column">
                         <label for="reference_av">Reference AV</label>
-                        <input type="text" name="reference_av" id="reference_av">
+                        <input type="text" name="reference_av" id="reference_av" class="fs-5">
                     </div>
                     <div class="col-4 d-flex flex-column">
                         <label for="libelle_av">Libellé AV</label>
-                        <input type="text" name="libelle_av" id="libelle_av">
+                        <input type="text" name="libelle_av" id="libelle_av" class="fs-5">
                     </div>
                     <div class="col-4 d-flex flex-column">
                         <label for="responsable_av">Responssable AV</label>
-                        <input type="text" name="responsable_av" id="responsable_av">
+                        <input type="text" name="responsable_av" id="responsable_av " class="fs-5">
                     </div>
 
                 </div>
 
-                <div class="col-12 d-flex flex-column mb-3">
+                <div class="col-12 d-flex flex-column my-3">
                     <label for="lib-action" class="text-center">Commentaires</label>
                     <textarea name="lib-action" id="" cols="30" rows="4"></textarea>
                 </div>
 
                 <div class="btn-icon-list mx-3">
                     <a href="#" id="add-analyse">
-                        <button class="btn btn-primary  border-0 rounded fw-bold" title="analyse">Envoyer</i></button>
+                        <button class="btn btn-primary  border-0 rounded fw-bold" title="analyse" onclick="return confirm('Voulez vous rejeter lanalyse')">Envoyer</i></button>
                     </a>
                     &nbsp;&nbsp;
                 </div>

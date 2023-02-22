@@ -19,10 +19,10 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class TypeProfil(enum.Enum):
-    ADMIN = "ADMIN"
-    MO ="MANAGER_OPERATIONNEL"
-    SO = "SUPEVISEUR_OPERATIONNEL"
+# class TypeProfil(enum.Enum):
+#     ADMIN = "ADMIN"
+#     MO ="MANAGER_OPERATIONNEL"
+#     SO = "SUPEVISEUR_OPERATIONNEL"
     
 class User(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
@@ -32,7 +32,9 @@ class User(UserMixin, db.Model):
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
-    profil = db.Column(db.Enum(TypeProfil))
+    profil=db.Column(db.String(150), unique=True, nullable=False)
+    plateau=db.Column(db.String(150), unique=True, nullable=False)
+    # profil = db.Column(db.Enum(TypeProfil))
     password = db.Column(db.String(120), nullable=False)
     # Relationships
     roles = db.relationship('Role', secondary='user_roles',
@@ -40,16 +42,15 @@ class User(UserMixin, db.Model):
 
     def has_roles(self, *args):
         return set(args).issubset({role.name for role in self.roles})
- 
-    # -----------------------Token------
 
-    def __init__(self, nom, prenom, username, email, profil, password):
+    def __init__(self, nom, prenom, username, email, profil, plateau, password):
         self.nom = nom
         self.prenom = prenom
         self.username = username
         self.email = email
         self.profil = profil
         self.password = password
+        self.plateau = plateau
 # /////////////////////////////////////
 # Define the Role data model
 class Role(db.Model):
@@ -299,12 +300,7 @@ class Plateau(UserMixin, db.Model):
     id=db.Column(db.Integer,primary_key=True, autoincrement=True)
     libelle = db.Column(db.String(100))
     description = db.Column(db.String(255))
-    # UNIV = (
-    #     ('FRONT OFFICE','FRONT OFFICE'),
-    #     ('BACK OFFICE','BACK OFFICE'),
-    # )
-    univers  =db.Column(db.String(255))
-    # metrique = models.ManyToManyField(Metrique)
+    univers=db.Column(db.String(255))
     
     def __init__(self, libelle, description, univers):
         self.libelle = libelle

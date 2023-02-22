@@ -212,6 +212,11 @@ function sous_bloc_action(parent, n, i, id, label){
   if (label=='Ref Action') {
     input_ref.value= `${id}_${n}.${i}`
   }
+  if (label=='Echeance Action') {
+    input_ref.type="date"
+  }
+  
+
   div_ref.appendChild(label_ref);
   div_ref.appendChild(input_ref);
   parent.appendChild(div_ref)
@@ -309,8 +314,10 @@ function bloc_action(n){
 
 document.querySelectorAll('.definir_action').forEach((element)=>{
   //element.addEventListener('click', ()=>{
+    
   $(element).on('click', function (e) {
       e.preventDefault();
+      console.log(element);
       var k = element.getAttribute('id').split('_').pop()
       var modal_title = document.getElementById(`input_5${k}_act`).value
       title = document.getElementById('modal_title')
@@ -334,6 +341,7 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
 function ajax(method, data, Url){
   var url = new URL(window.location.href)
   var id = document.getElementById('identifiant_act').value
+  console.log(id)
   var reference = document.getElementById('reference_av_act').value
   var n = url.searchParams.get("n");
   url = Url +'?reference='+reference+'&n='+n+'&id='+id

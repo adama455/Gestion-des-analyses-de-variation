@@ -89,9 +89,10 @@ plus.addEventListener("click", (e) => {
   table_tbody(tbody);
   plus_lines = document.querySelectorAll("i.btn-plus-tr");
   console.log(plus_lines.length);
-
+  
   for (let element = 0; element < plus_lines.length; element++) {
     plus_lines[element].addEventListener("click", (e) => {
+      e.stopImmediatePropagation()
       
       td1 = e.target.parentNode.previousSibling;
       td2 = td1.previousSibling;
@@ -116,6 +117,7 @@ plus.addEventListener("click", (e) => {
       cre_tr(td3_tbody, id_input_precdt3 + `${l++}`);
 
       alert("Okk");
+      
 
     // td1 = e.target.parentNode.previousSibling.previousSibling;
       // td2 = td1.previousSibling.previousSibling;

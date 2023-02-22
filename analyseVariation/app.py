@@ -94,7 +94,7 @@ def changepassword():
     return render_template('changepassword.html')    
 
 @app.route("/compte", methods=('GET', 'POST'))
-@login_required 
+@login_required
 @roles_required('admin')
 def compte():
     form = RegistrationForm()
@@ -103,13 +103,14 @@ def compte():
             password = 'Sovar@2023'
             print('test ', form.profil.data)
             hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
-            user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, form.profil.data, hashed_password)
+            user = User(form.nom.data, form.prenom.data, form.username.data, form.email.data, form.profil.data, form.plateau.data, hashed_password)
+            print('test ', form.plateau.data)
             if user.profil=='ADMIN':
                 user.roles.append(Role(name='admin'))
-            elif user.profil=='SO':    
-                user.roles.append(Role(name='so'))
-            else:
+            elif user.profil=='MANAGER_OPERATIONNEL':    
                 user.roles.append(Role(name='mo'))
+            else:
+                user.roles.append(Role(name='so'))
             emailUser = User.query.filter_by(email=request.form.get('email')).first()
             if emailUser:
                 flash('Email que vous avez entrez exist déjas','danger')
@@ -122,35 +123,36 @@ def compte():
             return redirect(url_for('compte'))
 
     users = User.query.all() #Récuperation de l'enssemble des utilisateurs::
+    plateaux = Plateau.query.all()  #Récuperation de l'enssemble des plateaux::
+    
     # print('profil',users.profil.value)
-    return render_template('comptes.html', title='Register', form=form,data=users) 
+    return render_template('comptes.html', title='Register', form=form,data=users,plateaux=plateaux) 
 
 #Cette page permet voir les détail d'un Utilisateur
 @app.route("/editUser", methods=['GET', 'POST'])
 @login_required
 def editUser():
-
+    form = RegistrationForm()   
     if request.method =='POST':
         data = User.query.get(request.form.get('id'))
-        data = Role.query.get(request.form.get('id'))
+        # data_Role = Role.query.get(request.form.get('id'))
         data.username = request.form['username']
         data.prenom = request.form['prenom']
         data.nom = request.form['nom']
         data.email = request.form['email']
-        data.profil = request.form['profil']
+        data.profil = form.profil.data
+        data.plateau = form.plateau.data
+        print('profil',data.plateau)
         if data.profil=='ADMIN':
             data.roles.clear()
-            data.roles.append(Role(name='admin'))
-                    
-        elif data.profil=='SO':
+            data.roles.append(Role(name='admin'))     
+        elif data.profil=='MANAGER_OPERATIONNEL':
+            data.roles.clear()
+            data.roles.append(Role(name='mo'))
+        else :
             data.roles.clear()
             data.roles.append(Role(name='so'))
 
-        else :
-            data.roles.clear()
-            data.roles.append(Role(name='mo'))
-
-            
         db.session.commit()
         flash('Utilisateur modifié avec Succès!','success')
         return redirect(url_for('compte'))
@@ -312,11 +314,12 @@ def analyseCause():
 @login_required
 def miseAjourAc():
     form = RegistrationForm()
-    return render_template('mise-a-jour-action.html',title='Analyse Cause', form=form)
+    return render_template('mise-a-jour-action.html', title='Analyse Cause', form=form)
 
-#Permet de Méttre à jours une action :::::::::::::::::
+#Permet de Méttre à jours une action :::::::::::::::::::::::::::::
 @app.route("/rejeterAv")
 @login_required
+@roles_required('admin')
 def rejeterAv():
     form = RegistrationForm()
     return render_template('rejeterAv.html',title='Analyse Cause', form=form)
@@ -369,9 +372,10 @@ def analyse_agent():
             pourquoi51 = '1._/_'+request.form.get('input_5')+'_/_' +'2._/_'+ request.form.get('input_52') +'_/_' +'3._/_'+ request.form.get('input_53')
             pourquoi52= '_/_4._/_'+request.form.get('input_54') +'_/_' +'5._/_'+ request.form.get('input_55') +'_/_' +'6._/_'+ request.form.get('input_56')
             datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
-            #print('pourquoi',pourquoi1, datacc)
+            print('pourquoi',pourquoi1, datacc)
             if not datacc:
                 pourquoi = AnalyseApporter(id, axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22, pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
+                print('lamine',pourquoi)
                 db.session.add(pourquoi)
                 db.session.commit()
             else:
@@ -420,15 +424,15 @@ def ajouter_action():
     valeurs_aberante_cc = valeurs_aberante[int(n)].valeurs
     agent = data.agent
     id = request.args.get('id')
-    print(id)
+    print('id',id)
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
     #Recuperation de l'ensemble des actions en rapport avec le conseiller pour les afficher sur le tableau recaputilatif
     action_cc = ActionProgramme.query.filter_by(identifiant_cc=id).all()
     liste_action = ActionProgramme.recup_action(action_cc)[0]
     nbre_act = ActionProgramme.recup_action(action_cc)[1]
-
+    print(" liste_action",liste_action)
     #Insertion des donnees action individuelles au niveau de la base de donnees
-    #On recupere les donnees poster par js sur l'url ajouter-action
+    #On recupere les donnees poster par js sur l'url ajouter-action............
     try:
         data_input_action = request.form.get('data')
         data_input_action = data_input_action.split('|')
@@ -467,8 +471,9 @@ def ajouter_action():
         print(exist)
         liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
         nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[1]
+        # print(liste_pourquoi)
         return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause, liste_action=liste_action,
-                            liste_pourquoi=liste_pourquoi, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act)
+            liste_pourquoi=liste_pourquoi, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act)
 
 
 @app.route("/recaputilatif", methods=('POST', 'GET'))
@@ -493,6 +498,7 @@ def recap_value():
         nbre_action = ActionProgramme.recup_action(action_cc)[1]
         table_liste_action.append(liste_action)
         table_nbre_action.append(nbre_action)
+        
     return render_template('recap.html', table_liste_pourquoi=table_liste_pourquoi, table_nbre_pourquoi=table_nbre_pourquoi, liste_identifiant=liste_identifiant,
                            table_liste_action=table_liste_action, table_nbre_action=table_nbre_action, nbre_analyse=nbre_analyse)
 

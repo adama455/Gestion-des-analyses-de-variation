@@ -12,11 +12,12 @@
                 <div class="col-md-3">
                     <div class="card">
                         <div class="editSup px-2 d-flex justify-content-between">
-                            <a href="/editPlateau/{{ele.id}}" class="fs-5" title="edit" data-toggle="modal"
-                                data-target="#modifPlateauModal{{ele.id}}" data-placement="top">
+                            <a href="/editPlateau/{{ele.id}}" class="fs-5" title="edit" data-bs-toggle="modal"
+                                data-bs-target="#modifPlateauModal{{ele.id}}" data-placement="top">
                                 <i class="fa-solid fa-pen-to-square text-info"></i>
                             </a>
-                            <a href="/supprimerPlateau/{{ele.id}}" class="fs-5" title="supprimer" onclick="return confirm('Etes Vous sûr de Supprimer')">
+                            <a href="/supprimerPlateau/{{ele.id}}" class="fs-5" title="supprimer"
+                                onclick="return confirm('Etes Vous sûr de Supprimer')">
                                 <i class="fa-solid fa-trash  text-danger"></i>
                             </a>
                         </div>
@@ -26,7 +27,7 @@
                         </div><!-- card-body -->
                         <div class="card-footer bd-t tx-center bg-primary">
 
-                            <a href="{{ele.libelle}}" class="nav-sub-link text-white" data-toggle="tooltip"
+                            <a href="{{ele.libelle}}" class="nav-sub-link text-white" data-bs-toggle="tooltip"
                                 data-placement="top" title="Voir Détails"
                                 onClick="window.open('/details_plateau/{{ele.id}}', 'cadre2','toolbar=0, location=0, directories=0, status=0, scrollbars=1, resizable=0, copyhistory=0, menuBar=0, width=800, height=700'); return false">
                                 <i class="fas fa-solid fa-th-list"></i> &nbsp; Détails</a>
@@ -53,17 +54,16 @@
 
     {# Modifier Cause Modal #}
     {% for ele in plateaux %}
-
-    <div class="modal fade pt-0" id="modifPlateauModal{{ele.id}}" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered az-content-body" role="document">
-            <div class=" border border-3 border-white modal-content text-white card bd-10 w-50 mx-auto rounded col-12"
+    <div class="modal fade" id="modifPlateauModal{{ele.id}}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class=" border border-3 border-white modal-content text-white card bd-10 mx-auto rounded col-12"
                 style="background:url('/static/img/2.png');">
-                <div class="modal-header border-bottom-0 d-flex justify-content-end ">
-                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Cause</h1>
+                <div class="modal-header  border-bottom-0 d-flex justify-content-end">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Plateau</h1>
                     <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body pt-0 text-white ">
+                <div class="modal-body pt-0 text-white">
                     <div class="d-flex flex-column card-body mx-0 px-0">
                         <form action="{{ url_for('editPlateau') }}" method="POST" target="cadre2">
 
@@ -108,6 +108,7 @@
             </div>
         </div>
     </div>
+   
     {% endfor %}
 
     {# Add User Modal #}

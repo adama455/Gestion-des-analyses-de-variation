@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="card container-xl border border-grey rounded-2 p-3 bg-gray-100 shadow mb-3">
+<div class="card container-fluid border border-grey rounded-2 p-3 bg-gray-100 shadow mb-3">
     <div class="jumbotron p-3 tx-center az-content-label mg-b-20">ANALYSE VARIATION</div>
     <form action="" method="POST">
         <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container ">
@@ -29,7 +29,7 @@
                         <label for="identifiant_act" class=" fs-5 tx-center">Identifient</label>
                         <input id="identifiant_act" name="identifiant_act"
                             class="px-2 fs-5 border border-info text-white" style="background-color: #009088;"
-                            value="{{ nom_conseiller }}" disabled>
+                            value="{{ nom_conseiller }}" >
                     </div>
                     <div class="col-9 d-flex flex-column">
                         <label for="axes_analyse_act" class=" fs-5 tx-center">Axes d'analyse des causes choisie</label>
@@ -111,23 +111,25 @@
                 <div class="d-flex row">
                     <label for="" class="col-2"> </label>
                     <div class="col p-0 ms-4">
-                        <div class="col d-flex row mg-b-20 p-0" id="div-btn">
+                        <div class="col d-flex row mg-b-20 p-0 " id="div-btn">
                             {%  for i in range(1,7) %}
                             {%  if liste_pourquoi[5][i-1] %}
                             <div class="col-2 p-0 ">
                                 <a href="#" class="definir-action fs-5">
-                                    <button id="definir-action_{{ i }}" class="tx-white text-center border-0 rounded definir_action px-2 " title="analyse" style="background-color: #FF7900;">Définir
+                                    <button id="definir-action_{{ i }}"
+                                        class="tx-white text-center border-0 rounded definir_action px-2 "
+                                        title="analyse" style="background-color: #FF7900;">Définir
                                         Action</button></a>
                                 &nbsp;&nbsp;
                             </div>
-                            {%  else %}
+                            {# {%  else %}
                             <div class="col-2 p-0 ">
                                 <a href="#" class="definir-action fs-5">
                                     <button id="definir-action_{{ i }}" class="tx-white text-center border-0 rounded definir_action px-2 " title="analyse" style="background-color: #FF7900;">Définir
                                         Action</button></a>
                                 &nbsp;&nbsp;
                             </div>
-                            {%  endif %}
+                            {%  endif %} #}
                             {%  endfor %}
                         </div>
                     </div>
@@ -136,8 +138,8 @@
                     <div class="d-flex justify-content-end ">
                         <div class="d-flex col-10 justify-content-end p-0 ">
                             <div class="col-2 d-flex justify-content-end p-0 ">
-                                <a href="{{ url_for('analyse_agent', reference=reference, n=n) }}">
-                                    <div class="btn tx-white btn-final rounded">Autres axes</div>
+                                <a href="{{ url_for('listeVa', ref=reference) }}">
+                                    <div class="btn tx-white btn-final rounded">Autre Valeur</div>
                                 </a>
                             </div>
                             <div class="col-3 d-flex justify-content-end p-0 mg-r-40" id="enregistrement_de_detail">
@@ -255,9 +257,9 @@
 <!-- ...............Récap............... -->
 <div class="jumbotron p-3  modal-title  mb-2 mt-5 tx-center az-content-label bg-light">Récap de l'analyse global</div>
 <div class="recap_global border m-0">
-    <table>
-        <caption>Récap de l'analyse global</caption>
-        <tr>
+    <table class="border border-black border-2">
+        <caption class="tx-center">Récap de l'analyse globale</caption>
+        <tr class="fs-5 tx-center py-2">
             <th>
                 CC
             </th>
@@ -297,7 +299,7 @@
             
         </tr>
         {% for i in range(6) %}
-        <tr >
+        <tr>
             {%  if i==0 %}
             <td rowspan="6" class="col-1 tx-center border">
                 {{ nom_conseiller }}
@@ -333,11 +335,9 @@
                 {{ liste_pourquoi[5][i] }}
             </td>
             <td class="col-1 tx-center border">
-                {% for k in range(nbre_act[i]) %}
+                {# {% for k in range(nbre_act[i]) %}
                 <p>{{ liste_action[i][0][k] }}</p>
-                {%  endfor %}
-            </td>
-            <td class="col-1 tx-center border p-0">
+                {%  endfor %} #}
                 {% for k in range(nbre_act[i]) %}
                 <p>{{ liste_action[i][1][k] }}</p>
                 {%  endfor %}
@@ -352,6 +352,9 @@
                 <p>{{ liste_action[i][3][k] }}</p>
                 {%  endfor %}
             </td>
+            <td class="col-1 tx-center border p-0">
+               
+            </td>
         </tr>
         {%  endfor %}
     </table>
@@ -359,7 +362,7 @@
 </div>
 <div class="action_programme">
     <a href="{{ url_for('action_programme') }}" id="action_programme" class="w-100 fs-5 ">
-        <button type="button" class="btn btn-primary rounded my-3 float-right" id="#">Définir Action Programme</button>   
+        <button type="button" class="btn btn-primary rounded my-3 float-right" id="#">Définir Action Programme</button>
     </a>
 </div>
 &nbsp;&nbsp;

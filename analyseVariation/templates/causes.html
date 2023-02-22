@@ -22,8 +22,8 @@
             <td>{{ele.libelle}}</td>
             <td>{{ele.description}}</td>
             <td>
-              <a href="/editCause/{{ele.id}}" class="text-center" title="edit" data-toggle="modal"
-                data-target="#modifCauseModal{{ele.id}}" data-placement="top">
+              <a href="/editCause/{{ele.id}}" class="text-center" title="edit" data-bs-toggle="modal"
+                data-bs-target="#modifCauseModal{{ele.id}}" data-placement="top">
                 <i class="fa-solid fa-pen-to-square fs-3 me-3 text-info"></i>
               </a>
               <a href="#" class="text-center" title="info">
@@ -47,48 +47,46 @@
 
   {# Modifier Cause Modal #}
   {% for ele in causes %}
-
-    <div class=" modal fade pt-0" id="modifCauseModal{{ele.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered az-content-body" role="document">
-        <div class=" border border-3 border-white modal-content text-white card bd-10 w-50 mx-auto rounded col-12"
+  <div class="modal fade" id="modifCauseModal{{ele.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class=" border border-3 border-white modal-content text-white card bd-10 mx-auto rounded col-12"
           style="background:url('/static/img/2.png');">
-          <div class="modal-header border-bottom-0 d-flex justify-content-end ">
-            <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Cause</h1>
-            <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body pt-0 text-white ">
-            <div class="d-flex flex-column card-body mx-0 px-0">
-              <form action="{{ url_for('editCause') }}" method="POST" target="cadre2">
+        <div class="modal-header  border-bottom-0 d-flex justify-content-end">
+          <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Modifier Cause</h1>
+          <button type="button" class="btn-close fs-5 " data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-0 text-white">
+          <div class="d-flex flex-column card-body mx-0 px-0">
+            <form action="{{ url_for('editCause') }}" method="POST" target="cadre2">
 
-                <div class="row row-sm mg-b-0 mb-3">
-                  <div class="col-12 form-group">
+              <div class="row row-sm mg-b-0 mb-3">
+                <div class="col-12 form-group">
 
-                    <input type="hidden" name="id" value="{{ele.id}}">
-                    {{ form.libelle.label(class="form-label mg-b-5 text-white") }}
-                    <input type="text" name="libelle" class="form-control wd-380 is-invalid", placeholder="saisir libelle" value="{{ele.libelle}}">
-                    
-                  </div>
+                  <input type="hidden" name="id" value="{{ele.id}}">
+                  {{ form.libelle.label(class="form-label mg-b-5 text-white") }}
+                  <input type="text" name="libelle" class="form-control wd-380 is-invalid", placeholder="saisir libelle" value="{{ele.libelle}}">
+                  
                 </div>
-                <div class="row row-sm mg-b-0 mb-3">
+              </div>
+              <div class="row row-sm mg-b-0 mb-3">
 
-                  <div class="col-12 form-group">
-                    {{ form.description.label(class="form-label mg-b-5 text-white") }}
-                    <textarea name="description" id="description" cols="30" rows="5" class="form-control wd-380 is-invalid">{{ele.description}}</textarea>
-                  </div>
+                <div class="col-12 form-group">
+                  {{ form.description.label(class="form-label mg-b-5 text-white") }}
+                  <textarea name="description" id="description" cols="30" rows="5" class="form-control wd-380 is-invalid">{{ele.description}}</textarea>
                 </div>
-                </br>
-                <div class="mg-t-30">
-                  <button type="submit" id="bouton" class="btn btn-block btn-az-primary pd-x-20"><i
-                    class="fa-solid fa-pen-to-square"></i>
-                    Editer</button>
-                </div>
-              </form>
-            </div>
+              </div>
+              </br>
+              <div class="mg-t-30">
+                <button type="submit" id="bouton" class="btn btn-block btn-az-primary pd-x-20"><i
+                  class="fa-solid fa-pen-to-square"></i>
+                  Editer</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
+  </div>
   {% endfor %}
 
 
