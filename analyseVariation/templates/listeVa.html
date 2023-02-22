@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
 <div class="container">
-    <div class=" jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES VALEURS AVERANTES</div>
+    <div class=" jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES VALEURS ABERRANTES</div>
     <div class="card bg-gray-100 bd-10">
         <div class="card-body">
             <table id="datatable1" class="display responsive nowrap" width="100%">
@@ -52,7 +52,6 @@
     lien.forEach((elem)=>{
         elem.addEventListener('click', (e)=>{
             //e.preventDefault()
-            
             liste_element_statut = sessionStorage.getItem('liste_element_statut')
             if (liste_element_statut){
                 liste_element_statut = liste_element_statut.split(',')
@@ -70,36 +69,53 @@
                 liste_element_statut.push(id)
             }
              sessionStorage.setItem('liste_element_statut',`${liste_element_statut}:En cours`)
+             sessionStorage.setItem('element_courant', id)
         })
     })
-
-    
     function change_statut(statut, id){
         contenant_statut = document.createElement('div')
         contenant_statut.textContent = statut
         document.getElementById(id).appendChild(contenant_statut)
     }
-    element_statut_terminer = ['statut_action_10', 'statut_action_1','statut_action_5']
+
+    // element_statut_terminer = ['statut_action_10', 'statut_action_1','statut_action_5']
+    element_statut_terminer = sessionStorage.getItem('element_statut_terminer') 
     statut = sessionStorage.getItem('statut')
     element_statut_en_cours = sessionStorage.getItem('liste_element_statut')
+
+    if (element_statut_terminer){
+        element_statut_terminer = element_statut_terminer.split(',')
+        element_statut_terminer.shift()
+        // console.log(element_statut_terminer)
+    }
     if (element_statut_en_cours){
         element_statut_en_cours = element_statut_en_cours.split(',')
         element_statut_en_cours.shift()
     }
-
         if (element_statut_en_cours){
             lien.forEach((elem)=>{
                 var statut_en_attente;
                 var ID_en_cours
                 var ID_terminer
                 Id = elem.parentNode.parentNode.nextElementSibling.firstElementChild.id
-                element_statut_terminer.forEach((el)=>{
+                if (element_statut_terminer){
+                    element_statut_terminer.forEach((el)=>{
+                        var elem = document.getElementById(el).parentNode
+                        // console.log(elem.previousElementSibling.firstElementChild)
+                        // elem.previousElementSibling.firstElementChild.addEventListener('click', (e)=>{
+                        //     return false;
+                        // })
+                        $(elem.previousElementSibling.firstElementChild).click(function(){
+                            return false;
+                        });
                     if (el == Id){
                         console.log(Id, id);
                         statut_en_attente = 2
                         ID_terminer = el
                     }
                 })
+                }
+                
                 element_statut_en_cours.forEach((element)=>{
                     element = element.split(':')
                     statut = element[1]
@@ -126,6 +142,5 @@
                 change_statut(statut, id)
             })
         }
-
 </script>
 {% endblock content %}

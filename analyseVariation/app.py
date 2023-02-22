@@ -93,20 +93,6 @@ def detailUser(id):
 def changepassword():
     return render_template('changepassword.html')    
 
-
-
-#Permet a l'admin de visualiser la liste des Utilisateurs.
-
-# def login_required(test):
-#     @wraps(test)
-#     def wrap(*args, **kwargs):
-#         if 'logged_in' in session:
-#             return test(*args, **kwargs)
-#         else:
-#             flash("Vous êtes pas autorisé à acceder à cette ressource.", "warning")
-#             return redirect(url_for('login'))
-#     return wrap
-
 @app.route("/compte", methods=('GET', 'POST'))
 @login_required 
 @roles_required('admin')
@@ -129,7 +115,6 @@ def compte():
                 flash('Email que vous avez entrez exist déjas','danger')
                 return redirect(url_for('compte'))
 
-            
             print(user)
             db.session.add(user)
             db.session.commit()
@@ -362,9 +347,13 @@ def analyse_agent():
     valeurs_aberante_cc = valeurs_aberante[int(n)].valeurs
     agent = data.agent
     initial = agent.split(' ')[0][0] + agent.split(' ')[-1][0]
+    id = nom_conseiller+initial
+    print(nom_conseiller, id)
+    data_exist = 0
+    datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
     if request.method=='POST':
-        try:
-            identifiant = request.form['identifiant']
+        # try:
+            # identifiant = request.form['identifiant']
             probleme = request.form['probleme']
             axes_analyse = ''
             for i in range(1,7):
@@ -379,21 +368,38 @@ def analyse_agent():
             pourquoi42= '_/_4._/_'+request.form.get('input_44') +'_/_' +'5._/_'+ request.form.get('input_45') +'_/_' +'6._/_'+ request.form.get('input_46')
             pourquoi51 = '1._/_'+request.form.get('input_5')+'_/_' +'2._/_'+ request.form.get('input_52') +'_/_' +'3._/_'+ request.form.get('input_53')
             pourquoi52= '_/_4._/_'+request.form.get('input_54') +'_/_' +'5._/_'+ request.form.get('input_55') +'_/_' +'6._/_'+ request.form.get('input_56')
-
-            print(pourquoi31, pourquoi32)
-            id = identifiant+initial
             datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
             #print('pourquoi',pourquoi1, datacc)
             if not datacc:
                 pourquoi = AnalyseApporter(id, axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22, pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
                 db.session.add(pourquoi)
                 db.session.commit()
+            else:
+                # AnalyseApporter.update_pourquoi(datacc,axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22,pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
+                datacc.famille_causes = axes_analyse
+                datacc.probleme = probleme
+                datacc.pourquoi_1 = pourquoi1
+                datacc.pourquoi_2 = pourquoi21+pourquoi22
+                datacc.pourquoi_3 = pourquoi31+pourquoi32
+                datacc.pourquoi_4 = pourquoi41+pourquoi42
+                datacc.pourquoi_5 = pourquoi51+pourquoi52
+                db.session.commit()
             return redirect(url_for('ajouter_action', reference=reference, n=n, id=id))
-            #else:
-            #    flash('Axe deja analyser pour cet identifiant')
-        except:
-            flash("Une erreur s'est produit")
-    return render_template('analyse-agent.html', reference=reference, libelle=libelle, agent=agent, cause=cause, nom_conseiller=nom_conseiller, valeurs_aberante_cc=valeurs_aberante_cc)    
+
+    elif datacc:
+        data_exist = 1
+        liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
+        # nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[1]
+        # print(liste_pourquoi)
+        #liste_pourquoi = AnalyseApporter.update_pourquoi(datacc, liste_pourquoi)[0]
+        #nbre_pourquoi = AnalyseApporter.update_pourquoi(datacc)[1]
+        return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi, reference=reference, libelle=libelle, 
+                               cause=cause, nom_conseiller=nom_conseiller, valeurs_aberante_cc=valeurs_aberante_cc, agent=agent)
+
+        # except:
+        flash("Une erreur s'est produit")
+    return render_template('analyse-agent.html', data_exist=data_exist, reference=reference, libelle=libelle, agent=agent, cause=cause, 
+                           nom_conseiller=nom_conseiller, valeurs_aberante_cc=valeurs_aberante_cc)    
 
 
 @app.route("/ajouter_action", methods=('GET', 'POST'))
@@ -425,7 +431,6 @@ def ajouter_action():
     #On recupere les donnees poster par js sur l'url ajouter-action
     try:
         data_input_action = request.form.get('data')
-        #print(s_role.split('|'))
         data_input_action = data_input_action.split('|')
         data_input_action.pop()
         for el in data_input_action:
@@ -433,28 +438,37 @@ def ajouter_action():
             action = ActionProgramme(id, act[0], act[1], act[2], act[3], '','' )
             db.session.add(action)
             db.session.commit()
-            # print('voyons voir',act)
     except:
         print('echec de recuperation des elements')
+
+    if request.method=='POST':
+        print('on a poster')
+        # try:
+        datacc.probleme = request.form['probleme_act']
+        pourquoi1 = '1._/_'+request.form.get('input_11_act')+'_/_' +'2._/_'+ request.form.get('input_12_act') +'_/_' +'3._/_'+ request.form.get('input_13_act')
+        pourquoi21 = '1._/_'+request.form.get('input_21_act')+'_/_' +'2._/_'+ request.form.get('input_22_act') +'_/_' +'3._/_'+ request.form.get('input_23_act')
+        pourquoi22= '_/_4._/_'+request.form.get('input_24_act') +'_/_' +'5._/_'+ request.form.get('input_25_act') +'_/_' +'6._/_'+ request.form.get('input_26_act')
+        pourquoi31 = '1._/_'+request.form.get('input_31_act')+'_/_' +'2._/_'+ request.form.get('input_32_act') +'_/_' +'3._/_'+ request.form.get('input_33_act')
+        pourquoi32= '_/_4._/_'+request.form.get('input_34_act') +'_/_' +'5._/_'+ request.form.get('input_35_act') +'_/_' +'6._/_'+ request.form.get('input_36_act')
+        pourquoi41 = '1._/_'+request.form.get('input_41_act')+'_/_' +'2._/_'+ request.form.get('input_42_act') +'_/_' +'3._/_'+ request.form.get('input_43_act')
+        pourquoi42= '_/_4._/_'+request.form.get('input_44_act') +'_/_' +'5._/_'+ request.form.get('input_45_act') +'_/_' +'6._/_'+ request.form.get('input_46_act')
+        pourquoi51 = '1._/_'+request.form.get('input_51_act')+'_/_' +'2._/_'+ request.form.get('input_52_act') +'_/_' +'3._/_'+ request.form.get('input_53_act')
+        pourquoi52= '_/_4._/_'+request.form.get('input_54_act') +'_/_' +'5._/_'+ request.form.get('input_55_act') +'_/_' +'6._/_'+ request.form.get('input_56_act')
+        datacc.probleme = request.form['probleme_act']
+        datacc.pourquoi_2 = pourquoi21+pourquoi22
+        datacc.pourquoi_3 = pourquoi31+pourquoi32
+        datacc.pourquoi_4 = pourquoi41+pourquoi42
+        datacc.pourquoi_5 = pourquoi51+pourquoi52
+        db.session.commit()
+        return redirect(url_for('listeVa', ref=reference))
+        # except:
+        flash("Pas de modifications apportées sur les pourquoi saisis")
     if datacc:
         print(exist)
         liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
         nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[1]
         return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause, liste_action=liste_action,
                             liste_pourquoi=liste_pourquoi, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act)
-
-    if request.method=='POST':
-        try:
-            datacc.probleme = request.form['probleme_act']
-            datacc.pourquoi_1 = request.form['input_1_act']
-            datacc.pourquoi_2 = '1.'+' _/_'+request.form['input_2_act']+' _/_2.'+ ' _/_'+request.form['input_21_act']
-            datacc.pourquoi_3 = '1.'+' _/_'+request.form['input_3_act']+' _/_2.'+ ' _/_'+request.form['input_31_act']+' _/_3.'+ ' _/_'+request.form['input_32_act']+' _/_4.'+ ' _/_'+request.form['input_33_act']
-            datacc.pourquoi_4 = '1.'+' _/_'+request.form['input_4_act']+' _/_2.'+ ' _/_'+request.form['input_41_act']+' _/_3.'+ ' _/_'+request.form['input_42_act']+' _/_4.'+ ' _/_'+request.form['input_43_act']
-            datacc.pourquoi_5 = '1.'+' _/_'+request.form['input_5_act']+' _/_2.'+ ' _/_'+request.form['input_51_act']+' _/_3.'+ ' _/_'+request.form['input_52_act']+' _/_4.'+ ' _/_'+request.form['input_53_act']
-            db.session.commit()
-            return redirect(url_for('listeVa', ref=reference))
-        except:
-            flash("Pas de modifications apportées sur les pourquoi saisis")
 
 
 @app.route("/recaputilatif", methods=('POST', 'GET'))
@@ -467,6 +481,7 @@ def recap_value():
     table_nbre_action = []
     nbre_analyse = len(all_data)
     liste_identifiant = []
+    
     for elem in all_data:
         liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(elem)[0]
         table_liste_pourquoi.append(liste_pourquoi)
@@ -480,8 +495,6 @@ def recap_value():
         table_nbre_action.append(nbre_action)
     return render_template('recap.html', table_liste_pourquoi=table_liste_pourquoi, table_nbre_pourquoi=table_nbre_pourquoi, liste_identifiant=liste_identifiant,
                            table_liste_action=table_liste_action, table_nbre_action=table_nbre_action, nbre_analyse=nbre_analyse)
-
-
 
 @app.route("/reset_request", methods=('POST', 'GET'))
 @login_required
@@ -524,7 +537,9 @@ def synthese_av():
         flash('Aucun fichier ou format non compatible','warning')
 
     analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
+    print('il y a analyse', analyse_variation)
     if not analyse_variation:
+        print('il y a analyse', analyse_variation)
         for i in range(data.shape[0]):
             #print(reference, data.index[i])
             valeur_aberante = ValeursAberrante(reference, data['Nom'][data.index[i]], data['Mesures'][data.index[i]])

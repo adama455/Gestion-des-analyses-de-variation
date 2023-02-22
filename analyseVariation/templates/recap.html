@@ -32,16 +32,16 @@
                     Famille
                 </th>
                 <th>
-                    Action
+                    Reference Action
+                </th>
+                <th>
+                    Libelle Action
                 </th>
                 <th>
                     Porteur
                 </th>
                 <th>
                     Echeance
-                </th>
-                <th>
-                    Statut
                 </th>
             </tr>
             {% for j in range(nbre_analyse) %}
@@ -86,7 +86,7 @@
                                 <p>{{ table_liste_action[j][i][0][k] }}</p>
                             {%  endfor %}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-2 tx-center border">
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][1][k] }}</p>
                             {%  endfor %}

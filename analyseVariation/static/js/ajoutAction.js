@@ -191,22 +191,6 @@ valider.addEventListener('click', (e)=>{
 // Accédez à l'élément form …
 var bouton_form = document.getElementById("bouton_form");
 
-/*/let xhr = new XMLHttpRequest();
-let json = JSON.stringify({
-  "name": "John",
-  "surname": "Smith"
-});
-
-$.ajax({
-  type: "POST",
-  url: "http://127.0.0.1:5000/analyse_agent?reference=000012&n=1",
-  data: {
-    "name": "NDIAYE",
-    "prenom": "ADAMA"
-}
-})/*/
-
-
 //////////////////////////////////---MODAL ACTION---/////////////////////////////
 
 var liste_labelle = ['Ref Action', 'Libelle Action', 'Porteur Acton', 'Echeance Action']
@@ -334,7 +318,8 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
       method = 'POST'
       data = 'reference_action_11'
       url = "http://127.0.0.1:5000/ajouter_action"
-      ajax(method, data, url)
+      console.log(url)
+      // ajax(method, data, url)
       $('#modal_action').modal('show');
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -346,14 +331,13 @@ document.querySelectorAll('.definir_action').forEach((element)=>{
   })
 });
 
-
-
-function ajax(method, data, url){
+function ajax(method, data, Url){
   var url = new URL(window.location.href)
   var id = document.getElementById('identifiant_act').value
   var reference = document.getElementById('reference_av_act').value
   var n = url.searchParams.get("n");
-  url = url +'?reference='+reference+'&n='+n+'&id='+id
+  url = Url +'?reference='+reference+'&n='+n+'&id='+id
+  console.log(url)
   $.ajax({
     data : { data : data }, //grab text between span tags
     type : method,
@@ -388,9 +372,31 @@ $(document).ready(function() {
     });
     
 })
-
-console.log('url',window.location.href)
-
+var element_statut_terminer = ['']
+var element_courant
+var exist
+document.getElementById('enregistrement_de_detail').addEventListener('click', (e)=>{
+  // e.preventDefault()
+  alert('Voulez vous reellement terminer cette analyse ?')
+  element_statut_terminer = sessionStorage.getItem('element_statut_terminer')
+  if (element_statut_terminer){
+    element_statut_terminer = element_statut_terminer.split(',')
+    console.log(element_statut_terminer)
+    element_statut_terminer.forEach((element)=>{
+      if (element==element_courant){
+        exist = 1
+      }
+    })
+  }else {
+    element_statut_terminer = ['']
+  }
+  if (exist!=1){
+  element_courant = sessionStorage.getItem('element_courant')
+    element_statut_terminer.push(element_courant)
+  }
+  sessionStorage.setItem('element_statut_terminer', element_statut_terminer)
+})
+// console.log(terminer)
 
 /////////////////////////* Récaputilatif *//////////////////////////////////
 /*/const row_actions =document.getElementById('row_action');

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="card container-xl border border-grey rounded-2 p-3 bg-gray-100 shadow mb-3">
     <div class="jumbotron p-3 tx-center az-content-label mg-b-20">ANALYSE VARIATION</div>
-    <form action="#" method="POST">
+    <form action="" method="POST">
         <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container ">
             <div class="section1 mb-3 ">
                 <div class="row mb-3">
@@ -113,7 +113,7 @@
                     <div class="col p-0 ms-4">
                         <div class="col d-flex row mg-b-20 p-0" id="div-btn">
                             {%  for i in range(1,7) %}
-                            {%  if liste_action[5][i-1] %}
+                            {%  if liste_pourquoi[5][i-1] %}
                             <div class="col-2 p-0 ">
                                 <a href="#" class="definir-action fs-5">
                                     <button id="definir-action_{{ i }}" class="tx-white text-center border-0 rounded definir_action px-2 " title="analyse" style="background-color: #FF7900;">Définir
@@ -123,7 +123,7 @@
                             {%  else %}
                             <div class="col-2 p-0 ">
                                 <a href="#" class="definir-action fs-5">
-                                    <button id="definir-action_{{ i }}" class="tx-white text-center border-0 rounded definir_action px-2 " title="analyse" style="background-color: #FF7900;" disabled>Définir
+                                    <button id="definir-action_{{ i }}" class="tx-white text-center border-0 rounded definir_action px-2 " title="analyse" style="background-color: #FF7900;">Définir
                                         Action</button></a>
                                 &nbsp;&nbsp;
                             </div>
@@ -141,7 +141,7 @@
                                 </a>
                             </div>
                             <div class="col-3 d-flex justify-content-end p-0 mg-r-40" id="enregistrement_de_detail">
-                                <button type="submit" class="btn  tx-white btn-final rounded">Terminer</button>
+                                <button type="submit" class="btn  tx-white btn-final rounded">Terminer</button type="submit">
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                     <div class="d-flex flex-column ">
                         <form action="#" method="POST" id="form_actions">
                             <div class="form-input" id="form-input">
-                                {#  <div class="row mb-3">
+                                {# <div class="row mb-3">
                                     <h3 class="modal-title fs-5 py-2" id="modal_tittle">action_n°1:</h3>
                                     <div class="col-3 d-flex flex-column">
                                         <label for="reference_action" class="d-flex justify-content-start">Ref
@@ -283,7 +283,10 @@
                 Famille
             </th>
             <th>
-                Action
+                Reference Action
+            </th>
+            <th>
+                Libelle action
             </th>
             <th>
                 Porteur
@@ -291,9 +294,7 @@
             <th>
                 Echeance
             </th>
-            <th>
-                Statut
-            </th>
+            
         </tr>
         {% for i in range(6) %}
         <tr >
@@ -329,7 +330,7 @@
                 {{ liste_pourquoi[4][i] }}
             </td>
             <td class="col-1 tx-center border">
-                {{ liste_action[5][i] }}
+                {{ liste_pourquoi[5][i] }}
             </td>
             <td class="col-1 tx-center border">
                 {% for k in range(nbre_act[i]) %}

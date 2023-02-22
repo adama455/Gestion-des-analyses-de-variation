@@ -222,9 +222,9 @@ class AnalyseApporter(db.Model):
     pourquoi_4 = db.Column(db.String(500))
     pourquoi_5 = db.Column(db.String(500))
 
-    def __init__(self, identifiant, valeur, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
+    def __init__(self, identifiant, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
         self.identifiant = identifiant
-        self.valeur = valeur
+        # self.valeur = valeur
         self.famille_causes = famille_causes
         self.probleme = probleme
         self.pourquoi_1 = pourquoi_1
@@ -245,6 +245,29 @@ class AnalyseApporter(db.Model):
         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
 
         return liste_pourquoi, nbre_pourquoi
+    
+    def update_pourquoi(object, axe_analyse, probleme, pourquoi1, pourquoi2, pourquoi3, pourquoi4, pourquoi5):
+        try:
+            # pourquoi1 = '1._/_'+liste_pourquoi[0][0]+'_/_' +'2._/_'+ liste_pourquoi[0][1] +'_/_' +'3._/_'+ liste_pourquoi[0][2]
+            # pourquoi21 = '1._/_'+liste_pourquoi[1][0]+'_/_' +'2._/_'+ liste_pourquoi[1][1] +'_/_' +'3._/_'+ liste_pourquoi[1][2]
+            # pourquoi22= '_/_4._/_'+liste_pourquoi[1][3] +'_/_' +'5._/_'+ liste_pourquoi[1][4] +'_/_' +'6._/_'+ liste_pourquoi[1][5]
+            # pourquoi31 = '1._/_'+liste_pourquoi[2][0]+'_/_' +'2._/_'+ liste_pourquoi[2][1] +'_/_' +'3._/_'+ liste_pourquoi[2][2]
+            # pourquoi32= '_/_4._/_'+liste_pourquoi[2][3] +'_/_' +'5._/_'+ liste_pourquoi[2][4] +'_/_' +'6._/_'+ liste_pourquoi[2][5]
+            # pourquoi41 = '1._/_'+liste_pourquoi[3][0]+'_/_' +'2._/_'+ liste_pourquoi[3][1] +'_/_' +'3._/_'+ liste_pourquoi[3][2]
+            # pourquoi42= '_/_4._/_'+liste_pourquoi[3][3] +'_/_' +'5._/_'+ liste_pourquoi[3][4] +'_/_' +'6._/_'+ liste_pourquoi[3][5]
+            # pourquoi51 = '1._/_'+liste_pourquoi[4][0]+'_/_' +'2._/_'+ liste_pourquoi[4][1] +'_/_' +'3._/_'+ liste_pourquoi[4][2]
+            # pourquoi52= '_/_4._/_'+liste_pourquoi[4][3] +'_/_' +'5._/_'+ liste_pourquoi[4][4] +'_/_' +'6._/_'+ liste_pourquoi[4][5]
+            # liste_pourquoi = [pourquoi1,pourquoi21 + pourquoi22,pourquoi31 + pourquoi32,pourquoi41 + pourquoi42,pourquoi51 + pourquoi52]
+            object.famille_causes = axe_analyse
+            object.probleme = probleme
+            object.pourquoi_1 = pourquoi1
+            object.pourquoi_2 = pourquoi2
+            object.pourquoi_3 = pourquoi3
+            object.pourquoi_4 = pourquoi4
+            object.pourquoi_5 = pourquoi5
+        except:
+            print("Quelque chose s'est mal passer")
+        
 
 class ValeursAberrante(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
