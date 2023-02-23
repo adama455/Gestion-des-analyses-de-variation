@@ -5,7 +5,7 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
-from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, AnalyseApporter
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, AnalyseApporter, Fichiers, Fichier
 from analyseVariation import app, db, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_user import login_required, UserManager, SQLAlchemyAdapter
@@ -265,6 +265,7 @@ def supprimerPlateau(id):
     data = Plateau.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('plateau.html', title='Plateau', form=form, plateaux=data) 
 
+
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/listeAv")
 @login_required
@@ -277,6 +278,20 @@ def listeAv():
         champ_analyse_variation = [elem.reference_av, elem.libelle_av, elem.agent, elem.date]
         liste_analyse_variation.append(champ_analyse_variation)
     return render_template('listeAv.html', title='Register', form=form, liste_analyse_variation=liste_analyse_variation, nbre_av=nbre_av)
+
+
+#Permet de visualiser la liste des Analyses de Variation
+@app.route("/fichiers")
+@login_required
+def fichiers():
+    form = LoginForm()
+    liste_fichier = []
+    all_av = Fichiers.query.all()
+    nbre_av =len(all_av)
+    for elem in all_av:
+        champ_fichier = [elem.reference, elem.nom, elem.effectif]
+        liste_fichier.append(champ_fichier)
+    return render_template('fichiers.html', title='Register', form=form, liste_fichier=liste_fichier, nbre_av=nbre_av)
 
 @app.route("/listepa")
 @login_required
@@ -529,6 +544,11 @@ def synthese_av():
         data = pd.read_excel(fichier)
         mesures = data.Mesures.dropna()
         data = data.dropna()
+        exist_file = Fichiers.query.filter_by(reference=reference).first()
+        insert_fichier = Fichiers(reference, fichier.split('.')[0], data["Mesures"].count())
+        if not exist_file:
+            db.session.add(insert_fichier)
+            db.session.commit()
         data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
         max = pd.to_numeric(mesures, errors='coerce').max()
         min = pd.to_numeric(mesures, errors='coerce').min()

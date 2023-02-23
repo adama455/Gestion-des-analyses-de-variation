@@ -215,6 +215,21 @@ class Enregistrement_AV(UserMixin, db.Model):
     def Consulter(self, ):
         pass
 
+class Fichiers(UserMixin, db.Model):
+    __table_args__ = {'extend_existing': True}
+    __tablename__='fichiers'
+    id = db.Column(db.Integer, primary_key=True)
+    reference = db.Column(db.String(50))
+    nom = db.Column(db.String(80))
+    effectif = db.Column(db.String(50))
+    def __init__(self, reference, nom, effectif):
+        self.reference = reference
+        self.nom = nom
+        self.effectif = effectif
+
+    def Importer(self, ):
+        pass
+
 class Fichier(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='fichier'
@@ -227,6 +242,7 @@ class Fichier(UserMixin, db.Model):
 
     def Importer(self, ):
         pass
+
 
 class AnalyseApporter(db.Model):
     __tablename__='apporter_analyse'

@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES ANALYSES DE VARIATION</div>
+
+    {# <div class="row w-100  recherche mx-0  my-3">
+        <div class="col-8 d-flex">
+            <input type="search" name="recherche" id="" placeholder="Rechercher une AV"
+                class="w-50  border border-1 p-3 shadow-lg rounded">
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+            <button class="btn btn-info" class="">Lancer</button>
+        </div>
+    </div> #}
+    <div class="card bg-gray-100 bd-10">
+        <div class="card-body">
+
+            <table id="datatable1" class="display responsive nowrap" width="100%">
+                <thead class="bg-primary">
+                    <tr>
+                        <th class="wd-20p text-dark">Reference</th>
+                        <th class="wd-10p text-dark">Nom fichiers</th>
+                        <th class="wd-15p text-dark">Effectif</th>
+                        <th class="wd-15p text-dark">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(nbre_av) %}
+                        <tr>
+                            <td>{{ liste_fichier[i][0] }}</td>
+                            <td>{{ liste_fichier[i][1] }}</td>
+                            <td>{{ liste_fichier[i][2] }}</td>
+                            <td>
+                                <a href="{{ url_for('listeVa', ref=liste_fichier[i][0]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
+                            </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+
+            <div class="btn-icon-list">
+
+                <a href="{{ url_for('home') }}">
+                    <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button></a>
+                &nbsp;&nbsp;
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
