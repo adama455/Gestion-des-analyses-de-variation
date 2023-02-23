@@ -65,9 +65,27 @@ class UserRoles(db.Model):
    
 # /////////////////////////////////////////////////////////////////////////////////////
 
-class ActionProgramme(UserMixin, db.Model):
+
+class ActionProgramme(UserMixin,db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='action_programme'
+    id=db.Column(db.Integer, primary_key=True)
+    cause_racine=db.Column(db.String(255))
+    action=db.Column(db.String(255))
+    porteur=db.Column(db.String(80))
+    echeance=db.Column(db.String(80))
+    status=db.Column(db.String(80))
+    def __init__(self, cause_racine, action, porteur, echeance, statut):
+        self.cause_racine = cause_racine
+        self.action = porteur
+        self.porteur = porteur
+        self.echeance = echeance
+        self.status = statut
+
+
+class ActionIndividuelle(UserMixin, db.Model):
+    __table_args__ = {'extend_existing': True}
+    __tablename__='action_individuelle'
     id=db.Column(db.Integer, primary_key=True)
     identifiant_cc=db.Column(db.String(80))
     reference_action=db.Column(db.String(80))
