@@ -20,8 +20,8 @@ function cre_td(item) {
 }
 function cre_td_plus(parent,id) {
   let nbr = tbody.childNodes.length;
-  td = document.createElement("td");
-  td.className ="col-1";
+  td = document.createElement("td"); 
+  td.className ='col-1';
   console.log(parent.childNodes.length);
   i = document.createElement("i");
   i.className = "fa-light fa-plus fs-3 mt-5 tx-primary btn-plus-tr";
@@ -83,14 +83,15 @@ function td_Input(id,valeur) {
 // });
 
 
-for (let index = 0; index <2; index++) {
+for (let index = 1; index <6; index++) {
 
   let nl = tbody.childNodes.length + 1;
   tr = document.createElement("tr");
   tr.className = "";
   tr.setAttribute("id", `line_${nl}`);
-  tr.appendChild(td_Input(`cause_${nl}`,"Causes"));
+  tr.appendChild(td_Input(`cause_${nl}`,"Causes_"+ index));
   cre_td_plus(tr,`btn_plus_tr_${nl}`); //td5
+ 
   console.log(tr.childNodes.length);
   tbody.appendChild(tr)
   plus_lines = document.querySelectorAll("i.btn-plus-tr");
