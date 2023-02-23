@@ -77,7 +77,7 @@ class ActionProgramme(UserMixin,db.Model):
     status=db.Column(db.String(80))
     def __init__(self, cause_racine, action, porteur, echeance, statut):
         self.cause_racine = cause_racine
-        self.action = porteur
+        self.action = action
         self.porteur = porteur
         self.echeance = echeance
         self.status = statut
