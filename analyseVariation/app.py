@@ -5,7 +5,7 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
-from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role, ActionProgramme, AnalyseApporter
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, AnalyseApporter
 from analyseVariation import app, db, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_user import login_required, UserManager, SQLAlchemyAdapter
@@ -420,9 +420,9 @@ def ajouter_action():
     print('id',id)
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
     #Recuperation de l'ensemble des actions en rapport avec le conseiller pour les afficher sur le tableau recaputilatif
-    action_cc = ActionProgramme.query.filter_by(identifiant_cc=id).all()
-    liste_action = ActionProgramme.recup_action(action_cc)[0]
-    nbre_act = ActionProgramme.recup_action(action_cc)[1]
+    action_cc = ActionIndividuelle.query.filter_by(identifiant_cc=id).all()
+    liste_action = ActionIndividuelle.recup_action(action_cc)[0]
+    nbre_act = ActionIndividuelle.recup_action(action_cc)[1]
     print(" liste_action",liste_action)
     #Insertion des donnees action individuelles au niveau de la base de donnees
     #On recupere les donnees poster par js sur l'url ajouter-action............
@@ -433,7 +433,7 @@ def ajouter_action():
         data_input_action.pop()
         for el in data_input_action:
             act = [elem for elem in el.split(',') if elem!='']
-            action = ActionProgramme(id, act[0], act[1], act[2], act[3], '','' )
+            action = ActionIndividuelle(id, act[0], act[1], act[2], act[3], '','' )
             db.session.add(action)
             db.session.commit()
             # print('voyons voir',act)
@@ -477,9 +477,9 @@ def recap_value():
         nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(elem)[1]
         table_nbre_pourquoi.append(nbre_pourquoi)
         liste_identifiant.append(elem.identifiant)
-        action_cc = ActionProgramme.query.filter_by(identifiant_cc=elem.identifiant).all()
-        liste_action = ActionProgramme.recup_action(action_cc)[0]
-        nbre_action = ActionProgramme.recup_action(action_cc)[1]
+        action_cc = ActionIndividuelle.query.filter_by(identifiant_cc=elem.identifiant).all()
+        liste_action = ActionIndividuelle.recup_action(action_cc)[0]
+        nbre_action = ActionIndividuelle.recup_action(action_cc)[1]
         table_liste_action.append(liste_action)
         table_nbre_action.append(nbre_action)
         
@@ -566,9 +566,26 @@ def upload_file () :
         flash('Erreur de chargement du fichier ','danger')
     #abort(404)
 
-@app.route("/action_programme")
+@app.route("/action_programme", methods=["GET", "POST"])
 @login_required
 def action_programme():
+    #Insertion des donnees action programme au niveau de la base de donnees
+    #On recupere les donnees poster par js sur l'url ajouter-action............
+    try:
+        data_act_prog = request.form['data']
+        data_act_prog = data_act_prog.split('|')
+        data_act_prog.pop()
+        # print(data_act_prog)  
+        for el in data_act_prog:
+            act_prg = [elem for elem in el.split(',') if elem!='']
+            print(act_prg)
+            action = ActionProgramme(act_prg[0], act_prg[1], act_prg[2], act_prg[3],'')
+            db.session.add(action)
+            db.session.commit()
+    except:
+        print('echec de recuperation des elements')
+        
+        
     return render_template('action_programme.html')
 
 
