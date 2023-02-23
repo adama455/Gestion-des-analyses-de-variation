@@ -614,11 +614,26 @@ def action_programme():
         data_act_prog.pop()
         # print(data_act_prog)  
         for el in data_act_prog:
-            act_prg = [elem for elem in el.split(',') if elem!='']
-            print(act_prg)
-            action = ActionProgramme(act_prg[0], act_prg[1], act_prg[2], act_prg[3],'')
-            db.session.add(action)
-            db.session.commit()
+            act_prg = [elem for elem in el.split('{') if elem!='']
+            # print("action:", act_prg)
+            if act_prg:
+                for el in act_prg:
+                    print("element:", el)
+                    actions = [elem for elem in el.split(',') if elem!='']
+                    print("actionsss:", actions)
+
+                    print("act1:", act_prg[1])
+                    
+                    if actions: 
+                        print(actions[0])
+                        print(actions[1])
+                        print(actions[2])
+                        print(actions[3])
+                        action = ActionProgramme(actions[0], actions[1], actions[2], actions[3], '')
+                        print(action)
+                        db.session.add(action)
+                        db.session.commit() 
+                    
     except:
         print('echec de recuperation des elements')
         
