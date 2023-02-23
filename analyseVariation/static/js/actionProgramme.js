@@ -82,14 +82,19 @@ function td_Input(id,valeur) {
 //   }
 // });
 
+var causes_racines = sessionStorage.getItem('causes_racines').split(',')
 
-for (let index = 0; index <2; index++) {
+console.log(causes_racines)
+
+document.getElementById('libelle_act_prog').textContent = causes_racines[0]
+
+for (let index = 1; index <causes_racines.length; index++) {
 
   let nl = tbody.childNodes.length + 1;
   tr = document.createElement("tr");
   tr.className = "";
   tr.setAttribute("id", `line_${nl}`);
-  tr.appendChild(td_Input(`cause_${nl}`,"Causes"));
+  tr.appendChild(td_Input(`cause_${nl}`,causes_racines[index]));
   cre_td_plus(tr,`btn_plus_tr_${nl}`); //td5
   console.log(tr.childNodes.length);
   tbody.appendChild(tr)
@@ -188,3 +193,5 @@ $(document).ready(function () {
     // window.location.reload();
   });
 });
+
+

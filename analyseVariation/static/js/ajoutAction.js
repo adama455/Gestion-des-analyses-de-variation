@@ -416,6 +416,20 @@ document.getElementById('enregistrement_de_detail').addEventListener('click', (e
   }
   sessionStorage.setItem('element_statut_terminer', element_statut_terminer)
 })
+
+console.log(document.getElementById('libelle_av').value)
+
+document.getElementById('action_programme').firstElementChild.addEventListener('click', (e)=>{
+  // e.preventDefault()
+  var causes_racines = []
+  causes_racines.push(document.getElementById('libelle_av').value)
+  for (let index = 1; index < 7; index++) {
+    document.getElementById(`input_5${index}_act`).value
+    causes_racines.push(document.getElementById(`input_5${index}_act`).value)
+  }
+  sessionStorage.setItem('causes_racines',causes_racines)
+})
+
 // console.log(terminer)
 
 /////////////////////////* Récaputilatif *//////////////////////////////////

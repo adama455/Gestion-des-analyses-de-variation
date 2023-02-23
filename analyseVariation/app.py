@@ -395,6 +395,7 @@ def analyse_agent():
                 db.session.commit()
             else:
                 # AnalyseApporter.update_pourquoi(datacc,axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22,pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
+                Enregistrement_AV.query.filter_by(reference_av=reference).first().libelle_av = request.form['libelle_av']
                 datacc.famille_causes = axes_analyse
                 datacc.probleme = probleme
                 datacc.pourquoi_1 = pourquoi1
@@ -463,7 +464,6 @@ def ajouter_action():
     if request.method=='POST':
         print('on a poster')
         # try:
-        datacc.probleme = request.form['probleme_act']
         pourquoi1 = '1._/_'+request.form.get('input_11_act')+'_/_' +'2._/_'+ request.form.get('input_12_act') +'_/_' +'3._/_'+ request.form.get('input_13_act')
         pourquoi21 = '1._/_'+request.form.get('input_21_act')+'_/_' +'2._/_'+ request.form.get('input_22_act') +'_/_' +'3._/_'+ request.form.get('input_23_act')
         pourquoi22= '_/_4._/_'+request.form.get('input_24_act') +'_/_' +'5._/_'+ request.form.get('input_25_act') +'_/_' +'6._/_'+ request.form.get('input_26_act')
@@ -474,6 +474,8 @@ def ajouter_action():
         pourquoi51 = '1._/_'+request.form.get('input_51_act')+'_/_' +'2._/_'+ request.form.get('input_52_act') +'_/_' +'3._/_'+ request.form.get('input_53_act')
         pourquoi52= '_/_4._/_'+request.form.get('input_54_act') +'_/_' +'5._/_'+ request.form.get('input_55_act') +'_/_' +'6._/_'+ request.form.get('input_56_act')
         datacc.probleme = request.form['probleme_act']
+        datacc.libelle_av = request.form['libelle_av']
+        datacc.pourquoi_1 = pourquoi1
         datacc.pourquoi_2 = pourquoi21+pourquoi22
         datacc.pourquoi_3 = pourquoi31+pourquoi32
         datacc.pourquoi_4 = pourquoi41+pourquoi42
