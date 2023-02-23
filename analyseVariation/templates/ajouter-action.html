@@ -4,7 +4,7 @@
 <div class="card container-fluid border border-grey rounded-2 p-3 bg-gray-100 shadow mb-3">
     <div class="jumbotron p-3 tx-center az-content-label mg-b-20">ANALYSE VARIATION</div>
     <form action="" method="POST">
-        <div style="white-space: nowrap;overflow-x: auto; width: 1700px;" class="position-relative container ">
+        <div style="white-space: nowrap; width: 1700px;" class="position-relative p-3">
             <div class="section1 mb-3 ">
                 <div class="row mb-3">
                     <div class="col-4 d-flex flex-column">
@@ -122,14 +122,14 @@
                                         Action</button></a>
                                 &nbsp;&nbsp;
                             </div>
-                            {# {%  else %}
+                            {%  else %}
                             <div class="col-2 p-0 ">
                                 <a href="#" class="definir-action fs-5">
                                     <button id="definir-action_{{ i }}" class="tx-white text-center border-0 rounded definir_action px-2 " title="analyse" style="background-color: #FF7900;">Définir
                                         Action</button></a>
                                 &nbsp;&nbsp;
                             </div>
-                            {%  endif %} #}
+                            {%  endif %}
                             {%  endfor %}
                         </div>
                     </div>
@@ -285,9 +285,6 @@
                 Famille
             </th>
             <th>
-                Reference Action
-            </th>
-            <th>
                 Libelle action
             </th>
             <th>
@@ -295,6 +292,9 @@
             </th>
             <th>
                 Echeance
+            </th>
+            <th>
+                Statut
             </th>
             
         </tr>

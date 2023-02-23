@@ -32,9 +32,6 @@
                     Famille
                 </th>
                 <th>
-                    Reference Action
-                </th>
-                <th>
                     Libelle Action
                 </th>
                 <th>
@@ -42,6 +39,9 @@
                 </th>
                 <th>
                     Echeance
+                </th>
+                <th>
+                    Statut
                 </th>
             </tr>
             {% for j in range(nbre_analyse) %}
@@ -81,30 +81,23 @@
                         <td class="col-1 tx-center border">
                             {{ table_liste_pourquoi[j][5][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
-                            {# {% for k in range(table_nbre_action[j][i]) %}
-                                <p>{{ table_liste_action[j][i][0][k] }}</p>
-                            {%  endfor %}
-                        </td>
                         <td class="col-2 tx-center border">
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][1][k] }}</p>
                             {%  endfor %}
                         </td>
                         <td class="col-1 tx-center border">
-                            
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][2][k] }}</p>
                             {%  endfor %}
                         </td>
                         <td class="col-1 tx-center border">
-                            
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][3][k] }}</p>
                             {%  endfor %}
                         </td>
                         <td class="col-1 tx-center border">
-                             
+                            
                         </td>
                     </tr>
                 {%  endfor %}

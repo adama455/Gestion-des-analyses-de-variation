@@ -94,8 +94,8 @@ def changepassword():
     return render_template('changepassword.html')    
 
 @app.route("/compte", methods=('GET', 'POST'))
-@login_required
-@roles_required('admin')
+# @login_required
+# @roles_required('admin')
 def compte():
     form = RegistrationForm()
     if form.validate_on_submit():
