@@ -4,7 +4,7 @@
 
 <div class="jumbotron p-0 mb-2 mt-5 tx-center az-content-label bg-light">RECAPUTILATIF DES ACTIONS ANALYSE </div>
     <div class="recap p-3 shadow">
-        <table>
+        <table class=" border border-dark">
             <caption>Récap de l'analyse global</caption>
             <tr class="tx-center py-2 fs-5">
                 <th>
@@ -48,55 +48,55 @@
                 {% for i in range(6) %}
                     <tr >
                         {% if i==0 %}
-                        <td rowspan="6" class="col-1 tx-center border">
+                        <td rowspan="6" class="col-1 tx-center border border-dark">
                             {{ liste_identifiant[j] }}
                         </td>
-                        <td rowspan="6" class="col-1 tx-center border">
+                        <td rowspan="6" class="col-1 tx-center border border-dark">
                             {{ valeurs_aberante_cc }}
                         </td>
-                        <td rowspan="2" class="col-1 tx-center border">
+                        <td rowspan="2" class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][0][i] }}
                         </td>
                         {% elif i==2 %}
-                        <td rowspan="2" class="col-1 tx-center border">
+                        <td rowspan="2" class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][0][1] }}
                         </td>
                         {% elif i==4 %}
-                        <td rowspan="2" class="col-1 tx-center border">
+                        <td rowspan="2" class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][0][2] }}
                         </td>
                         {%  endif %}
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][1][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][2][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][3][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][4][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][5][i] }}
                         </td>
-                        <td class="col-2 tx-center border">
+                        <td class="col-2 tx-center border border-dark">
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][1][k] }}</p>
                             {%  endfor %}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][2][k] }}</p>
                             {%  endfor %}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             {% for k in range(table_nbre_action[j][i]) %}
                                 <p>{{ table_liste_action[j][i][3][k] }}</p>
                             {%  endfor %}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark">
                             
                         </td>
                     </tr>

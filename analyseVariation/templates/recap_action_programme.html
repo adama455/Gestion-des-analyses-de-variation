@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="jumbotron p-0 mb-2 mt-5 tx-center az-content-label bg-light">RECAPUTILATIF DES ACTIONS PROGRAMME </div>
+    <div class="recap p-3 shadow">
+        <table class=" w-100 border border-dark">
+            <caption>Récap de l'analyse global</caption>
+            <tr class="tx-center py-2 fs-5">
+                <th>
+                    Cause Racine              
+                </th>
+                <th>
+                    Action              
+                </th>
+                <th>
+                    Porteur              
+                </th>
+                <th>
+                    Echeance              
+                </th>
+                <th>
+                    Statut              
+                </th>
+            </tr>
+            {% for j in range(nbre_analyse) %}
+            {# {% for i in range(table_nbre_cause) %} #}
+                <tr>
+                    
+                    <td rowspan="" class="col-1 tx-center border border-dark">
+                        {# {% if table_liste_causes[j] == nbre[j] %} #}
+                            {{ table_liste_causes[j] }}
+                        {# {% endif %} #}
+                    </td> 
+                    
+                    <td class=" tx-center col-1 border border-dark">
+                        <p> {{ table_liste_action[j]}}</p>
+                    </td>
+                    <td class=" tx-center col-1 border border-dark">
+                        <p> {{ table_liste_porteur[j]}}</p>
+                    </td>
+                    <td class=" tx-center col-1 border border-dark">
+                        <p> {{ table_liste_echeance[j]}}</p>
+                    </td>
+                    <td class=" tx-center col-1 border border-dark">
+                        status
+                    </td>
+                </tr>
+            {# {% endfor %} #}
+            {% endfor %}
+        </table>
+        {% if current_user.is_authenticated and (current_user.profil) != 'MANAGER_OPERATIONNEL' %}
+            <div class="detail-analyse d-flex row">
+                <a href="#" id="action_programme" class="w-100 fs-5 col-3">
+                    <button type="button" class="btn btn-primary rounded my-3 float-left" id="exporter-an">Exporter</button>
+                </a>
+                <a href="#" id="action_programme" class="w-100 fs-5 col-8">
+                    <button type="button" class="btn btn-primary rounded my-3 float-right" id="valider-av">Valider</button>
+                </a>
+                <a href="{{ url_for("rejeterAv") }}" id="action_programme" class="w-100 fs-5 col-1">
+                    <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Rejeter</button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -117,7 +117,7 @@ class ActionIndividuelle(UserMixin, db.Model):
             act_4 = []
             act_5 = []
             act_6 = []
-                
+
             liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
             for i in range(1,7):
                 ref = []
@@ -262,7 +262,7 @@ class AnalyseApporter(db.Model):
         # self.valeur = valeur
         self.famille_causes = famille_causes
         self.probleme = probleme
-        self.pourquoi_1 = pourquoi_1
+        self.pourquoi_1 = pourquoi_1  
         self.pourquoi_2 = pourquoi_2
         self.pourquoi_3 = pourquoi_3
         self.pourquoi_4 = pourquoi_4

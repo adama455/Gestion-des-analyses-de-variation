@@ -2,12 +2,13 @@ const tbody = document.getElementById("corps");
 const plus = document.getElementById("btn-plus");
 var nl = tbody.childNodes.length + 1;
 
-function cre_input(Class, id_input,Valeur) {
+function cre_input(Class, id_input, type, Valeur) {
   input = document.createElement("input");
   input.className = Class;
-  input.name = "action";
+  input.type = type;
   input.value = Valeur;
   input.setAttribute("id", `${id_input}`);
+  input.name = "action";
   // parent.appendChild(input);
   return input;
 }
@@ -21,17 +22,24 @@ function cre_td(item) {
 function cre_td_plus(parent,id) {
   let nbr = tbody.childNodes.length;
   td = document.createElement("td"); 
-  td.className ='col-1';
+  td.className ='col-1 d-flex flex-column';
   console.log(parent.childNodes.length);
   i = document.createElement("i");
-  i.className = "fa-light fa-plus fs-3 mt-5 tx-primary btn-plus-tr";
+  i.className = "fa-light fa-plus fs-3 tx-primary btn-plus-tr";
   i.setAttribute("id", id);
   i.style = "cursor:pointer";
   td.appendChild(i);
   parent.appendChild(td);
 }
-function td_Input(id,valeur) {
-  return cre_td(cre_input("border-0 tx-center w-100 fs-5 p-1",id,valeur))
+function cre_td_moin(parent,id) {
+  i = document.createElement("i");
+  i.className = "fa-solid fa-minus fs-5 tx-info btn-moin-tr";
+  i.setAttribute("id", id);
+  i.style = "cursor:pointer";
+  parent.appendChild(i);
+}
+function td_Input(id, type,valeur) {
+  return cre_td(cre_input("border-0 tx-center w-100 fs-5 p-1",id, type,valeur))
 }
 
 // plus.addEventListener("click", (e) => {
@@ -82,14 +90,19 @@ function td_Input(id,valeur) {
 //   }
 // });
 
+var causes_racines = sessionStorage.getItem('causes_racines').split(',')
 
-for (let index = 1; index <6; index++) {
+console.log(causes_racines)
+
+document.getElementById('libelle_act_prog').textContent = causes_racines[0]
+
+for (let index = 1; index <causes_racines.length; index++) {
 
   let nl = tbody.childNodes.length + 1;
   tr = document.createElement("tr");
   tr.className = "";
   tr.setAttribute("id", `line_${nl}`);
-  tr.appendChild(td_Input(`cause_${nl}`,"Causes_"+ index));
+  tr.appendChild(td_Input(`cause_${nl}`,"text", causes_racines[index]));
   cre_td_plus(tr,`btn_plus_tr_${nl}`); //td5
  
   console.log(tr.childNodes.length);
@@ -112,9 +125,14 @@ for (let index = 1; index <6; index++) {
         let t = e.target.parentNode.parentNode.childNodes.length - 1
         let v = e.target.parentNode.parentNode.childNodes.length - 1
         let w = e.target.parentNode.parentNode.childNodes.length - 1
-        tr.insertBefore(td_Input(`cause_${nl}_action_${t}`, ""), plus_ac.parentNode)
-        tr.insertBefore(td_Input(`cause_${nl}_porteur_${t}`, ""), plus_ac.parentNode)
-        tr.insertBefore(td_Input(`cause_${nl}_echeance${t}`, ""), plus_ac.parentNode)
+        console.log(e.target.parentNode.previousSibling);
+        // if (e.target.parentNode.childNodes) {
+          
+        // }
+        cre_td_moin(e.target.parentNode,`btn_moin_tr_${nl}`)
+        tr.insertBefore(td_Input(`cause_${nl}_action_${t}` ,"text", ""), plus_ac.parentNode)
+        tr.insertBefore(td_Input(`cause_${nl}_porteur_${t}` ,"text", ""), plus_ac.parentNode)
+        tr.insertBefore(td_Input(`cause_${nl}_echeance${t}` ,"date", ""), plus_ac.parentNode)
       }else{
         td1 = e.target.parentNode.previousSibling.previousSibling.previousSibling;
         let i = td1.childNodes.length + 1;
@@ -123,11 +141,34 @@ for (let index = 1; index <6; index++) {
         td3 = td2.nextSibling;
         let k = td3.childNodes.length + 1;
         console.log(td2);
-        td1.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_action_${i}`, ""));
-        td2.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_porteur_${j}`, ""));
-        td3.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_echeance_${k}`, ""));
+        // cre_td_moin(e.target.parentNode,`btn_moin_tr_${nl}`)
+        td1.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_action_${i}`, "text", ""));
+        td2.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_porteur_${j}`, "text", ""));
+        td3.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_echeance_${k}`, "date", ""));
       }
       // alert("Okk");
+      moin_lines = document.querySelectorAll("i.btn-moin-tr");
+      console.log(moin_lines.length);
+
+      for (let elem = 0; elem < moin_lines.length; elem++) {
+        moin_lines[elem].addEventListener("click", (e) => { //Supprimer une action
+          e.stopImmediatePropagation();
+          alert("Salam!!!!!");
+          td1 = e.target.parentNode.previousSibling
+          td2 = td1.previousSibling
+          td3 = td2.previousSibling
+          // console.log( td3 = td2.previousSibling);
+          if (td1.childNodes.length>1) {
+            td1.lastChild.remove()
+            td2.lastChild.remove()
+            td3.lastChild.remove() 
+          }else{
+            alert("il faut avoir aumoins deux Aactions!")
+          }
+        });
+
+      }
+
     });
   }
   
@@ -189,3 +230,5 @@ $(document).ready(function () {
     // window.location.reload();
   });
 });
+
+

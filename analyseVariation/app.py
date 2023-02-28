@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import Counter
 import sys
 sys.path.append('.')
 sys.path.append('..')
@@ -395,6 +396,7 @@ def analyse_agent():
                 db.session.commit()
             else:
                 # AnalyseApporter.update_pourquoi(datacc,axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22,pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
+                Enregistrement_AV.query.filter_by(reference_av=reference).first().libelle_av = request.form['libelle_av']
                 datacc.famille_causes = axes_analyse
                 datacc.probleme = probleme
                 datacc.pourquoi_1 = pourquoi1
@@ -463,7 +465,6 @@ def ajouter_action():
     if request.method=='POST':
         print('on a poster')
         # try:
-        datacc.probleme = request.form['probleme_act']
         pourquoi1 = '1._/_'+request.form.get('input_11_act')+'_/_' +'2._/_'+ request.form.get('input_12_act') +'_/_' +'3._/_'+ request.form.get('input_13_act')
         pourquoi21 = '1._/_'+request.form.get('input_21_act')+'_/_' +'2._/_'+ request.form.get('input_22_act') +'_/_' +'3._/_'+ request.form.get('input_23_act')
         pourquoi22= '_/_4._/_'+request.form.get('input_24_act') +'_/_' +'5._/_'+ request.form.get('input_25_act') +'_/_' +'6._/_'+ request.form.get('input_26_act')
@@ -474,6 +475,8 @@ def ajouter_action():
         pourquoi51 = '1._/_'+request.form.get('input_51_act')+'_/_' +'2._/_'+ request.form.get('input_52_act') +'_/_' +'3._/_'+ request.form.get('input_53_act')
         pourquoi52= '_/_4._/_'+request.form.get('input_54_act') +'_/_' +'5._/_'+ request.form.get('input_55_act') +'_/_' +'6._/_'+ request.form.get('input_56_act')
         datacc.probleme = request.form['probleme_act']
+        datacc.libelle_av = request.form['libelle_av']
+        datacc.pourquoi_1 = pourquoi1
         datacc.pourquoi_2 = pourquoi21+pourquoi22
         datacc.pourquoi_3 = pourquoi31+pourquoi32
         datacc.pourquoi_4 = pourquoi41+pourquoi42
@@ -513,6 +516,7 @@ def recap_value():
         nbre_action = ActionIndividuelle.recup_action(action_cc)[1]
         table_liste_action.append(liste_action)
         table_nbre_action.append(nbre_action)
+        # print(table_nbre_action)
         
     return render_template('recap.html', table_liste_pourquoi=table_liste_pourquoi, table_nbre_pourquoi=table_nbre_pourquoi, liste_identifiant=liste_identifiant,
                            table_liste_action=table_liste_action, table_nbre_action=table_nbre_action, nbre_analyse=nbre_analyse)
@@ -639,6 +643,40 @@ def action_programme():
         
         
     return render_template('action_programme.html')
+
+@app.route("/recap_action_programme", methods=["GET", "POST"])
+@login_required
+def recap_action_programme():
+    all_data = ActionProgramme.query.all() #on recupere tous les identifiants des conseiller deja analysé
+    table_liste_causes = []
+    table_liste_action = []
+    table_liste_porteur = []
+    table_liste_echeance = []
+    nbre_analyse = len(all_data)
+    liste_identifiant = []
+    nbre = []
+    
+    for el in all_data :
+        table_liste_causes.append(el.cause_racine)
+        table_liste_action.append(el.action)
+        table_liste_porteur.append(el.porteur)
+        table_liste_echeance.append(el.echeance)
+        table_nbre_action = len(table_liste_action)
+        table_nbre_cause = len(table_liste_causes)
+        # freq = Counter(table_liste_causes).get(el.cause_racine)
+        # nbre.append(freq)
+        # for  elem in table_liste_causes:
+        if table_liste_causes.count(el.cause_racine)==1:
+            nbre.append(el.cause_racine)
+    
+        print("Cause_racine:", el.cause_racine);
+            
+    print("all_data:", table_liste_causes);
+    print("Nbre:", nbre);
+    return render_template('recap_action_programme.html',nbre=nbre, nbre_analyse=nbre_analyse,table_nbre_cause=table_nbre_cause, 
+                            table_liste_causes=table_liste_causes,table_liste_action=table_liste_action,
+                            table_liste_porteur=table_liste_porteur,table_liste_echeance=table_liste_echeance
+                        );
 
 
 if __name__=='__main__':
