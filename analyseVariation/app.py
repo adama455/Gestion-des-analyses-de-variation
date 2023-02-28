@@ -5,7 +5,7 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
-from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, AnalyseApporter, Fichiers, Fichier
+from analyseVariation.models import User, ValeursAberrante, Enregistrement_AV, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, AnalyseApporter, Fichiers, Fichier, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5
 from analyseVariation import app, db, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_user import login_required, UserManager, SQLAlchemyAdapter
@@ -337,7 +337,11 @@ def miseAjourAc():
 @roles_required('admin')
 def rejeterAv():
     form = RegistrationForm()
-    return render_template('rejeterAv.html',title='Analyse Cause', form=form)
+    reference = request.args.get('reference')
+    data = Enregistrement_AV.query.filter_by(reference_av=reference).first()
+    libelle = data.libelle_av
+    agent = data.agent
+    return render_template('rejeterAv.html',title='Analyse Cause', form=form, reference=reference, libelle=libelle, agent=agent)
 
 #Permet a tout utilisateur de verifier son profil
 @app.route("/profil", methods=('GET', 'POST'))
@@ -370,47 +374,19 @@ def analyse_agent():
     data_exist = 0
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
     if request.method=='POST':
-        # try:
-            # identifiant = request.form['identifiant']
-            probleme = request.form['probleme']
-            axes_analyse = ''
-            for i in range(1,7):
-                axes = request.form.get(f'axes_{i}_analyse')
-                axes_analyse += f'{i}._/_'+axes+f'_/_{i+1}._/_'
-            pourquoi1 = '1._/_'+request.form.get('input_1')+'_/_' +'2._/_'+ request.form.get('input_12') +'_/_' +'3._/_'+ request.form.get('input_13')
-            pourquoi21 = '1._/_'+request.form.get('input_2')+'_/_' +'2._/_'+ request.form.get('input_22') +'_/_' +'3._/_'+ request.form.get('input_23')
-            pourquoi22= '_/_4._/_'+request.form.get('input_24') +'_/_' +'5._/_'+ request.form.get('input_25') +'_/_' +'6._/_'+ request.form.get('input_26')
-            pourquoi31 = '1._/_'+request.form.get('input_3')+'_/_' +'2._/_'+ request.form.get('input_32') +'_/_' +'3._/_'+ request.form.get('input_33')
-            pourquoi32= '_/_4._/_'+request.form.get('input_34') +'_/_' +'5._/_'+ request.form.get('input_35') +'_/_' +'6._/_'+ request.form.get('input_36')
-            pourquoi41 = '1._/_'+request.form.get('input_4')+'_/_' +'2._/_'+ request.form.get('input_42') +'_/_' +'3._/_'+ request.form.get('input_43')
-            pourquoi42= '_/_4._/_'+request.form.get('input_44') +'_/_' +'5._/_'+ request.form.get('input_45') +'_/_' +'6._/_'+ request.form.get('input_46')
-            pourquoi51 = '1._/_'+request.form.get('input_5')+'_/_' +'2._/_'+ request.form.get('input_52') +'_/_' +'3._/_'+ request.form.get('input_53')
-            pourquoi52= '_/_4._/_'+request.form.get('input_54') +'_/_' +'5._/_'+ request.form.get('input_55') +'_/_' +'6._/_'+ request.form.get('input_56')
-            datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
-            print('pourquoi',pourquoi1, datacc)
-            if not datacc:
-                pourquoi = AnalyseApporter(id, axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22, pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
-                print('lamine',pourquoi)
-                db.session.add(pourquoi)
-                db.session.commit()
-            else:
-                # AnalyseApporter.update_pourquoi(datacc,axes_analyse, probleme, pourquoi1, pourquoi21+pourquoi22,pourquoi31+pourquoi32, pourquoi41+pourquoi42, pourquoi51+pourquoi52)
-                Enregistrement_AV.query.filter_by(reference_av=reference).first().libelle_av = request.form['libelle_av']
-                datacc.famille_causes = axes_analyse
-                datacc.probleme = probleme
-                datacc.pourquoi_1 = pourquoi1
-                datacc.pourquoi_2 = pourquoi21+pourquoi22
-                datacc.pourquoi_3 = pourquoi31+pourquoi32
-                datacc.pourquoi_4 = pourquoi41+pourquoi42
-                datacc.pourquoi_5 = pourquoi51+pourquoi52
-                db.session.commit()
-            return redirect(url_for('ajouter_action', reference=reference, n=n, id=id))
-
+        Pourquoi1.insert_p1(id)
+        Pourquoi2.insert_p2(id)
+        Pourquoi3.insert_p3(id)
+        Pourquoi4.insert_p4(id)
+        Pourquoi5.insert_p5(id)
+        AnalyseApporter.insert_update_pourquoi(id, datacc, reference)
+        return redirect(url_for('ajouter_action', reference=reference, n=n, id=id))
     elif datacc:
         data_exist = 1
-        liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
+        #liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
+        liste_pourquoi = AnalyseApporter.traitement_data_pourquoi(id,datacc)[0]
         # nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[1]
-        # print(liste_pourquoi)
+        #print(liste_pourquoi,liste_pourquoiBis)
         #liste_pourquoi = AnalyseApporter.update_pourquoi(datacc, liste_pourquoi)[0]
         #nbre_pourquoi = AnalyseApporter.update_pourquoi(datacc)[1]
         return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi, reference=reference, libelle=libelle, 
@@ -455,42 +431,26 @@ def ajouter_action():
         data_input_action.pop()
         for el in data_input_action:
             act = [elem for elem in el.split(',') if elem!='']
-            action = ActionIndividuelle(id, act[0], act[1], act[2], act[3], '','' )
-            db.session.add(action)
-            db.session.commit()
+            act_exist = ActionIndividuelle.query.filter_by(identifiant_cc=id,reference_action=act[0]).first()
+            if not act_exist:
+                action = ActionIndividuelle(id, act[0], act[1], act[2], act[3], '','' )
+                db.session.add(action)
+                db.session.commit()
     except:
         print('echec de recuperation des elements')
-
     if request.method=='POST':
-        print('on a poster')
-        # try:
-        pourquoi1 = '1._/_'+request.form.get('input_11_act')+'_/_' +'2._/_'+ request.form.get('input_12_act') +'_/_' +'3._/_'+ request.form.get('input_13_act')
-        pourquoi21 = '1._/_'+request.form.get('input_21_act')+'_/_' +'2._/_'+ request.form.get('input_22_act') +'_/_' +'3._/_'+ request.form.get('input_23_act')
-        pourquoi22= '_/_4._/_'+request.form.get('input_24_act') +'_/_' +'5._/_'+ request.form.get('input_25_act') +'_/_' +'6._/_'+ request.form.get('input_26_act')
-        pourquoi31 = '1._/_'+request.form.get('input_31_act')+'_/_' +'2._/_'+ request.form.get('input_32_act') +'_/_' +'3._/_'+ request.form.get('input_33_act')
-        pourquoi32= '_/_4._/_'+request.form.get('input_34_act') +'_/_' +'5._/_'+ request.form.get('input_35_act') +'_/_' +'6._/_'+ request.form.get('input_36_act')
-        pourquoi41 = '1._/_'+request.form.get('input_41_act')+'_/_' +'2._/_'+ request.form.get('input_42_act') +'_/_' +'3._/_'+ request.form.get('input_43_act')
-        pourquoi42= '_/_4._/_'+request.form.get('input_44_act') +'_/_' +'5._/_'+ request.form.get('input_45_act') +'_/_' +'6._/_'+ request.form.get('input_46_act')
-        pourquoi51 = '1._/_'+request.form.get('input_51_act')+'_/_' +'2._/_'+ request.form.get('input_52_act') +'_/_' +'3._/_'+ request.form.get('input_53_act')
-        pourquoi52= '_/_4._/_'+request.form.get('input_54_act') +'_/_' +'5._/_'+ request.form.get('input_55_act') +'_/_' +'6._/_'+ request.form.get('input_56_act')
-        datacc.probleme = request.form['probleme_act']
-        datacc.libelle_av = request.form['libelle_av']
-        datacc.pourquoi_1 = pourquoi1
-        datacc.pourquoi_2 = pourquoi21+pourquoi22
-        datacc.pourquoi_3 = pourquoi31+pourquoi32
-        datacc.pourquoi_4 = pourquoi41+pourquoi42
-        datacc.pourquoi_5 = pourquoi51+pourquoi52
-        db.session.commit()
+        AnalyseApporter.insert_update_pourquoi(id, datacc, reference)
         return redirect(url_for('listeVa', ref=reference))
         # except:
         flash("Pas de modifications apportées sur les pourquoi saisis")
     if datacc:
         print(exist)
-        liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
-        nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[1]
-        # print(liste_pourquoi)
-        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, cause=cause, liste_action=liste_action,
-            liste_pourquoi=liste_pourquoi, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act)
+        data_pourquoi = AnalyseApporter.traitement_data_pourquoi(id,datacc)
+        liste_pourquoi = data_pourquoi[0]
+        nbre_pourquoi = data_pourquoi[1]  
+        #print(liste_pourquoi)
+        return render_template('ajouter-action.html', n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, liste_action=liste_action, 
+                               liste_pourquoi=liste_pourquoi, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act, cause=cause)
 
 
 @app.route("/recaputilatif", methods=('POST', 'GET'))
@@ -503,7 +463,7 @@ def recap_value():
     table_nbre_action = []
     nbre_analyse = len(all_data)
     liste_identifiant = []
-    
+    reference = request.args.get('reference')
     for elem in all_data:
         liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(elem)[0]
         table_liste_pourquoi.append(liste_pourquoi)
@@ -515,9 +475,9 @@ def recap_value():
         nbre_action = ActionIndividuelle.recup_action(action_cc)[1]
         table_liste_action.append(liste_action)
         table_nbre_action.append(nbre_action)
-        
+
     return render_template('recap.html', table_liste_pourquoi=table_liste_pourquoi, table_nbre_pourquoi=table_nbre_pourquoi, liste_identifiant=liste_identifiant,
-                           table_liste_action=table_liste_action, table_nbre_action=table_nbre_action, nbre_analyse=nbre_analyse)
+                           table_liste_action=table_liste_action, table_nbre_action=table_nbre_action, nbre_analyse=nbre_analyse, reference=reference)
 
 @app.route("/reset_request", methods=('POST', 'GET'))
 @login_required
@@ -540,8 +500,10 @@ def logout():
 
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
-    fichier = request.args.get('filename')
     try :
+        fichier = request.args.get('filename')
+        kpi = request.args.get('kpi')
+        libelle_analyse = request.args.get('libelle_analyse')
         reference = '000012'
         data = pd.read_excel(fichier)
         mesures = data.Mesures.dropna()
@@ -551,21 +513,22 @@ def synthese_av():
         if not exist_file:
             db.session.add(insert_fichier)
             db.session.commit()
-        data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
-        max = pd.to_numeric(mesures, errors='coerce').max()
-        min = pd.to_numeric(mesures, errors='coerce').min()
-        nbr_va_sou_perf = data[data["Mesures"]<650].Nom.count()
-        nbr_va_sur_perf = data[data["Mesures"]>1000].Nom.count()
-        data = data[(data["Mesures"]<650)|(data['Mesures']>1000)]
+        if kpi == 'DMT':
+            data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
+            #max = pd.to_numeric(mesures, errors='coerce').max()
+            #min = pd.to_numeric(mesures, errors='coerce').min()
+            nbr_va_sou_perf = data[data["Mesures"]<650].Nom.count()
+            nbr_va_sur_perf = data[data["Mesures"]>1000].Nom.count()
+            data = data[(data["Mesures"]<650)|(data['Mesures']>1000)]
         prenom = current_user.prenom
+        print('dmt')
         nom = current_user.nom
         Date = date.today()
-
     except:
         flash('Aucun fichier ou format non compatible','warning')
 
     analyse_variation = Enregistrement_AV.query.filter_by(reference_av=reference).first()
-    print('il y a analyse', analyse_variation)
+    #print('il y a analyse', analyse_variation)
     if not analyse_variation:
         print('il y a analyse', analyse_variation)
         for i in range(data.shape[0]):
@@ -589,18 +552,23 @@ def synthese_av():
         db.session.commit()
         return redirect(url_for('listeVa', ref=reference)) 
     try:
-        return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, nbr_va_sur_perf=nbr_va_sur_perf)  
+        return render_template('synthese-av.html', ref=reference, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbr_va_sou_perf, 
+                               nbr_va_sur_perf=nbr_va_sur_perf, libelle_analyse=libelle_analyse, kpi=kpi)  
     except:
         return render_template('home.html')
 
 @app.route('/uploader', methods = ['GET', 'POST'])
-def upload_file () : 
+def upload_file () :
     try:
+        print(request.form['libelle_analyse'])
+        print(request.form['kpi'])
+        kpi = request.form['kpi']
+        libelle_analyse = request.form['libelle_analyse']
         filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
                                             filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
 
         #flash("Fichier charge avec succes ! ")
-        return redirect(url_for('synthese_av', filename=filename))
+        return redirect(url_for('synthese_av', filename=filename, kpi=kpi, libelle_analyse=libelle_analyse))
     except:
         flash('Erreur de chargement du fichier ','danger')
     #abort(404)
@@ -623,9 +591,7 @@ def action_programme():
                     print("element:", el)
                     actions = [elem for elem in el.split(',') if elem!='']
                     print("actionsss:", actions)
-
                     print("act1:", act_prg[1])
-                    
                     if actions: 
                         print(actions[0])
                         print(actions[1])
