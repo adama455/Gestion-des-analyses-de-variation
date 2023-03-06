@@ -47,6 +47,7 @@
             
         </tr>
         {% for j in range(nbre_cc) %}
+
             {% for i in range(N[j]) %}
                     <tr >
                         {% if i==0 %}
@@ -81,7 +82,7 @@
                                 {{ table_pourquoi_axe[0][j][5] }}
                             </td>
                         {%  endif %}
-                        
+
                         {%  endif %}
                         {%  for m in range(1,6) %}
                             {% if i==0 %}

@@ -309,6 +309,7 @@ def editpa():
     statut=action.status
     commentaire=action.commentaire
     porteur=action.porteur
+    echeance=action.echeance
 
     return render_template('editpa.html', title='Register', form=form, libelle=libelle)
 
