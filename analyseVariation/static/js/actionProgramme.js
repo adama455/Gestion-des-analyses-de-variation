@@ -12,6 +12,13 @@ function cre_input(Class, id_input, type, Valeur) {
   // parent.appendChild(input);
   return input;
 }
+function cre_div(id,content) {
+  div = document.createElement("div");
+  div.className = "fs-5 py-1 px-2 flex-wrap tx-center tx-dark"
+  div.textContent = content
+  div.setAttribute("id", `${id}`);
+  return div;
+}
 function cre_td(item) {
   td = document.createElement("td");
   td.className = "border border-dark";
@@ -39,7 +46,10 @@ function cre_td_moin(parent,id) {
   parent.appendChild(i);
 }
 function td_Input(id, type,valeur) {
-  return cre_td(cre_input("border-0 tx-center w-100 fs-5 p-1",id, type,valeur))
+  return cre_td(cre_input("border-0 w-100 fs-5 py-1 px-2",id, type,valeur))
+}
+function td_div(id, content) {
+  return cre_td(cre_div(id, content))
 }
 
 // plus.addEventListener("click", (e) => {
@@ -92,29 +102,30 @@ function td_Input(id, type,valeur) {
 
 var causes_racines = sessionStorage.getItem('causes_racines').split(',')
 
-console.log(causes_racines)
 
 document.getElementById('libelle_act_prog').textContent = causes_racines[0]
 
 for (let index = 1; index <causes_racines.length; index++) {
-
+  
   let nl = tbody.childNodes.length + 1;
   tr = document.createElement("tr");
   tr.className = "";
   tr.setAttribute("id", `line_${nl}`);
-  tr.appendChild(td_Input(`cause_${nl}`,"text", causes_racines[index]));
+  // tr.appendChild(td_Input(`cause_${nl}`,"text", causes_racines[index]));
+  tr.appendChild(td_div(`cause_${nl}`, causes_racines[index]));
   cre_td_plus(tr,`btn_plus_tr_${nl}`); //td5
  
   console.log(tr.childNodes.length);
   tbody.appendChild(tr)
   plus_lines = document.querySelectorAll("i.btn-plus-tr");
   console.log(plus_lines.length);
-
+  
   for (let element = 0; element < plus_lines.length; element++) {
     let nac = tbody.childNodes.length;
     let np = tbody.childNodes.length;
     let ne = tbody.childNodes.length;
     plus_lines[element].addEventListener("click", (e) => {
+      console.log(causes_racines)
       e.stopImmediatePropagation();
       plus_ac = document.getElementById(`btn_plus_tr_${nl}`)
       // console.log(plus_ac.parentNode);
@@ -125,10 +136,8 @@ for (let index = 1; index <causes_racines.length; index++) {
         let t = e.target.parentNode.parentNode.childNodes.length - 1
         let v = e.target.parentNode.parentNode.childNodes.length - 1
         let w = e.target.parentNode.parentNode.childNodes.length - 1
-        console.log(e.target.parentNode.previousSibling);
-        // if (e.target.parentNode.childNodes) {
-          
-        // }
+        console.log(e.target.parentNode.previousSibling.nextSibling)
+
         cre_td_moin(e.target.parentNode,`btn_moin_tr_${nl}`)
         tr.insertBefore(td_Input(`cause_${nl}_action_${t}` ,"text", ""), plus_ac.parentNode)
         tr.insertBefore(td_Input(`cause_${nl}_porteur_${t}` ,"text", ""), plus_ac.parentNode)
@@ -142,9 +151,9 @@ for (let index = 1; index <causes_racines.length; index++) {
         let k = td3.childNodes.length + 1;
         console.log(td2);
         // cre_td_moin(e.target.parentNode,`btn_moin_tr_${nl}`)
-        td1.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_action_${i}`, "text", ""));
-        td2.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_porteur_${j}`, "text", ""));
-        td3.appendChild( cre_input("border tx-center w-100 fs-5 p-1", `cause_${nl}_echeance_${k}`, "date", ""));
+        td1.appendChild( cre_input("border w-100 fs-5 py-1 px-2", `cause_${nl}_action_${i}`, "text", ""));
+        td2.appendChild( cre_input("border w-100 fs-5 py-1 px-2", `cause_${nl}_porteur_${j}`, "text", ""));
+        td3.appendChild( cre_input("border w-100 fs-5 py-1 px-2", `cause_${nl}_echeance_${k}`, "date", ""));
       }
       // alert("Okk");
       moin_lines = document.querySelectorAll("i.btn-moin-tr");
@@ -175,13 +184,6 @@ for (let index = 1; index <causes_racines.length; index++) {
 }
 
 function ajax(method, data, url) {
-  // var url = new URL(window.location.href);
-  // var id = document.getElementById("identifiant_act").value;
-  // console.log(id);
-  // var reference = document.getElementById("reference_av_act").value;
-  // var n = url.searchParams.get("n");
-  // console.log(reference);
-  // url = Url + "?reference=" + reference + "&n=" + n + "&id=" + id;
   $.ajax({
     data: { data: data }, //grab text between span tags
     type: method,
@@ -207,9 +209,10 @@ $(document).ready(function () {
       // for (let j = 0; j < element.childNodes.length; j++) {  //colonnes
         var colonnes = [];
         for (let k = 0; k < element.children[1].childNodes.length; k++) {  
-          console.log(element.childNodes[1].childNodes[0]);
-          colonnes.push(element.children[0].childNodes[0].value);
+          console.log(element.childNodes[1].childNodes.length);
+          colonnes.push(element.children[0].childNodes[0].innerHTML);
           colonnes.push(element.children[1].childNodes[k].value);
+          console.log(element.children[1].childNodes[k]);
           colonnes.push(element.children[2].childNodes[k].value);
           colonnes.push(element.children[3].childNodes[k].value);
           console.log(actions);

@@ -212,17 +212,17 @@
         </div>
     </div>
     {%  else %}
-    <div class="modal fade" id="modal_action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+    <div class="modal fade mx-auto" id="modal_action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="max-width: 90% !important;">
+        <div class="modal-dialog mx-auto" style="max-width: 90% !important;">
+        <div class="modal-content mx-auto" style="max-width: 90% !important;">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Définir action</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex flex-column" id="modal-body">
-                    <marquee id="modal_title" width="100%" scrollamount="2" scrolldelay="10" class=" modal-title fs-4 ">
+                    <p id="modal_title" class="fs-5 ">
                         Vueillez cliquer
-                        sur le bouton action</marquee>
+                        sur le bouton action</p>
                     <div class="d-flex flex-column ">
                         <form action="#" method="POST" id="form_actions">
                             <div class="form-input" id="form-input">
@@ -315,7 +315,7 @@
             <td rowspan="6" class="col-1 tx-center border border-dark">
                 {{ nom_conseiller }}
             </td>
-            <td rowspan="6" class="col-1 tx-center border border-dark">
+            <td rowspan="6" class="tx-center border border-dark">
                 {{ valeurs_aberante_cc }}
             </td>
             <td rowspan="2" class="col-1 tx-center border border-dark">
@@ -342,29 +342,28 @@
             <td class="col-1 tx-center border border-dark">
                 {{ liste_pourquoi[4][i] }}
             </td>
-            <td class="col-1 tx-center border border-dark">
+            <td class=" tx-center border border-dark">
                 {{ liste_pourquoi[5][i] }}
             </td>
-            <td class="col-1 tx-center border border-dark">
-                {# {% for k in range(nbre_act[i]) %}
-                <p>{{ liste_action[i][0][k] }}</p>
-                {%  endfor %} #}
+            <td class=" action-indiv col-2  tx-center border border-dark p-0" style="padding: 0 !important;margin: 0 !important">
                 {% for k in range(nbre_act[i]) %}
-                <p>{{ liste_action[i][1][k] }}</p>
+                <div class=" mb-3 mt-3 ">{{ liste_action[i][1][k] }}</div>
+                {% endfor %}
+            </td>
+            <td class=" action-indiv tx-center border border-dark p-0 " style="padding: 0 !important;margin: 0 !important">
+                {% for k in range(nbre_act[i]) %}
+                    <div class=" mb-3 mt-3">{{ liste_action[i][2][k] }}</div>
+                {% endfor %}
+            </td>
+            <td class=" action-indiv tx-center border border-dark p-0" style="padding: 0 !important;margin: 0 !important">
+                {% for k in range(nbre_act[i]) %}
+                <div class=" mb-3 mt-3">{{ liste_action[i][3][k] }}</div>
                 {%  endfor %}
             </td>
-            <td class="col-1 tx-center border border-dark p-0">
+            <td class="action-indiv tx-center border border-dark p-0" style="padding: 0 !important;margin: 0 !important">
                 {% for k in range(nbre_act[i]) %}
-                <p>{{ liste_action[i][2][k] }}</p>
+                <div class=" mb-3 mt-3">Status</div>
                 {%  endfor %}
-            </td>
-            <td class="col-1 tx-center border border-dark p-0">
-                {% for k in range(nbre_act[i]) %}
-                <p>{{ liste_action[i][3][k] }}</p>
-                {%  endfor %}
-            </td>
-            <td class="col-1 tx-center border border-dark p-0">
-
             </td>
         </tr>
         {%  endfor %}

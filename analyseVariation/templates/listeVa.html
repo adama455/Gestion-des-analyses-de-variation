@@ -1,45 +1,101 @@
 {% extends 'index.html' %}
 {% block content %}
-<div class="container">
-    <div class=" jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES VALEURS ABERRANTES</div>
-    <div class="card bg-gray-100 bd-10">
-        <div class="card-body">
-            <table id="datatable1" class="display responsive nowrap" width="100%">
-                <thead class="bg-primary">
-                    <tr>
-                        <th class="wd-20p text-dark">Identifiant</th>
-                        <th class="wd-10p text-dark">Valeur</th>
-                        <th class="wd-5p text-dark">Analyse</th>
-                        <th class="wd-5p text-dark">Statut</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in range(n) %}
+<div class="container-fluid d-flex mb-3">
+    <div class="synthese_av col-6">
+        <div class="jumbotron p-3 tx-center az-content-label mg-b-5">ENREGISTREMENT DES SYNTHESES D'ANALYSES DE VARIATION</div>
+        <div class="card bg-gray-100 bd-10 shadow">
+            <div class="mg-20">
+                <form action="#" method="POST">
+                    <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">{{reference}}</div>
+                        <div class="col-3 fs-5" style="background-color: #D9D9D9;">Date: 
+                            {{ Date }}
+                        </div>
+                        <div class="col-4" style="background-color: #D9D9D9;">Aut : {{ prenom }} {{ nom }}</div>
+                        <select class="col-2 fs-5 border-0" id="statut" name="statut" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
+                            <option label="Statut en cour"></option>
+                            <option value="Enregistre">Enregistre</option>
+                            <option value="Valide">Valide</option>
+                            <option value="Cloture">Cloture</option>
+                        </select>
+                    </div>
+                    <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <input id="libelle" name="libelle" class="col-12 border-0" style="background-color: #D9D9D9;" type="text" value="{{ libelle_analyse }}">
+                        <!-- <div class="col-12" style="background-color: #D9D9D9;">libelle</div> -->
+                    </div>
+                    <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <input class="col-2 border-0" style="background-color: #D9D9D9;" value="KPI : {{ kpi }}" >
+                        <div class="col-6 d-flex row">
+                            <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
+                            <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
+                        </div>
+                    <!-- <input class="col-3" style="background-color: #D9D9D9;" value="Periode"> -->
+                        <input class="col-3 border-0" style="background-color: #D9D9D9;" value="Equipe">
+                    </div>
+                    <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <div class="col-12 text-center" style="background-color: #D9D9D9;">Syntheses des resultats</div> 
+                    </div>
+                    <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <div class="col-3 fs-5" style="background-color: #D9D9D9;">Nombres de mesures</div>
+                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">Objectif</div>
+                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">VSF</div>
+                        <div class="col-3 fs-5" style="background-color: #D9D9D9;">Mesures a l'objectif</div>
+                    </div>
+                    <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <div class="col-6" style="background-color: #D9D9D9;">Limite de controle superieure : 1000</div>
+                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sur-perf : {{ nbr_va_sur_perf }}</div>
+                    </div>
+                    <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
+                        <div class="col-6" style="background-color: #D9D9D9;">Limite de controle inferieure : 600</div>
+                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sous-perf : {{ nbr_va_sou_perf }}</div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="liste_av col-6">
+        <div class=" jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES VALEURS ABERRANTES</div>
+        <div class="card bg-gray-100 ">
+            <div class="card-body">
+                <table id="datatable1" class="display responsive nowrap" width="100%">
+                    <thead class="bg-primary">
                         <tr>
-                            <td>{{ liste[i].nom_cc }}</td>
-                            <td>{{ liste[i].valeurs }}</td>
-                            <td>
-                                <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', reference=reference, n=i ) }}">
-                                    <i class="fa-solid fa-pen-to-square fs-5 lien_analyse"></i>
-                                    <!--<div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </div>-->
-                                </a>
-                            </td>
-                            
-                            <td>
-                                <div id="statut_action_{{ i }}"></div>
-                            </td>
+                            <th class="wd-20p text-dark">Identifiant</th>
+                            <th class="wd-10p text-dark">Valeur</th>
+                            <th class="wd-10p text-dark">Analyse</th>
+                            <th class="wd-10p text-dark">Statut</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <br>
-            <div class="btn-icon-list">
-                <a href="{{ url_for('home') }}">
-                    <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button>
-                </a>
-                &nbsp;&nbsp;
+                    </thead>
+                    <tbody>
+                        {% for i in range(n) %}
+                            <tr>
+                                <td>{{ liste[i].nom_cc }}</td>
+                                <td>{{ liste[i].valeurs }}</td>
+                                <td>
+                                    <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', reference=reference, n=i ) }}">
+                                        <i class="fa-solid fa-pen-to-square fs-5 lien_analyse"></i>
+                                        <!--<div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </div>-->
+                                    </a>
+                                </td>
+                                
+                                <td>
+                                    <div id="statut_action_{{ i }}"></div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <div class="btn-icon-list">
+                    <a href="{{ url_for('home') }}">
+                        <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button>
+                    </a>
+                    &nbsp;&nbsp;
+                </div>
             </div>
         </div>
     </div>

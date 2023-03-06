@@ -47,14 +47,12 @@
 .icon-add{
     margin-left: -1rem;
 }
-
 .div-btn{
     visibility: hidden;
 }
 .div-btn-show{
     visibility: visible;
 }
-
 .btn-final,.definir-action{
     background-color: #FF7900;
     border-radius: 5px;
@@ -64,13 +62,26 @@
     border-radius: 5px;
 }
 
-/* .spanCpt{
-    background-color: red;
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-
-} */
+.action-indiv :nth-child(1){
+    border-bottom: 1px solid black;
+    padding-bottom: 20px;
+}
+.action-indiv :nth-child(2){
+    border-bottom: 1px solid black;
+    padding-bottom: 20px;
+}
+.action-indiv :nth-child(3){
+    border-bottom: 1px solid black;
+    padding-bottom: 20px;
+}
+.action-indiv :nth-child(4){
+    border-bottom: 1px solid black;
+    padding-bottom: 20px;
+}
+.action-indiv :last-child{
+    border-bottom:none;
+    padding-bottom: 20px;
+}
 
 
 

@@ -55,7 +55,7 @@
                 <a href="#" id="action_programme" class="w-100 fs-5 col-8">
                     <button type="button" class="btn btn-primary rounded my-3 float-right" id="valider-av">Valider</button>
                 </a>
-                <a href="{{ url_for("rejeterAv") }}" id="action_programme" class="w-100 fs-5 col-1">
+                <a href="{{ url_for("rejeterAv", reference=reference) }}" id="action_programme" class="w-100 fs-5 col-1">
                     <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Rejeter</button>
                 </a>
             </div>

@@ -135,7 +135,7 @@
                   </div>
                   {% for ele in plateaux %}
                   <div class="col-3 form-inline">
-                    <input type="checkbox" value="{{ele.libelle}}" id="plateau"name="plateau" />
+                    <input type="checkbox" value="{{ele.id}}" id="plateau"name="plateau" />
                     <label class="form-label tx-white mg-b-10 ml-2">{{ele.libelle}}</label>
                   </div>
                   {% endfor %}
@@ -278,7 +278,7 @@
               </div>
                 {% for ele in plateaux %}
                 <div class="col-3 form-inline">
-                  <input type="checkbox" value="{{ele.libelle}}" id="plateau" name="plateau" />
+                  <input type="checkbox" value="{{ele.id}}" id="plateau" name="plateau" />
                   <label class="form-label mg-b-10 ml-2 tx-white">{{ele.libelle}}</label>
                 </div>
                 {% endfor %}

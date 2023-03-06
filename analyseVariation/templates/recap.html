@@ -51,8 +51,8 @@
                         <td rowspan="6" class="col-1 tx-center border border-dark">
                             {{ liste_identifiant[j] }}
                         </td>
-                        <td rowspan="6" class="col-1 tx-center border border-dark">
-                            {{ valeurs_aberante_cc }}
+                        <td rowspan="6" class="tx-center border border-dark">
+                            {# {{ liste_valeur[j] }} #}
                         </td>
                         <td rowspan="2" class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][0][i] }}
@@ -78,30 +78,32 @@
                         <td class="col-1 tx-center border border-dark">
                             {{ table_liste_pourquoi[j][4][i] }}
                         </td>
-                        <td class="col-1 tx-center border border-dark">
+                        <td class="tx-center border border-dark">
                             {{ table_liste_pourquoi[j][5][i] }}
                         </td>
-                        <td class="col-2 tx-center border border-dark">
+                        <td class="action-indiv col-2 tx-center border border-dark" style="padding: 0 !important;margin: 0 !important">
                             {% for k in range(table_nbre_action[j][i]) %}
-                                <p>{{ table_liste_action[j][i][1][k] }}</p>
-                            {%  endfor %}
+                                <div class="mb-3 mt-3">{{ table_liste_action[j][i][1][k] }}</div>
+                            {% endfor %}
                         </td>
-                        <td class="col-1 tx-center border border-dark">
+                        <td class=" action-indiv tx-center border border-dark" style="padding: 0 !important;margin: 0 !important">
                             {% for k in range(table_nbre_action[j][i]) %}
-                                <p>{{ table_liste_action[j][i][2][k] }}</p>
-                            {%  endfor %}
+                                <div class="mb-3 mt-3">{{ table_liste_action[j][i][2][k] }}</div>
+                            {% endfor %}
                         </td>
-                        <td class="col-1 tx-center border border-dark">
+                        <td class=" action-indiv tx-center border border-dark" style="padding: 0 !important;margin: 0 !important">
                             {% for k in range(table_nbre_action[j][i]) %}
-                                <p>{{ table_liste_action[j][i][3][k] }}</p>
-                            {%  endfor %}
+                                <div class="mb-3 mt-3">{{ table_liste_action[j][i][3][k] }}</div>
+                            {% endfor %}
                         </td>
-                        <td class="col-1 tx-center border border-dark">
-                            
+                        <td class=" action-indiv tx-center border border-dark" style="padding: 0 !important;margin: 0 !important">
+                            {% for k in range(table_nbre_action[j][i]) %}
+                                <div class=" mb-3 mt-3">en cours</div>
+                            {% endfor %}
                         </td>
                     </tr>
-                {%  endfor %}
-            {%  endfor %}
+                {% endfor %}
+            {% endfor %}
         </table>
 
         {% if current_user.is_authenticated and (current_user.profil)!='MANAGER_OPERATIONNEL' %}
@@ -112,7 +114,7 @@
             <a href="#" id="action_programme" class="w-100 fs-5 col-8">
                 <button type="button" class="btn btn-primary rounded my-3 float-right" id="valider-av">Valider</button>
             </a>
-            <a href="{{ url_for("rejeterAv") }}" id="action_programme" class="w-100 fs-5 col-1">
+            <a href="{{ url_for('rejeterAv', reference=reference) }}" id="action_programme" class="w-100 fs-5 col-1">
                 <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Rejeter</button>
             </a>
         </div>

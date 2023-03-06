@@ -211,7 +211,7 @@ function sous_bloc_action(parent, n, i, id, label) {
   label_ref.className = "d-flex justify-content-start";
   label_ref.innerHTML = label;
   input_ref = document.createElement("input");
-  input_ref.className = "fs-5";
+  input_ref.className = "fs-5 ps-2";
   input_ref.id = `${id}_${n}.${i}`;
   // console.log(input_ref.id);
   input_ref.name = `${id}_${n}.${i}`;
@@ -219,8 +219,15 @@ function sous_bloc_action(parent, n, i, id, label) {
   if (label == "Ref Action") {
     input_ref.value = `${id}_${n}.${i}`;
   }
+  if (label == "Libelle Action") {
+    div_ref.className = "col-5 d-flex flex-column";
+  }
+  if (label == "Porteur Acton") {
+    div_ref.className = "col-2 d-flex flex-column";
+  }
   if (label == "Echeance Action") {
     input_ref.type = "date";
+    div_ref.className = "col-2 d-flex flex-column";
   }
 
   div_ref.appendChild(label_ref);
@@ -424,8 +431,10 @@ document.getElementById('action_programme').firstElementChild.addEventListener('
   var causes_racines = []
   causes_racines.push(document.getElementById('libelle_av').value)
   for (let index = 1; index < 7; index++) {
-    document.getElementById(`input_5${index}_act`).value
-    causes_racines.push(document.getElementById(`input_5${index}_act`).value)
+    if (document.getElementById(`input_5${index}_act`).value != "") {
+      document.getElementById(`input_5${index}_act`).value
+      causes_racines.push(document.getElementById(`input_5${index}_act`).value)
+    }
   }
   sessionStorage.setItem('causes_racines',causes_racines)
 })

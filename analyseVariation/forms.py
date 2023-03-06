@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import StringField,PasswordField,SubmitField,BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from analyseVariation.models import User
+from analyseVariation.user_model import User
 
 
 
@@ -13,6 +13,8 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email() ])
     profil = StringField('Profile', validators=[DataRequired()])
     plateau = StringField('Plateau', validators=[DataRequired()])
+    # plateau_id = (db.Integer, db.ForeignKey('plateaux.id'))
+    
     # password = PasswordField('Password', validators=[DataRequired()])
     # confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     

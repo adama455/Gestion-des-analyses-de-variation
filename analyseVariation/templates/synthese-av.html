@@ -5,7 +5,6 @@
     <div class="jumbotron p-3 tx-center az-content-label mg-b-20">ENREGISTREMENT DES SYNTHESES D'ANALYSES DE VARIATION</div>
     <div class="card bg-gray-100 bd-10 shadow">
         <div class="mg-20">
-
             <form action="#" method="POST">
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                     <div class="col-2" style="background-color: #D9D9D9;">Reference</div>
@@ -13,19 +12,19 @@
                         {{ Date }}
                     </div>
                     <div class="col-3" style="background-color: #D9D9D9;">Aut : {{ prenom }} {{ nom }}</div>
-                        <select class="col-2" id="statut" name="statut" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
+                    <select class="col-2" id="statut" name="statut" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
                         <option label="Statut en cour"></option>
                         <option value="Enregistre">Enregistre</option>
                         <option value="Valide">Valide</option>
                         <option value="Cloture">Cloture</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                    <input id="libelle" name="libelle" class="col-12" style="background-color: #D9D9D9;" type="text" value="libelle">
+                    <input id="libelle" name="libelle" class="col-12" style="background-color: #D9D9D9;" type="text" value="{{ libelle_analyse }}">
                     <!-- <div class="col-12" style="background-color: #D9D9D9;">libelle</div> -->
                 </div>
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                    <input class="col-2" style="background-color: #D9D9D9;" value="KPI analyse" >
+                    <input class="col-2" style="background-color: #D9D9D9;" value="KPI : {{ kpi }}" >
                     <div class="col-5 d-flex row">
                         <input class="col-6" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
                         <input class="col-6" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
@@ -64,7 +63,6 @@
                     </div>
                 </div>
             </form>
-            
         </div>
     </div>
 
