@@ -296,19 +296,35 @@ def listepa():
     form = LoginForm()
     return render_template('listepa.html', title='Register', form=form)
 
-@app.route("/editpa")
+@app.route("/editpa", methods=('GET', 'POST'))
 @login_required
 def editpa():
     form = LoginForm()
     id_action=request.args.get('id_action')
     action = ActionIndividuelle.query.filter_by(id=int(id_action)).first()
-    libelle = action.libelle_action
+    #libelle_action = action.libelle_action
     statut=action.status
     commentaire=action.commentaire
     porteur=action.porteur
     echeance=action.echeance
-
-    return render_template('editpa.html', title='Register', form=form, libelle=libelle)
+    id_va = Pourquoi5.query.filter_by(id=action.pourquoi5_id).first().valeur_aberrante_id
+    valeur_aberrante = ValeursAberrante.query.filter_by(id=id_va).first()
+    user = User.query.filter_by(id=valeur_aberrante.user_id).first()
+    if request.method=='POST':
+        statut = request.form.get('statut')
+        libelle = request.form.get('libelle_action')
+        porteur = request.form.get('porteur_action')
+        echeance = request.form.get('echeance_action')
+        statut = request.form.get('statut')
+        action.status = request.form.get('status')
+        action.libelle_action = request.form.get('libelle_action')
+        action.porteur = request.form.get('porteur_action')
+        action.echeance = request.form.get('echeance_action')
+        action.commentaire = request.form.get('commentaire')
+        db.session.commit()
+        #action.commentaire = commentaire
+        print(statut)
+    return render_template('editpa.html', title='Register', form=form, action=action, user=user, valeur_aberrante=valeur_aberrante)
 
 #Permet de visualiser la liste des Valeurs Aberantes
 @app.route("/listeVa", methods=('GET', 'POST' ))

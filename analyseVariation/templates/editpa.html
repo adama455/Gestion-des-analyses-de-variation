@@ -15,26 +15,30 @@
     </div> #}
     <div class="card bg-gray-100 bd-10">
         <div class="card-body">
-         
+         <form action="#" method="POST">
             <table id="" class="table fs-5 border">
                 <thead>
                     <tr>
-                        <th class="col-3 fs-5">Rechercher action</th>
+                        <th class="col-3 fs-5">Reference action</th>
                         <th class="col-4 fs-5">Libelle AV</th>
                         <th class="col-3 fs-5">Responsable AV</th>
                         <th class="col-1 fs-5">Statut</th>
                     </tr>
                 </thead>
-                <tbody >
+                <tbody>
                     <tr>
-                        <td>AD004</td>
+                        <td>{{ valeur_aberrante.reference_av }}</td>
                         <td>Libelle av</td>
-                        <td>Lamine THIAM</td>
+                        <td>{{ user.prenom +' '+ user.nom }}</td>
                         <td>
-                            <a href="{{ url_for('home') }}">
-                                <div class="border border-info d-flex justify-content-center align-items-center" style="height:30px; width:75px;">
-                                </div>
-                            </a>
+                            <div class="col d-flex flex-column p-0 mg-b-10">
+                                <select name="statut" id="statut" class="bg-white border me-2 fs-5">
+                                    <option label="Statut" ></option>
+                                    <option value="Valide">Valide</option>
+                                    <option value="Cloture">Cloture</option>
+                                    <option value="Annule">Annule</option>
+                                </select>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -43,22 +47,42 @@
             <table class="table border ">
                 <thead>
                     <tr>
-                        <th class="col-12 fs-5 text-center">Libellé action</th>
+                        <th class="col-12 fs-5 text-center">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="fs-5">{{ libelle }}</td>
+                        <td class="fs-5">
+                            <label for="libelle_action">Libellé action</label>
+                            <input class="col-12 mg-b-20" type="text" name="libelle_action" id="libelle_action" value="{{ action.libelle_action }}">
+                            <div class="d-flex flex-row">
+                                <div class="mg-r-20">
+                                    <label for="libelle_action">Porteur action</label>
+                                    <input class="col mg-b-20" type="text" name="porteur_action" id="porteur_action" value="{{ action.porteur }}">
+                                </div>
+                                <div class="mg-r-20">
+                                    <label for="libelle_action">Echeance action</label>
+                                    <input class="col mg-b-20" type="date" name="echeance_action" id="echeance_action" value="{{ action.echeance }}">
+                                </div>
+                                <div class="">
+                                    <label for="libelle_action"> </label>
+                                    <select name="status" id="status" class="bg-white border me-2 fs-5 mg-t-10 col">
+                                        <option label="Statut" ></option>
+                                        <option value="Valide">Valide</option>
+                                        <option value="Cloture">Cloture</option>
+                                        <option value="Annule">Annule</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
             <br>
-            <form>
-                <div class="form-group fs-5">
+                <div class="form-group">
                   <label for="exampleFormControlTextarea1">Saisir un commentaire</label>
-                  <textarea class="form-control fs-5" id="exampleFormControlTextarea1" rows="3"></textarea>
+                  <textarea class="form-control fs-5" id="commentaire" rows="3" name="commentaire">{{ action.commentaire }}</textarea>
                 </div>
-            </form>
             <div class="d-flex row col-6 ">
                 <div class="btn-icon-list col-2 mg-r-20">
                     <a href="{{ url_for('home') }}">
@@ -67,10 +91,11 @@
                 </div>
                 <div class="btn-icon-list col-2">
                     <a href="{{ url_for('home') }}">
-                        <button class="btn btn-primary  border-0 rounded" title="Sortir">Valider</i></button></a>
+                        <button type="submit" class="btn btn-primary  border-0 rounded" title="Sortir">Valider</i></button></a>
                     &nbsp;&nbsp;
                 </div>
             </div>
+        </form>
         </div>
     </div>
 </div>
