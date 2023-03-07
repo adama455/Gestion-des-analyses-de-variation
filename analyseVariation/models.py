@@ -125,6 +125,7 @@ class ActionIndividuelle(UserMixin, db.Model):
             libelle = []
             porteur = []
             echeance = []
+            statut = []
             id = []
             table = []
             liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
@@ -147,6 +148,7 @@ class ActionIndividuelle(UserMixin, db.Model):
                         ech.append(elem.echeance)
                         echeance.append(elem.echeance)
                         id.append(elem.id)
+                        statut.append(elem.status)
                         
                     liste_action[n-1].append(ref)
                     liste_action[n-1].append(lib)
@@ -157,6 +159,7 @@ class ActionIndividuelle(UserMixin, db.Model):
             table.append(porteur)
             table.append(echeance)
             table.append(id)
+            table.append(statut)
             #print('fds', table)
             nbre_act = []
             for elem in liste_action:
