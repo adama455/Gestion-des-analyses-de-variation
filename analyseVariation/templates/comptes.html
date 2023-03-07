@@ -119,10 +119,10 @@
                     <br>
                     <label class="form-label mg-b-10 text-white">Profil : <span class="tx-danger">*</span></label>
                     <select name="profil" id="profil" class="form-control wd-380 is-invalid" >
-                    {# <option value="{{user.profil}}">{{user.profil}}</option> #}
-                      <option value="ADMIN" {% if user.profil==ADMIN %} selected {% endif %}>ADMIN</option>
-                      <option value="MANAGER_OPERATIONNEL" {% if user.profil==MANAGER_OPERATIONNEL %} selected {% endif %}>MO</option>
-                      <option value="SUPERVISEUR_OPERATIONNEL" {% if user.profil==SUPERVISEUR_OPERATIONNEL %} selected {% endif %}>SO</option>
+                      <option default>Choisir profil</option>
+                      <option value="ADMIN" {% if user.profil == ADMIN %} selected {% endif %}>ADMIN</option>
+                      <option value="MANAGER_OPERATIONNEL" {% if user.profil == MANAGER_OPERATIONNEL %} selected {% endif %}>MO</option>
+                      <option value="SUPERVISEUR_OPERATIONNEL" {% if user.profil == SUPERVISEUR_OPERATIONNEL %} selected {% endif %}>SO</option>
                     </select>
                   </div><!-- col-4 -->
                 </div>
@@ -253,6 +253,7 @@
                   <br>
                   <label class="form-label mg-b-10 text-white">Profil : <span class="tx-danger">*</span></label>
                   <select name="profil" id="profil" class="form-control wd-380 is-invalid">
+                    <option default>Choisir profil</option>
                     <option value="ADMIN">ADMIN</option>
                     <option value="MANAGER_OPERATIONNEL">MO</option>
                     <option value="SUPERVISEUR_OPERATIONNEL">SO</option>

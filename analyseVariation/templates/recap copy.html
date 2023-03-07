@@ -1,0 +1,132 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="jumbotron p-0 mb-2 mt-5 tx-center az-content-label bg-light">RECAPUTILATIF DES ACTIONS ANALYSE </div>
+    <div class="recap p-3 shadow">
+        <table>
+            <caption>Récap de l'analyse global</caption>
+            <tr class="tx-center py-2 fs-5">
+                <th>
+                    CC
+                </th>
+                <th>
+                    valeur
+                </th>
+                <th>
+                    Pourquoi 1
+                </th>
+                <th>
+                    Pourquoi 2
+                </th>
+                <th>
+                    Pourquoi 3
+                </th>
+                <th>
+                    Pourquoi 4
+                </th>
+                <th>
+                    Pourquoi 5
+                </th>
+                <th>
+                    Famille
+                </th>
+                <th>
+                    Libelle Action
+                </th>
+                <th>
+                    Porteur
+                </th>
+                <th>
+                    Echeance
+                </th>
+                <th>
+                    Statut
+                </th>
+            </tr>
+            {% for j in range(nbre_analyse) %}
+                {% for i in range(6) %}
+                    <tr >
+                        {% if i==0 %}
+                        <td rowspan="6" class="col-1 tx-center border">
+                            {{ liste_identifiant[j] }}
+                        </td>
+                        <td rowspan="6" class="col-1 tx-center border">
+                            {{ valeurs_aberante_cc }}
+                        </td>
+                        <td rowspan="2" class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][0][i] }}
+                        </td>
+                        {% elif i==2 %}
+                        <td rowspan="2" class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][0][1] }}
+                        </td>
+                        {% elif i==4 %}
+                        <td rowspan="2" class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][0][2] }}
+                        </td>
+                        {%  endif %}
+                        <td class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][1][i] }}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][2][i] }}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][3][i] }}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][4][i] }}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            {{ table_liste_pourquoi[j][5][i] }}
+                        </td>
+                        <td class="col-2 tx-center border">
+                            {% for k in range(table_nbre_action[j][i]) %}
+                                <p>{{ table_liste_action[j][i][1][k] }}</p>
+                            {%  endfor %}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            {% for k in range(table_nbre_action[j][i]) %}
+                                <p>{{ table_liste_action[j][i][2][k] }}</p>
+                            {%  endfor %}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            {% for k in range(table_nbre_action[j][i]) %}
+                                <p>{{ table_liste_action[j][i][3][k] }}</p>
+                            {%  endfor %}
+                        </td>
+                        <td class="col-1 tx-center border">
+                            
+                        </td>
+                    </tr>
+                {%  endfor %}
+            {%  endfor %}
+        </table>
+
+        {% if current_user.is_authenticated %}
+        <div class="detail-analyse d-flex row">
+            <div href="#" id="action_programme" class="w-100 fs-5 col-3">
+            </div>
+            <div href="#" id="action_programme" class="w-100 fs-5 col-8">
+            </div>
+            <a href="{{ url_for('rejeterAv', reference=reference) }}" id="action_programme" class="w-100 fs-5 col-1">
+                <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Suivi actions</button>
+            </a>
+        </div>
+        {% endif %}
+        {% if current_user.is_authenticated and (current_user.profil)!='MANAGER_OPERATIONNEL' %}
+        <div class="detail-analyse d-flex row">
+            <a href="#" id="action_programme" class="w-100 fs-5 col-3">
+            <button type="button" class="btn btn-primary rounded my-3 float-left" id="exporter-an">Exporter</button>
+            </a>
+            <a href="#" id="action_programme" class="w-100 fs-5 col-8">
+                <button type="button" class="btn btn-primary rounded my-3 float-right" id="valider-av">Valider</button>
+            </a>
+            <a href="{{ url_for('rejeterAv', reference=reference) }}" id="action_programme" class="w-100 fs-5 col-1">
+                <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Rejeter</button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+{% endblock content %}

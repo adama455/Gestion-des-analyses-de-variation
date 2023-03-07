@@ -1,0 +1,98 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="jumbotron p-0 mb-2 mt-5 tx-center az-content-label bg-light">RECAPUTILATIF DES ACTIONS ANALYSE </div>
+    <div class="recap p-3 shadow">
+        <table>
+            <caption>Récap de l'analyse global</caption>
+            <tr class="tx-center py-2 fs-5">
+                <th>
+                    Conseiller
+                </th>
+                <th>
+                    valeur
+                </th>
+                
+                <th>
+                    Cause racine
+                </th>
+                <th>
+                    Famille cause
+                </th>
+                <th>
+                    Actions
+                </th>
+                <th>
+                    Porteurs
+                </th>
+                <th>
+                    Echeances
+                </th>
+                <th>
+                    Statut
+                </th>
+                <th>
+                    Edit
+                </th>
+            </tr>
+            {% for j in range(nbre_cc) %}
+                {% for i in range(N[j]) %}
+                        <tr>
+                            {% if i==0 %}
+                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
+                                {{ Nom_cc[j] }}
+                            </td>
+                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
+                                {{ Valeur_cc[j] }}
+                            </td>
+                            {%  endif %}
+                            {%  for m in range(2) %}
+                                {% if i==0 %}
+                                    <td rowspan="{{ nbre_act[j][0] }}" class="col-2 tx-center border">
+                                        {{ table_pourquoi_axe[m][j][0] }}
+                                    </td>
+                                    {% elif i==nbre_act[j][0] %}
+                                    <td rowspan="{{ nbre_act[j][1] }}" class="col-2 tx-center border">
+                                        {{ table_pourquoi_axe[m][j][1] }}
+                                    </td>
+                                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]) %}
+                                    <td rowspan="{{ nbre_act[j][2] }}" class="col-2 tx-center border">
+                                        {{ table_pourquoi_axe[m][j][2] }}
+                                    </td>
+                                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]) %}
+                                    <td rowspan="{{ nbre_act[j][3] }}" class="col-2 tx-center border">
+                                        {{ table_pourquoi_axe[m][j][3] }}
+                                    </td>
+                                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]) %}
+                                    <td rowspan="{{ nbre_act[j][4] }}" class="col-2 tx-center border">
+                                        {{ table_pourquoi_axe[m][j][4] }}
+                                    </td>
+                                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]+nbre_act[j][4]) %}
+                                    <td rowspan="{{ nbre_act[j][5] }}" class="col-2 tx-center border">
+                                        {{ table_pourquoi_axe[m][j][5] }}
+                                    </td>
+                                {%  endif %}
+                            {%  endfor %}
+
+                            <td class="col-2 tx-center border">
+                                {{ table_action[j][0][i] }}
+                            </td>
+                            <td class="col-1 tx-center border">
+                                {{ table_action[j][1][i] }}
+                            </td>
+                            <td class="col-1 tx-center border">
+                                {{ table_action[j][2][i] }}
+                            </td>
+                            <td class="col-1 tx-center border">
+                                En attente
+                            </td>
+                            <td class="col-1 tx-center border">
+                                <a href="{{ url_for('editpa', id_action=table_action[j][3][i]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                    <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
+                                </a>
+                            </td>
+                        </tr>
+                {%  endfor %}
+            {%  endfor %}
+        </table>
+    </div>
+{% endblock content %}

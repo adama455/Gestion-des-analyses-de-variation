@@ -395,7 +395,7 @@ $(document).ready(function () {
     data = ACTION.toString();
     url = "http://127.0.0.1:5000/ajouter_action";
     ajax(method, data, url);
-    window.location.reload();
+    //window.location.reload();
   });
 });
 
