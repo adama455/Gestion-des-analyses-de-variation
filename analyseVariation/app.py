@@ -334,6 +334,9 @@ def listeVa():
         form = RegistrationForm()
         ref = request.args.get('ref')
         liste = ValeursAberrante.query.filter_by(reference_av=ref).all()
+        data = Enregistrement_AV.query.filter_by(reference_av=ref).first()
+        kpi = request.args.get('kpi')
+        libelle = data.libelle_av
         n = len(liste)
         statut_action = 'En attente'
         # print("data = ", liste[1].nom_cc, n)
@@ -345,10 +348,9 @@ def listeVa():
         Date = date.today()
     except:
         flash("Erreur infos non prise en charge")
-       
-                              
-    return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, reference=ref,statut_action=statut_action,
-                           Date=Date,nom=nom,prenom=prenom)
+                                    
+    return render_template('listeVa.html', title='liste VA', form=form, liste=liste, n=n, reference=ref,statut_action=statut_action,
+                           Date=Date,nom=nom,prenom=prenom,libelle_analyse=libelle)
 
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
@@ -409,6 +411,7 @@ def analyse_agent():
     data_exist = 0
     #axe_id = Cause.query.filter_by(libelle)
     datacc = AnalyseApporter.query.filter_by(identifiant=id).first()
+    print("donnée_apport:", datacc)
     if request.method=='POST':
         Pourquoi1.insert_p1(int(n)+1)
         Pourquoi2.insert_p2(int(n)+1)
@@ -419,8 +422,10 @@ def analyse_agent():
         return redirect(url_for('ajouter_action', reference=reference, n=n, id=id))
     elif datacc:
         data_exist = 1
-        #liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
+        # liste_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[0]
         liste_pourquoi = AnalyseApporter.traitement_data_pourquoi(id,datacc)[0]
+        print("Liste_pourquoi:", liste_pourquoi)        
+        
         # nbre_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)[1]
         #print(liste_pourquoi,liste_pourquoiBis)
         #liste_pourquoi = AnalyseApporter.update_pourquoi(datacc, liste_pourquoi)[0]
@@ -459,7 +464,7 @@ def ajouter_action():
     #action_cc = ActionIndividuelle.query.filter_by(pourquoi5_id=int(n)).all()
     liste_action = ActionIndividuelle.recup_action(all_causes_racines)[0]
     nbre_act = ActionIndividuelle.recup_action(all_causes_racines)[1]
-    #print(" liste_action",liste_action)
+    # print(" liste_action",liste_action)
     #Insertion des donnees action individuelles au niveau de la base de donnees
     #On recupere les donnees poster par js sur l'url ajouter-action............
     #print(request.form.get('data'))
@@ -488,16 +493,18 @@ def ajouter_action():
         flash("Pas de modifications apportées sur les pourquoi saisis")
     if datacc:
         #print(exist)
-        #data_pourquoi = AnalyseApporter.traitement_data_pourquoi(id,datacc)
+        # data_pourquoi = AnalyseApporter.traitement_data_pourquoi(id,datacc)
         data_pourquoi = AnalyseApporter.traitement_data_analyse_apporter(datacc)
         liste_pourquoi = data_pourquoi[0]
         nbre_pourquoi = data_pourquoi[1]  
-        #print(liste_pourquoi)
+        print("liste_pourquoi:",liste_pourquoi)
         all_va = ValeursAberrante.query.filter_by(id=int(n)+1).all()
+        print("all_va:",all_va)
         Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
         Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
         CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
-        nbre_p1 = len(Pourquoi[0][0])
+        nbre_p1 = len(Pourquoi[0][0]) 
+        
         return render_template('ajouter-action.html', nbre_p1=nbre_p1, n=n, nbre_pourquoi=nbre_pourquoi, datacc=datacc, reference=reference, libelle=libelle, agent=agent, liste_action=liste_action, Pourquoi=Pourquoi,
                                CC=CC, Action=Action, liste_pourquoi=liste_pourquoi, nom_conseiller=id, exist=exist, valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act, cause=cause)
 
@@ -525,7 +532,7 @@ def recap_value():
     #    table_liste_action.append(liste_action)
     #    table_nbre_action.append(nbre_action)
     #    print(len(liste_pourquoi), len(liste_action[0]))
-
+    
     all_data = AnalyseApporter.query.all()
     all_va = ValeursAberrante.query.all()
     table_pourquoi1 = []
@@ -550,6 +557,7 @@ def recap_value():
             if element.id not in liste_id:
                 liste_id.append(element.id)
     # Pour chaque id on recupere l'ensemble des causes racines et les axes d'analyses correspondante
+    
     for element in liste_id:
         #print(element, liste_id)
         all_pourquoi1 = Pourquoi1.query.filter_by(valeur_aberrante_id=element).all()
@@ -593,11 +601,11 @@ def recap_value():
         N.append(act[0]+act[1]+act[2]+act[3]+act[4]+act[5])# liste des nombre d'actions totale pour tous les conseillers
         nbre_cc += 1
     table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe]
-    #print(table_pourquoi_axe)
+    # print("table_pourquoi_axe: ",table_pourquoi1)
     act_p1 = [3, 2, 0, 0, 0, 0]
     #print()
     return render_template('recap.html', N=N, nbre_act=nbre_act, nbre_cc=nbre_cc, table_pourquoi_axe=table_pourquoi_axe, 
-                           table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc)
+                        table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc) 
 
 
     return render_template('recap.html', table_liste_pourquoi=table_liste_pourquoi, table_nbre_pourquoi=table_nbre_pourquoi, liste_identifiant=liste_identifiant,

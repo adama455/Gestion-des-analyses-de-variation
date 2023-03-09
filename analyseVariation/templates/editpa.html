@@ -2,8 +2,8 @@
 {% block content %}
 
 <div class="container">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-5">MIS A JOUR D'UN PLAN D'ACTION</div>
 
-    <h1 class="text-dark d-flex justify-content-center align-items-center py-1 my-4">MIS A JOUR D'UN PLAN D'ACTION</h1>
     {# <div class="row w-100  recherche mx-0  my-3">
         <div class="col-8 d-flex">
             <input type="search" name="recherche" id="" placeholder="Rechercher une AV"
@@ -13,10 +13,10 @@
             <button class="btn btn-info" class="">Lancer</button>
         </div>
     </div> #}
-    <div class="card bg-gray-100 bd-10">
+    <div class="card bg-gray-100 bd-10 border border-dark">
         <div class="card-body">
          <form action="#" method="POST">
-            <table id="" class="table fs-5 border">
+            <table id="" class="fs-5 border">
                 <thead>
                     <tr>
                         <th class="col-3 fs-5">Reference action</th>
@@ -27,9 +27,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ valeur_aberrante.reference_av }}</td>
-                        <td>Libelle av</td>
-                        <td>{{ user.prenom +' '+ user.nom }}</td>
+                        <td class="col-3">{{ valeur_aberrante.reference_av }}</td>
+                        <td class="col-4">Libelle av</td>
+                        <td class="col-3">{{ user.prenom +' '+ user.nom }}</td>
                         <td>
                             <div class="col d-flex flex-column p-0 mg-b-10">
                                 <select name="statut" id="statut" class="bg-white border me-2 fs-5">
@@ -44,7 +44,7 @@
                 </tbody>
             </table>
             <br>
-            <table class="table border ">
+            <table class="table border">
                 <thead>
                     <tr>
                         <th class="col-12 fs-5 text-center">ACTION</th>

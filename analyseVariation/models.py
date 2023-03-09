@@ -300,7 +300,7 @@ class AnalyseApporter(db.Model):
         pourquoi_5 = [ elem for elem in datacc.pourquoi_5.split('_/_') if not [el for el in car_exclu if el==elem]]
         liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
-
+        print("Liste_Pourquoi:", liste_pourquoi)
         return liste_pourquoi, nbre_pourquoi
     
     def traitement_data_pourquoi(id, datacc):
@@ -314,7 +314,10 @@ class AnalyseApporter(db.Model):
         pourquoi_5 = [ elem.details for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
         liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
-        print(pourquoi_1)
+            
+        print("Pourquoi_1:", Pourquoi1.query.filter_by(valeur_aberrante_id=id).all())
+        # print("Pourquoi_3:",pourquoi_3)
+        print("axes_analyse:",axes_analyse)
 
         return liste_pourquoi, nbre_pourquoi
 
@@ -352,7 +355,6 @@ class AnalyseApporter(db.Model):
                 db.session.commit()
         except:
             print("Quelque chose s'est mal passer")
-
 
 class ValeursAberrante(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
