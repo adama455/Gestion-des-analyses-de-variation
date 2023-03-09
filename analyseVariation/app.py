@@ -464,12 +464,11 @@ def ajouter_action():
     #action_cc = ActionIndividuelle.query.filter_by(pourquoi5_id=int(n)).all()
     liste_action = ActionIndividuelle.recup_action(all_causes_racines)[0]
     nbre_act = ActionIndividuelle.recup_action(all_causes_racines)[1]
-    # print(" liste_action",liste_action)
+    #print(" liste_action",liste_action)
     #Insertion des donnees action individuelles au niveau de la base de donnees
     #On recupere les donnees poster par js sur l'url ajouter-action............
     #print(request.form.get('data'))
     try:
-    #if True:
         data_input_action = request.form.get('data')
         data_input_action = data_input_action.split('|')
         data_input_action.pop()
@@ -483,7 +482,6 @@ def ajouter_action():
                 action = ActionIndividuelle(act[0], act[1], act[2], act[3], '','', p5_id)
                 db.session.add(action)
                 db.session.commit()
-
     except:
         print('echec de recuperation des elements')
     if request.method=='POST':
