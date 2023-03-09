@@ -19,7 +19,7 @@
                             <td>{{ liste[i].nom_cc }}</td>
                             <td>{{ liste[i].valeurs }}</td>
                             <td>
-                                <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', reference=reference, n=i ) }}">
+                                <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', fichier_id=fichier_id, id_va=i+1 ) }}">
                                     <i class="fa-solid fa-pen-to-square fs-5 lien_analyse"></i>
                                     <!--<div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
                                         <i class="fa-solid fa-pen-to-square"></i>

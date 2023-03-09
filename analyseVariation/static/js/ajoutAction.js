@@ -350,7 +350,8 @@ function ajax(method, data, Url) {
   console.log(id);
   var reference = document.getElementById("reference_av_act").value;
   var n = url.searchParams.get("n");
-  url = Url +'?reference='+reference+'&n='+n+'&id='+id
+  var fichier_id = url.searchParams.get("fichier_id");
+  url = Url +'?fichier_id='+fichier_id+'&n='+n+'&id='+id
   console.log(url)
   $.ajax({
     data: { data: data }, //grab text between span tags

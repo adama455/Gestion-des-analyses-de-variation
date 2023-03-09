@@ -101,7 +101,7 @@
                         <label for="" class="col-2 fs-5">Famille Causes </label>
                         <div class="col pe-0">
                             <div class="col d-flex row p-0 ">
-                                {%  for i in range(1,7) %}
+                                {%  for i in range(1,nbre_pourquoi[4]+1) %}
                                     <input  class="col pe-0 me-2 fs-5" id="axes_analyse_{{ i }}" name="axes_analyse_{{ i }}" value="{{ liste_pourquoi[5][i-1] }}" disabled>
                                 {%  endfor %}
                             </div>
@@ -112,7 +112,7 @@
                     <label for="" class="col-2"> </label>
                     <div class="col p-0 ms-4">
                         <div class="col d-flex row mg-b-20 p-0 " id="div-btn">
-                            {%  for i in range(1,7) %}
+                            {%  for i in range(1,nbre_pourquoi[4]+1) %}
                             {%  if liste_pourquoi[5][i-1] %}
                             <div class="col-2 p-0 ">
                                 <a href="#" class="definir-action fs-5">
@@ -153,56 +153,7 @@
     </form>
 
     <!--............ Modal ...............-->
-    {%  if exist %}
-    <div class="modal fade" id="modal_action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Définir action</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body d-flex flex-column" id="modal-body">
-                    <h3 class="">Bien sur que Action existe </h3>
-                    <div class="d-flex flex-column ">
-                        <form action="#" method="POST" id="form_actions">
-                            <div class="form-input" id="form-input">
-                                {# <div class="row mb-3">
-                                    <h3 class="modal-title fs-5 py-2" id="modal_tittle">action_n°1:</h3>
-                                    <div class="col-3 d-flex flex-column">
-                                        <label for="reference_action" class="d-flex justify-content-start">Ref
-                                            action</label>
-                                        <input type="text" name="reference_action" id="reference_action" class="fs-5"
-                                            value="">
-                                    </div>
-                                    <div class="col-3 d-flex flex-column">
-                                        <label for="libelle_action" class="d-flex justify-content-start">Libellé
-                                            action</label>
-                                        <input type="text" name="libelle_action" id="libelle_action" class="fs-5">
-                                    </div>
-                                    <div class="col-3 d-flex flex-column">
-                                        <label for="porteur_action" class="d-flex justify-content-start">Porteur</label>
-                                        <input type="text" name="porteur_action" id="porteur_action" class="fs-5">
-                                    </div>
-                                    <div class="col-3 d-flex flex-column">
-                                        <label for="delai_action" class="d-flex justify-content-start">Echéance</label>
-                                        <input type="date" name="echeance_action" id="echeance_action" class="fs-5">
-                                    </div>
-                                </div> #}
-                            </div>
-                            <div class="modal-footer py-3" id="modal-footer">
-                                <button type="button" class="btn btn-primary rounded" id="autre-act">Autre
-                                    act..</button>
-                                <button type="submit" id="bouton_valider_action" class="btn btn-primary rounded"
-                                    data-bs-dismiss="modal">valider</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    {%  else %}
+    
     <div class="modal fade" id="modal_action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -251,7 +202,6 @@
             </div>
         </div>
     </div>
-    {%  endif %}
 
 </div>
 <!-- ...............Récap............... -->

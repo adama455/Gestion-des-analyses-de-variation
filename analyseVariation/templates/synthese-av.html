@@ -27,28 +27,35 @@
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                     <input class="col-2" style="background-color: #D9D9D9;" value="KPI : {{ kpi }}" >
                     <div class="col-5 d-flex row">
-                        <input class="col-6" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
-                        <input class="col-6" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
+                        <input class="col-6" type="date" id="date1" name="date1" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
+                        <input class="col-6" type="date" id="date2" name="date2" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
                     </div>
                    <!-- <input class="col-3" style="background-color: #D9D9D9;" value="Periode"> -->
-                    <input class="col-3" style="background-color: #D9D9D9;" value="Equipe">
+                   <div class="col-3" style="background-color: #D9D9D9;">
+                    <select class="col" id="equipe" name="equipe" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
+                        <option label="Equipe"></option>
+                        {% for i in range(3) %}
+                            <option value="Equipe">Equipe {{ i }}</option>
+                        {% endfor %}
+                    </select>
+                   </div>
                 </div>
                 <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                     <div class="col-12 text-center" style="background-color: #D9D9D9;">Syntheses des resultats</div> 
                 </div>
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                    <div class="col-3" style="background-color: #D9D9D9;">Nombres de mesures</div>
+                    <div class="col-3" style="background-color: #D9D9D9;">Nombres de mesures : {{ paramettre_analyse_variation[3] }}</div>
                     <div class="col-2" style="background-color: #D9D9D9;">Objectif</div>
-                    <div class="col-2" style="background-color: #D9D9D9;">VSF</div>
-                    <div class="col-3" style="background-color: #D9D9D9;">Mesures a l'objectif</div>
+                    <div class="col-2" style="background-color: #D9D9D9;">VSF : {{ paramettre_analyse_variation[2] }}</div>
+                    <div class="col-3" style="background-color: #D9D9D9;">Mesures a l'objectif : {{ paramettre_analyse_variation[4] }}</div>
                 </div>
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                    <div class="col-4" style="background-color: #D9D9D9;">Limite de controle superieure : 1000</div>
-                    <div class="col-4" style="background-color: #D9D9D9;">Nombres de VA en sur-perf : {{ nbr_va_sur_perf }}</div>
+                    <div class="col-5" style="background-color: #D9D9D9;">Limite de controle superieure : {{ paramettre_analyse_variation[0] }}</div>
+                    <div class="col-5" style="background-color: #D9D9D9;">Nombres de VA en sur-perf : {{ nbr_va_sur_perf }}</div>
                 </div>
                 <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                    <div class="col-4" style="background-color: #D9D9D9;">Limite de controle inferieure : 600</div>
-                    <div class="col-4" style="background-color: #D9D9D9;">Nombres de VA en sous-perf : {{ nbr_va_sou_perf }}</div>
+                    <div class="col-5" style="background-color: #D9D9D9;">Limite de controle inferieure : {{ paramettre_analyse_variation[1] }}</div>
+                    <div class="col-5" style="background-color: #D9D9D9;">Nombres de VA en sous-perf : {{ nbr_va_sou_perf }}</div>
                 </div>
                 <br>
                 <div class="col-12 d-flex row" style="justify-content: space-between;">
@@ -64,9 +71,7 @@
                     </div>
                 </div>
             </form>
-            
         </div>
     </div>
-
 </div>
 {% endblock content %}

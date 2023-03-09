@@ -32,7 +32,7 @@
                             <td>{{ liste_fichier[i][1] }}</td>
                             <td>{{ liste_fichier[i][2] }}</td>
                             <td>
-                                <a href="{{ url_for('listeVa', ref=liste_fichier[i][0]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                <a href="{{ url_for('listeVa', fichier_id=liste_fichier[i][0]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
                                 <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
                             </a>
                             </td>
