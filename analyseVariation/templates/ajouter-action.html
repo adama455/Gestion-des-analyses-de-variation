@@ -138,7 +138,7 @@
                     <div class="d-flex justify-content-end ">
                         <div class="d-flex col-10 justify-content-end p-0 ">
                             <div class="col-2 d-flex justify-content-end p-0 ">
-                                <a href="{{ url_for('listeVa', ref=reference) }}">
+                                <a href="{{ url_for('listeVa', fichier_id=fichier_id) }}">
                                     <div class="btn tx-white btn-final rounded">Autre Valeur</div>
                                 </a>
                             </div>
@@ -260,31 +260,31 @@
                                 {{ CC[2][j] }}
                             </td>
                         {%  endif %}
-                        {% if nbre_p1==3 %}
+                        {% if Pourquoi[6][j]==3 %}
                             {% if i==0 %}
                                 <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border">
                                     {{ Pourquoi[0][j][0] }}
                                 </td>
-                            {% elif i==3 %}
+                            {% elif i==Action[1][j][0]+Action[1][j][1] %}
                                 <td rowspan="{{ Action[1][j][2]+Action[1][j][3] }}" class="col-1 tx-center border">
                                     {{ Pourquoi[0][j][1] }} 
                                 </td>
-                            {% elif i==5 %}
+                            {% elif i==Action[1][j][0]+Action[1][j][1]+Action[1][j][2]+Action[1][j][3] %}
                                 <td rowspan="{{ Action[1][j][4]+Action[1][j][5] }}" class="col-1 tx-center border">
                                     {{ Pourquoi[0][j][2] }}
                                 </td>
                             {%  endif %}
-                        {% elif nbre_p1==2 %}
+                        {% elif Pourquoi[6][j]==2 %}
                             {% if i==0 %}
-                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1]+Action[1][j][2] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border">
                                     {{ Pourquoi[0][j][0] }}
                                 </td>
-                            {% elif i==4 %}
-                                <td rowspan="{{ Action[1][j][3]+Action[1][j][4]+Action[1][j][5] }}" class="col-1 tx-center border">
+                            {% elif i==Action[1][j][0]+Action[1][j][1] %}
+                                <td rowspan="{{ Action[1][j][3]+Action[1][j][2] }}" class="col-1 tx-center border">
                                     {{ Pourquoi[0][j][1] }} 
                                 </td>
                             {%  endif %}
-                        {% elif nbre_p1==1 %}
+                        {% elif Pourquoi[6][j]==1 %}
                             {% if i==0 %}
                                 <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
                                     {{ Pourquoi[0][j][0] }}
@@ -319,7 +319,6 @@
                                 </td>
                             {%  endif %}
                         {%  endfor %}
-
                         <td class="col-1 tx-center border">
                             {{ Action[2][j][0][i] }}
                         </td>
@@ -330,7 +329,7 @@
                             {{ Action[2][j][2][i] }}
                         </td>
                         <td class="col-1 tx-center border">
-                            En attente
+                            {{ Action[2][j][4][i] }}
                         </td>
                         
                     </tr>

@@ -128,7 +128,7 @@ def compte():
 @app.route("/editUser", methods=['GET', 'POST'])
 @login_required
 def editUser():
-    form = RegistrationForm()   
+    form = RegistrationForm()
     if request.method =='POST':
         data = User.query.get(request.form.get('id'))
         data.username = request.form['username']
@@ -263,10 +263,12 @@ def supprimerPlateau(id):
 def listeAv():
     form = LoginForm()
     liste_analyse_variation = []
-    all_av = Enregistrement_AV.query.all()
+    all_av = Fichiers.query.all()
     nbre_av =len(all_av)
     for elem in all_av:
-        champ_analyse_variation = [elem.reference_av, elem.libelle_av, elem.agent, elem.date]
+        prenom_agent = User.query.filter_by(id=elem.user_id).first().prenom
+        nom_agent = User.query.filter_by(id=elem.user_id).first().nom
+        champ_analyse_variation = [elem.id, elem.libelle, prenom_agent+' '+nom_agent, elem.date, elem.statut]
         liste_analyse_variation.append(champ_analyse_variation)
     return render_template('listeAv.html', title='Register', form=form, liste_analyse_variation=liste_analyse_variation, 
                            nbre_av=nbre_av)
@@ -305,7 +307,7 @@ def editpa():
         action.porteur = request.form.get('porteur_action')
         action.echeance = request.form.get('echeance_action')
         action.commentaire = request.form.get('commentaire')
-        db.session.commit()
+        db.session.commit() 
     return render_template('editpa.html', title='Register', form=form, action=action, user=user, 
                            valeur_aberrante=valeur_aberrante)
 
@@ -364,14 +366,11 @@ def analyse_agent():
     fichier_id = int(request.args.get('fichier_id'))
     try:
         data_fichier = Fichiers.query.filter_by(id=fichier_id).first()
-        causes = Cause.query.all()
-        cause = []
-        for elem in causes:
-            cause.append(elem.libelle)
+        cause = Cause.query.all()
         libelle = data_fichier.libelle
         id_va = request.args.get('id_va') ### Il constitut l'id de la valeur aberrante
         valeurs_aberante = ValeursAberrante.query.filter_by(id=int(id_va)).first()
-        nom_conseiller = valeurs_aberante.nom_cc.split('(')[1].split(')')[0].strip(' ')
+        nom_conseiller = valeurs_aberante.nom_cc
         valeurs_aberante_cc = valeurs_aberante.valeurs
         nom = User.query.filter_by(id=data_fichier.user_id).first().nom
         prenom = User.query.filter_by(id=data_fichier.user_id).first().prenom
@@ -379,7 +378,9 @@ def analyse_agent():
         initial =prenom[0] + nom[0]
         id = nom_conseiller+initial
         data_exist = 0
+        ## datacc contient les causes racines du conseillers en cours d'analyse
         datacc = Pourquoi5.query.filter_by(valeur_aberrante_id=id_va).first()
+        
     except AttributeError:
         print('Un probleme est survenu sur la recuperation des attributs.')
     if request.method=='POST':
@@ -388,22 +389,18 @@ def analyse_agent():
         Pourquoi3.insert_p3(int(id_va))
         Pourquoi4.insert_p4(int(id_va))
         Pourquoi5.insert_p5(int(id_va))
+        valeurs_aberante.statut = 'En cours'
+        db.session.commit()
         # AnalyseApporter.insert_update_pourquoi(id, datacc, fichier_id)
-        return redirect(url_for('ajouter_action', fichier_id=fichier_id, id_va=id_va, id=id))
+        return redirect(url_for('ajouter_action', fichier_id=fichier_id, id_va=id_va))
     elif datacc:
         data_exist = 1
-        liste_pourquoi = AnalyseApporter.traitement_data_pourquoi(id_va,datacc)[0]
-        #nbre_pourquoi = AnalyseApporter.traitement_data_pourquoi(datacc)[1]
-        #print(liste_pourquoi,liste_pourquoiBis)
-        #liste_pourquoi = AnalyseApporter.update_pourquoi(datacc, liste_pourquoi)[0]
-        #nbre_pourquoi = AnalyseApporter.update_pourquoi(datacc)[1]
+        liste_pourquoi = Fichiers.traitement_data_pourquoi(id_va)[0]
         return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi, 
                                fichier_id=fichier_id, libelle=libelle, cause=cause, nom_conseiller=nom_conseiller, 
                                valeurs_aberante_cc=valeurs_aberante_cc, agent=agent)
-        # except:
-        flash("Une erreur s'est produit")
     try:
-        return render_template('analyse-agent.html', fichier_id=fichier_id, libelle=libelle, agent=agent, cause=cause, 
+        return render_template('analyse-agent.html', fichier_id=id, libelle=libelle, agent=agent, cause=cause, 
                            nom_conseiller=nom_conseiller, valeurs_aberante_cc=valeurs_aberante_cc)    
     except UnboundLocalError:
         flash('Erreur de referencement.')
@@ -416,14 +413,11 @@ def ajouter_action():
     fichier_id = request.args.get('fichier_id')
     print(fichier_id)
     data_fichier = Fichiers.query.filter_by(id=int(fichier_id)).first()
-    causes = Cause.query.all()
-    cause = []
-    for elem in causes:
-        cause.append(elem.libelle)
     libelle = data_fichier.libelle #libelle de l'analyse de variation
-    id_va= int(request.args.get('id_va')) #rang du conseiller sur la liste des valeurs aberantes
-    nom_conseiller = ValeursAberrante.query.filter_by(id=id_va).first().nom_cc
-    valeurs_aberante_cc = ValeursAberrante.query.filter_by(id=id_va).first().valeurs
+    id_va= int(request.args.get('id_va'))
+    valeur_aberrante = ValeursAberrante.query.filter_by(id=id_va).first()
+    nom_conseiller = valeur_aberrante.nom_cc
+    valeurs_aberante_cc = valeur_aberrante.valeurs
     nom = User.query.filter_by(id=data_fichier.user_id).first().nom
     prenom = User.query.filter_by(id=data_fichier.user_id).first().prenom
     agent = prenom + ' '+ nom
@@ -451,112 +445,39 @@ def ajouter_action():
     except AttributeError:
         print('echec de recuperation des elements, erreur attribut')
     if request.method=='POST':
+        Pourquoi1.insert_p1(int(id_va))
+        Pourquoi2.insert_p2(int(id_va))
+        Pourquoi3.insert_p3(int(id_va))
+        Pourquoi4.insert_p4(int(id_va))
+        Pourquoi5.insert_p5(int(id_va))
+        valeur_aberrante.statut = 'Terminer'
+        db.session.commit()
         return redirect(url_for('listeVa', fichier_id=fichier_id))
-        # except:
-        # flash("Pas de modifications apportées sur les pourquoi saisis")
     if datacc:
-        data_pourquoi = AnalyseApporter.traitement_data_pourquoi(id_va,datacc)
+        data_pourquoi = Fichiers.traitement_data_pourquoi(id_va)
         liste_pourquoi = data_pourquoi[0]
         nbre_pourquoi = data_pourquoi[1]
         all_va = ValeursAberrante.query.filter_by(id=id_va).all()
         Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
         Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
         CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
-        return render_template('ajouter-action.html', id_va=id_va, nbre_pourquoi=nbre_pourquoi, datacc=datacc, 
-                               fichier_id=fichier_id, libelle=libelle, agent=agent, liste_action=liste_action, 
-                               Pourquoi=Pourquoi,CC=CC, Action=Action, liste_pourquoi=liste_pourquoi, nom_conseiller=id, 
-                               valeurs_aberante_cc=valeurs_aberante_cc, nbre_act=nbre_act, cause=cause)
+        print(Action[1])
+        return render_template('ajouter-action.html', id_va=id_va, nbre_pourquoi=nbre_pourquoi, datacc=datacc, Action=Action,
+                               fichier_id=fichier_id, libelle=libelle, agent=agent, liste_action=liste_action, Pourquoi=Pourquoi,
+                               CC=CC, liste_pourquoi=liste_pourquoi, nom_conseiller=nom_conseiller, nbre_act=nbre_act,
+                               valeurs_aberante_cc=valeurs_aberante_cc)
 
 @app.route("/recaputilatif", methods=('POST', 'GET'))
 @login_required
 def recap_value():
     #all_data = AnalyseApporter.query.all()
-    all_va = ValeursAberrante.query.all()
-    table_pourquoi1 = []
-    table_pourquoi2 = []
-    table_pourquoi3 = []
-    table_pourquoi4 = []
-    table_pourquoi5 = []
-    table_axe = []
-    liste_identifiant = []
-    table_liste_pourquoi = []
-    nbre_act = []
-    N = []
-    Nom_cc = []
-    Valeur_cc = []
-    table_action = []
-    nbre_cc=0
-    liste_id=[]
-    # On récupere tous les identifiants qui ont ete analyse qu'on met dans list_id
-    for element in all_va:
-        all_pourquoi5 = Pourquoi5.query.filter_by(valeur_aberrante_id=element.id).all()
-        for elem in all_pourquoi5:
-            if element.id not in liste_id:
-                liste_id.append(element.id)
-    # Pour chaque id on recupere l'ensemble des causes racines et les axes d'analyses correspondante
-    for element in liste_id:
-        all_pourquoi1 = Pourquoi1.query.filter_by(valeur_aberrante_id=element).all()
-        all_p1 = []
-        for elem in all_pourquoi1:
-            all_p1.append(elem.details)
-        all_pourquoi2 = Pourquoi2.query.filter_by(valeur_aberrante_id=element).all()
-        all_pourquoi3 = Pourquoi3.query.filter_by(valeur_aberrante_id=element).all()
-        all_pourquoi4 = Pourquoi4.query.filter_by(valeur_aberrante_id=element).all()
-        all_pourquoi5 = Pourquoi5.query.filter_by(valeur_aberrante_id=element).all()
-        all_p2 = []
-        all_p3 = []
-        all_p4 = []
-        all_p5 = []
-        all_axe_analyse = []
-        for i in range(len(all_pourquoi5)):
-            axe = Cause.query.filter_by(id=all_pourquoi5[i].axe_analyse_id).first().libelle
-            all_axe_analyse.append(axe)
-            all_p2.append(all_pourquoi2[i].details)
-            all_p3.append(all_pourquoi3[i].details)
-            all_p4.append(all_pourquoi4[i].details)
-            all_p5.append(all_pourquoi5[i].details)
-        nom_cc = ValeursAberrante.query.filter_by(id=element).first().nom_cc
-        Nom_cc.append(nom_cc)
-        valeur_cc = ValeursAberrante.query.filter_by(id=element).first().valeurs
-        Valeur_cc.append(valeur_cc)
-        # Pour chaque cause racine on recupere l'ensemble des actions definis 
-        #liste_action = ActionIndividuelle.recup_action(all_pourquoi5)[0] #l'ensemble des actions par id
-        table = ActionIndividuelle.recup_action(all_pourquoi5)[2] #l'ensemble des actions par id
-        act = ActionIndividuelle.recup_action(all_pourquoi5)[1] # liste nombre d'actions par id
-        table_pourquoi1.append(all_p1) # l'ensemble des pourquoi1 pour tous les conseillers
-        table_pourquoi2.append(all_p2) # l'ensemble des pourquoi2 pour tous les conseillers
-        table_pourquoi3.append(all_p3) # l'ensemble des pourquoi3 pour tous les conseillers
-        table_pourquoi4.append(all_p4) # l'ensemble des pourquoi4 pour tous les conseillers
-        table_pourquoi5.append(all_p5) # l'ensemble des pourquoi5 pour tous les conseillers
-        table_axe.append(all_axe_analyse) # l'ensemble des axes d'analyses pour tous les conseillers
-        table_action.append(table) #l'ensemble des actions pour tous les conseillers
-        nbre_act.append(act) # l'ensemble des liste de nombre d'actions pour tous les conseillers
-        N.append(act[0]+act[1]+act[2]+act[3]+act[4]+act[5])# liste des nombre d'actions totale pour tous les conseillers
-        nbre_cc += 1
-    table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe]
-    #print(table_pourquoi_axe)
-    #act_p1 = [3, 2, 0, 0, 0, 0]
-    #print()
-    return render_template('recap.html', N=N, nbre_act=nbre_act, nbre_cc=nbre_cc, table_pourquoi_axe=table_pourquoi_axe, 
-                           table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc)
-
-
-    return render_template('recap.html', table_liste_pourquoi=table_liste_pourquoi, table_nbre_pourquoi=table_nbre_pourquoi, liste_identifiant=liste_identifiant,
-                           table_liste_action=table_liste_action, table_nbre_action=table_nbre_action, nbre_analyse=nbre_analyse, reference=reference)
-
-# @app.route("/reset_request", methods=('POST', 'GET'))
-# @login_required
-# def reset_request():
-#     request_data = request.get_json()
-
-#     return render_template('reset_request.html')
-
-# @app.route("/demarrer-av")
-# @login_required
-# def demarrerav():
-
-#     return render_template('demarrer-av.html')
-
+    fichier_id=request.args.get('fichier_id')
+    all_va = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
+    all_va = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
+    Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
+    Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
+    CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
+    return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
 
 @app.route("/logout")
 def logout():
@@ -570,27 +491,24 @@ def synthese_av():
         kpi = request.args.get('kpi')
         libelle_analyse = request.args.get('libelle_analyse')
         equipe = request.args.get('equipe')
-        reference = '000012'
+        #reference = '000012'
         data = pd.read_excel(nom_fichier)
-        mesures = data.Mesures.dropna()
+        #mesures = data.Mesures.dropna()
         data = data.dropna()
         Date = date.today()
         effectif = data["Mesures"].count()
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
-        print(current_user.id)
+        #print(current_user.id)
         #intervale_analyse = request.form.get('date1') + '-'+request.form.get('date2')
         data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
         limite_ctrl_sup = round(data['Mesures'].std() + data['Mesures'].mean(), 2)
         limite_ctrl_inf = round(data['Mesures'].mean() - data['Mesures'].std(), 2)
         VSF = round((data['Mesures'].std()*6)/data['Mesures'].mean(), 2)
         nbre_mesure = data.Nom.count()
-        print( limite_ctrl_sup, data['Mesures'].std(), data['Mesures'].mean())
+        #print( limite_ctrl_sup, data['Mesures'].std(), data['Mesures'].mean())
         if kpi == 'DMT':
-            #max = pd.to_numeric(mesures, errors='coerce').max()
-            #min = pd.to_numeric(mesures, errors='coerce').min()
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
-            #data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             data = data[(data["Mesures"]<650)|(data['Mesures']> 1000)]
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
@@ -598,35 +516,39 @@ def synthese_av():
         prenom = current_user.prenom
         nom = current_user.nom
         insert_fichier = Fichiers(nom_fichier, libelle_analyse, effectif, Date, ' ', 'Equipe', VSF, limite_ctrl_sup, 
-                                  limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En cours', kpi_id,  
+                                  limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
                                   int(current_user.id))
         if not exist_file:
             db.session.add(insert_fichier)
             db.session.commit()
+        else:
+            flash('Ce fichier existe dejà, veuillez choisir un autre fichier.')
     except:
         flash('Aucun fichier ou format non compatible','warning')
-
-    fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
-    valeur_exist = ValeursAberrante.query.filter_by(fichier_id=fichier.id).first()
-    if not valeur_exist:
-        for i in range(data.shape[0]):
-            valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], 'En cours', fichier.id, int(current_user.id))
-            db.session.add(valeur_aberante)
-            db.session.commit()
-
+    try:
+        fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
+        valeur_exist = ValeursAberrante.query.filter_by(fichier_id=fichier.id).first()
+        if not valeur_exist:
+            for i in range(data.shape[0]):
+                valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], 'En attente', fichier.id, int(current_user.id))
+                db.session.add(valeur_aberante)
+                db.session.commit()
+    except AttributeError:
+        print("Erreur d'atribut")
     if request.method=='POST':
         libelle = request.form['libelle']
         statut = request.form['statut']
         Fichiers.agent = prenom +' '+ nom
-        Fichiers.reference_av = reference
+        #Fichiers.reference_av = reference
         Fichiers.libelle = libelle
         Fichiers.date = Date
         Fichiers.statut_analyse = statut
         db.session.commit()
         return redirect(url_for('listeVa', fichier_id=fichier.id)) 
     try:
-        return render_template('synthese-av.html', fichier_id=fichier.id, prenom=prenom, Date=Date, nom=nom, nbr_va_sou_perf=nbre_va_sous_perf, 
-                               nbr_va_sur_perf=nbre_va_sur_perf, libelle_analyse=libelle_analyse, kpi=kpi, paramettre_analyse_variation=paramettre_analyse_variation)  
+        return render_template('synthese-av.html', fichier_id=fichier.id, nbr_va_sou_perf=nbre_va_sous_perf, 
+                               nbr_va_sur_perf=nbre_va_sur_perf, prenom=prenom, nom=nom, Date=Date, kpi=kpi, 
+                               libelle_analyse=libelle_analyse, paramettre_analyse_variation=paramettre_analyse_variation)  
     except:
         return render_template('home.html')
 
@@ -639,7 +561,6 @@ def upload_file () :
         libelle_analyse = request.form['libelle_analyse']
         filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
                                             filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
-
         return redirect(url_for('synthese_av', filename=filename, kpi=kpi, libelle_analyse=libelle_analyse))
     except:
         flash('Erreur de chargement du fichier ','danger')
@@ -666,6 +587,7 @@ def action_programme():
                         print(action)
                         db.session.add(action)
                         db.session.commit()
+
     except:
         print('echec de recuperation des elements')
     return render_template('action_programme.html')
@@ -673,7 +595,8 @@ def action_programme():
 @app.route("/suivi_actions", methods=["GET", "POST"])
 #@login_required
 def suivi_action():
-    all_va = ValeursAberrante.query.all()
+    fichier_id = request.args.get('fichier_id')
+    all_va = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
     table_pourquoi = []
     table_axe = []
     liste_identifiant = []
@@ -715,8 +638,8 @@ def suivi_action():
         N.append(act[0]+act[1]+act[2]+act[3]+act[4]+act[5])# liste des nombre d'actions totale pour tous les conseillers
         nbre_cc += 1
     table_pourquoi_axe = [table_pourquoi, table_axe]
-    return render_template('suivi_actions.html', N=N, nbre_act=nbre_act, nbre_cc=nbre_cc, liste_identifiant=liste_identifiant, table_pourquoi_axe=table_pourquoi_axe, 
-                           table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc)
+    return render_template('suivi_actions.html', N=N, nbre_act=nbre_act, nbre_cc=nbre_cc, liste_identifiant=liste_identifiant, 
+                           table_pourquoi_axe=table_pourquoi_axe, table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc)
 
 if __name__=='__main__':
     app.run()

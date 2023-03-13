@@ -46,88 +46,115 @@
             </th>
             
         </tr>
-        {% for j in range(nbre_cc) %}
+        {% for j in range(CC[0]) %}
 
-            {% for i in range(N[j]) %}
+            {% for i in range(Action[0][j]) %}
                     <tr >
                         {% if i==0 %}
-                        <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                            {{ Nom_cc[j] }}
-                        </td>
-                        <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                            {{ Valeur_cc[j] }}
-                        </td>
-                        {% if i==0 %}
-                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                                {{ table_pourquoi_axe[0][j][0] }}
+                            <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
+                                {{ CC[1][j] }}
                             </td>
-                            {% elif i==nbre_act[j][0] %}
-                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                                {{ table_pourquoi_axe[0][j][1] }} 
-                            </td>
-                            {% elif i==(nbre_act[j][0]+nbre_act[j][1]) %}
-                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                                {{ table_pourquoi_axe[0][j][2] }}
-                            </td>
-                            {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]) %}
-                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                                {{ table_pourquoi_axe[0][j][3] }}
-                            </td>
-                            {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]) %}
-                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                                {{ table_pourquoi_axe[0][j][4] }}
-                            </td>
-                            {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]+nbre_act[j][4]) %}
-                            <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                                {{ table_pourquoi_axe[0][j][5] }}
+                            <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
+                                {{ CC[2][j] }}
                             </td>
                         {%  endif %}
-
+                        {% if Pourquoi[6][j]==3 %}
+                            {% if i==0 %}
+                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[0][j][0] }}
+                                </td>
+                            {% elif i==3 %}
+                                <td rowspan="{{ Action[1][j][2]+Action[1][j][3] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[0][j][1] }} 
+                                </td>
+                            {% elif i==5 %}
+                                <td rowspan="{{ Action[1][j][4]+Action[1][j][5] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[0][j][2] }}
+                                </td>
+                            {%  endif %}
+                        {% elif Pourquoi[6][j]==2 %}
+                            {% if i==0 %}
+                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[0][j][0] }}
+                                </td>
+                            {% elif i==4 %}
+                                <td rowspan="{{ Action[1][j][3]+Action[1][j][2] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[0][j][1] }} 
+                                </td>
+                            {%  endif %}
+                        {% elif Pourquoi[6][j]==1 %}
+                            {% if i==0 %}
+                                <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[0][j][0] }}
+                                </td>
+                            {%  endif %}
                         {%  endif %}
                         {%  for m in range(1,6) %}
                             {% if i==0 %}
-                                <td rowspan="{{ nbre_act[j][0] }}" class="col-1 tx-center border">
-                                    {{ table_pourquoi_axe[m][j][0] }}
+                                <td rowspan="{{ Action[1][j][0] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[m][j][0] }}
                                 </td>
-                                {% elif i==nbre_act[j][0] %}
-                                <td rowspan="{{ nbre_act[j][1] }}" class="col-1 tx-center border">
-                                    {{ table_pourquoi_axe[m][j][1] }}
+                                {% elif i==Action[1][j][0] %}
+                                <td rowspan="{{ Action[1][j][1] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[m][j][1] }}
                                 </td>
-                                {% elif i==(nbre_act[j][0]+nbre_act[j][1]) %}
-                                <td rowspan="{{ nbre_act[j][2] }}" class="col-1 tx-center border">
-                                    {{ table_pourquoi_axe[m][j][2] }}
+                                {% elif i==(Action[1][j][0]+Action[1][j][1]) %}
+                                <td rowspan="{{ Action[1][j][2] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[m][j][2] }}
                                 </td>
-                                {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]) %}
-                                <td rowspan="{{ nbre_act[j][3] }}" class="col-1 tx-center border">
-                                    {{ table_pourquoi_axe[m][j][3] }}
+                                {% elif i==(Action[1][j][0]+Action[1][j][1]+Action[1][j][2]) %}
+                                <td rowspan="{{ Action[1][j][3] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[m][j][3] }}
                                 </td>
-                                {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]) %}
-                                <td rowspan="{{ nbre_act[j][4] }}" class="col-1 tx-center border">
-                                    {{ table_pourquoi_axe[m][j][4] }}
+                                {% elif i==(Action[1][j][0]+Action[1][j][1]+Action[1][j][2]+Action[1][j][3]) %}
+                                <td rowspan="{{ Action[1][j][4] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[m][j][4] }}
                                 </td>
-                                {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]+nbre_act[j][4]) %}
-                                <td rowspan="{{ nbre_act[j][5] }}" class="col-1 tx-center border">
-                                    {{ table_pourquoi_axe[m][j][5] }}
+                                {% elif i==(Action[1][j][0]+Action[1][j][1]+Action[1][j][2]+Action[1][j][3]+Action[1][j][4]) %}
+                                <td rowspan="{{ Action[1][j][5] }}" class="col-1 tx-center border">
+                                    {{ Pourquoi[m][j][5] }}
                                 </td>
                             {%  endif %}
                         {%  endfor %}
-
                         <td class="col-1 tx-center border">
-                            {{ table_action[j][0][i] }}
+                            {{ Action[2][j][0][i] }}
                         </td>
                         <td class="col-1 tx-center border">
-                            {{ table_action[j][1][i] }}
+                            {{ Action[2][j][1][i] }}
                         </td>
                         <td class="col-1 tx-center border">
-                            {{ table_action[j][2][i] }}
+                            {{ Action[2][j][2][i] }}
                         </td>
                         <td class="col-1 tx-center border">
-                            En attente
-                        </td>
-                        
+                            {{ Action[2][j][4][i] }}
                     </tr>
             {%  endfor %}
         {%  endfor %}
     </table>
+
+    {% if current_user.is_authenticated %}
+    <div class="detail-analyse d-flex row">
+        <div href="#" id="action_programme" class="w-100 fs-5 col-3">
+        </div>
+        <div href="#" id="action_programme" class="w-100 fs-5 col-8">
+        </div>
+        <a href="{{ url_for('suivi_action', fichier_id=fichier_id) }}" id="action_programme" class="w-100 fs-5 col-1">
+            <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Suivi actions</button>
+        </a>
+    </div>
+    {% endif %}
+    {% if current_user.is_authenticated and (current_user.profil)!='MANAGER_OPERATIONNEL' %}
+    <div class="detail-analyse d-flex row">
+        <a href="#" id="action_programme" class="w-100 fs-5 col-3">
+        <button type="button" class="btn btn-primary rounded my-3 float-left" id="exporter-an">Exporter</button>
+        </a>
+        <a href="#" id="action_programme" class="w-100 fs-5 col-8">
+            <button type="button" class="btn btn-primary rounded my-3 float-right" id="valider-av">Valider</button>
+        </a>
+        <a href="{{ url_for('rejeterAv', reference=reference) }}" id="action_programme" class="w-100 fs-5 col-1">
+            <button type="button" class="btn btn-primary rounded my-3 float-right" id="rejet-av">Rejeter</button>
+        </a>
+    </div>
+    {% endif %}
 </div>
 {% endblock content %}

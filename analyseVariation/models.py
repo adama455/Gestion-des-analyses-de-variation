@@ -117,6 +117,7 @@ class ActionIndividuelle(UserMixin, db.Model):
                     lib = []
                     por = []
                     ech = []
+                    stat = []
                     for elem in action:
                         ref.append(elem.reference_action)
                         reference.append(elem.reference_action)
@@ -126,12 +127,14 @@ class ActionIndividuelle(UserMixin, db.Model):
                         porteur.append(elem.porteur)
                         ech.append(elem.echeance)
                         echeance.append(elem.echeance)
+                        stat.append(elem.status)
                         id.append(elem.id)
                         statut.append(elem.status)
                     liste_action[n-1].append(ref)
                     liste_action[n-1].append(lib)
                     liste_action[n-1].append(por)
                     liste_action[n-1].append(ech)
+                    liste_action[n-1].append(stat)
                 n+=1
             table.append(libelle)
             table.append(porteur)
@@ -253,6 +256,19 @@ class Fichiers(UserMixin, db.Model):
         self.user_id = user_id
     def Importer(self, ):
         pass
+    def traitement_data_pourquoi(id):
+        pourquoi_1 = [ elem.details for elem in Pourquoi1.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_2 = [ elem.details for elem in Pourquoi2.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_3 = [ elem.details for elem in Pourquoi3.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_4 = [ elem.details for elem in Pourquoi4.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_5 = [ elem.details for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
+        axes_analyse_id = [ elem.axe_analyse_id for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
+        axes_analyse = []
+        for id in axes_analyse_id:
+            axes_analyse.append(Cause.query.filter_by(id=int(id)).first().libelle)
+        liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
+        nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
+        return liste_pourquoi, nbre_pourquoi
 
 class ValeursFichier(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
@@ -529,6 +545,7 @@ class Pourquoi5(UserMixin, db.Model):
                 if element.id not in liste_id:
                     liste_id.append(element.id)
         # Pour chaque id on recupere l'ensemble des causes racines et les axes d'analyses correspondante
+        nbre_p1 = []
         for element in liste_id:
             #print(element, liste_id)
             all_pourquoi1 = Pourquoi1.query.filter_by(valeur_aberrante_id=element).all()
@@ -557,10 +574,10 @@ class Pourquoi5(UserMixin, db.Model):
             valeur_cc = ValeursAberrante.query.filter_by(id=element).first().valeurs
             Valeur_cc.append(valeur_cc)
             # Pour chaque cause racine on recupere l'ensemble des actions definis 
-            #liste_action = ActionIndividuelle.recup_action(all_pourquoi5)[0] #l'ensemble des actions par id
             table = ActionIndividuelle.recup_action(all_pourquoi5)[2] #l'ensemble des actions par id
             act = ActionIndividuelle.recup_action(all_pourquoi5)[1] # liste nombre d'actions par id
             table_pourquoi1.append(all_p1) # l'ensemble des pourquoi1 pour tous les conseillers
+            nbre_p1.append(len(all_p1)) # l'ensemble des pourquoi1 pour tous les conseillers
             table_pourquoi2.append(all_p2) # l'ensemble des pourquoi2 pour tous les conseillers
             table_pourquoi3.append(all_p3) # l'ensemble des pourquoi3 pour tous les conseillers
             table_pourquoi4.append(all_p4) # l'ensemble des pourquoi4 pour tous les conseillers
@@ -572,7 +589,8 @@ class Pourquoi5(UserMixin, db.Model):
             nbre_cc += 1
         cc = [nbre_cc, Nom_cc, Valeur_cc]
         Action = [N, nbre_act, table_action]
-        table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe]
+        table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe, nbre_p1]
         return table_pourquoi_axe, Action, cc
+    
 
 init_base()

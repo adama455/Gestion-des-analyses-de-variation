@@ -19,10 +19,11 @@
             <table id="datatable1" class="display responsive nowrap" width="100%">
                 <thead class="bg-primary">
                     <tr>
-                        <th class="wd-20p text-dark">Rechercher une AV</th>
-                        <th class="wd-10p text-dark">Libelle AV</th>
-                        <th class="wd-15p text-dark">Responsable AV</th>
-                        <th class="wd-15p text-dark">Date AV</th>
+                        <th class="wd-20p text-dark">Numero</th>
+                        <th class="wd-10p text-dark">Libelle</th>
+                        <th class="wd-15p text-dark">Responsable</th>
+                        <th class="wd-15p text-dark">Date </th>
+                        <th class="wd-15p text-dark">Statut </th>
                         <th class="wd-5p text-dark">Action</th>
                     </tr>
                 </thead>
@@ -33,8 +34,9 @@
                             <td>{{ liste_analyse_variation[i][1] }}</td>
                             <td>{{ liste_analyse_variation[i][2] }}</td>
                             <td>{{ liste_analyse_variation[i][3] }}</td>
+                            <td>{{ liste_analyse_variation[i][4] }}</td>
                             <td>
-                                <a href="{{ url_for('recap_value', reference = liste_analyse_variation[i][0])}}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                <a href="{{ url_for('recap_value', fichier_id = liste_analyse_variation[i][0])}}" class="text-center" title="edit" id="edituser" data-toggle="modal">
                                 <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
                             </a>
                             </td>
