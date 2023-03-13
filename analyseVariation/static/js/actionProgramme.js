@@ -208,7 +208,7 @@ $(document).ready(function () {
       console.log(element);
       // for (let j = 0; j < element.childNodes.length; j++) {  //colonnes
         var colonnes = [];
-        for (let k = 0; k < element.children[1].childNodes.length; k++) {  
+        for (let k = 0; k < element.children[1].childNodes.length; k++) { 
           console.log(element.childNodes[1].childNodes.length);
           colonnes.push(element.children[0].childNodes[0].innerHTML);
           colonnes.push(element.children[1].childNodes[k].value);

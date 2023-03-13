@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
     <div class="jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES FICHIERS CHARGER</div>
     <div class="card bg-gray-100 bd-10">
         <div class="card-body">
@@ -9,22 +9,36 @@
             <table id="datatable1" class="display responsive nowrap" width="100%">
                 <thead class="bg-primary">
                     <tr>
-                        <th class="wd-20p tx-center text-dark">Reference</th>
-                        <th class="wd-10p tx-center text-dark">Nom fichiers</th>
-                        <th class="wd-15p tx-center text-dark">Effectif</th>
-                        <th class="wd-15p tx-center text-dark">Details</th>
+                        <th class="wd-5p tx-center text-dark">Numéro</th>
+                        <th class="wd-15p text-dark">Libelle</th>
+                        <th class="wd-15p text-dark">Responsable analyse</th>
+                        <th class="wd-20p tx-center text-dark">Nom fichiers</th>
+                        <th class="wd-5p tx-center text-dark">Effectif</th>
+                        <th class="wd-10p text-dark">Date</th>
+                        <th class="wd-5p tx-center text-dark">Valeur aberrante</th>
+                        <th class="wd-5p tx-center text-dark">Fichier global</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for i in range(nbre_av) %}
                         <tr>
-                            <td class="tx-center">{{ liste_fichier[i][0] }}</td>
-                            <td class="tx-center">{{ liste_fichier[i][1] }}</td>
-                            <td class="tx-center">{{ liste_fichier[i][2] }}</td>
+                            <td>{{ liste_fichier[i][0] }}</td>
+                            <td>{{ liste_fichier[i][4] }}</td>
+                            <td>{{ liste_fichier[i][5] }}</td>
+                            <td>{{ liste_fichier[i][1] }}</td>
+                            <td>{{ liste_fichier[i][2] }}</td>
+                            <td>{{ liste_fichier[i][3] }}</td>
                             <td class="tx-center">
-                                <a href="{{ url_for('listeVa', ref=liste_fichier[i][0]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
-                                <i class="fa-solid fa-pen-to-square fs-4 me-3 text-primary"></i>
-                            </a>
+                                <a href="{{ url_for('listeVa', fichier_id=liste_fichier[i][0]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                    <i class="fa-sharp fa-solid fa-list-check fs-4"></i>
+
+                                </a>
+                            </td>
+                            <td class="tx-center">
+                                <a href="{{ url_for('fichiers_global')}}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                    <i class="fa-sharp fa-solid fa-list-check fs-4"></i>
+                                    
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

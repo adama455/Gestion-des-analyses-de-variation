@@ -19,7 +19,7 @@
           <div class="col-6">
             {# <label class="form-label mg-b-10">Matricule : <span class="tx-danger">*</span></label>
             <input type="text" name="matricule" class="form-control wd-380" placeholder="saisir prenom" required>
-           #}
+            #}
             {{ form.username.label(class="form-label mg-b-10") }}
 
             {% if form.username.errors %}
@@ -36,7 +36,8 @@
 
           <div class="col-6">
             {# <label class="form-label mg-b-10">Prenoms : <span class="tx-danger">*</span></label>
-            <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> #}
+              <input type="text" name="prenom" class="form-control wd-380" placeholder="saisir prénom" required> 
+            #}
             {{ form.prenom.label(class="form-label mg-b-10") }}
             {% if form.prenom.errors %}
             {{ form.prenom(class="form-control wd-380", placeholder="saisir prenom") }}
@@ -50,12 +51,11 @@
             {% endif %}
           </div>
         </div>
-
         <div class="row row-sm mg-b-0 mb-3">
           <div class="col-6">
             {# <label class="form-label mg-b-10">Nom : <span class="tx-danger">*</span></label>
-            <input type="text" name="nom" class="form-control wd-380" placeholder="saisir nom" required>
-           #}
+              <input type="text" name="nom" class="form-control wd-380" placeholder="saisir nom" required>
+            #}
             {{ form.nom.label(class="form-label mg-b-10") }}
             {% if form.nom.errors %}
             {{ form.nom(class="form-control wd-380", placeholder="saisir nom") }}
@@ -70,8 +70,8 @@
           </div>
           <div class="col-6">
             {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
-            <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
-           #}
+              <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
+            #}
             {{ form.email.label(class="form-label mg-b-10") }}
             {% if form.email.errors %}
             {{ form.email(class="form-control wd-380", placeholder="saisir email") }}
@@ -89,8 +89,8 @@
         <div class="row row-sm mg-b-0 mb-3">
           <div class="col-6">
             {# <label class="form-label mg-b-10">Email : <span class="tx-danger">*</span></label>
-            <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
-           #}
+              <input type="text" name="email" class="form-control wd-380" placeholder="saisir email" required>
+            #}
             {{ form.password.label(class="form-label mg-b-10") }}
             {% if form.password.errors %}
             {{ form.password(class="form-control wd-380", placeholder="saisir password") }}

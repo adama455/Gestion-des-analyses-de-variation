@@ -6,50 +6,53 @@
         <div class="card bg-gray-100 bd-10 shadow">
             <div class="mg-20">
                 <form action="#" method="POST">
+                    {% for i in range(nbre_fichier) %}
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">{{reference}}</div>
+                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">{{infos_fichier[i][0]}}</div>
                         <div class="col-3 fs-5" style="background-color: #D9D9D9;">Date: 
-                            {{ Date }}
+                            {{ infos_fichier[i][1] }}
                         </div>
-                        <div class="col-4" style="background-color: #D9D9D9;">Aut : {{ prenom }} {{ nom }}</div>
-                        <select class="col-2 fs-5 border-0" id="statut" name="statut" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
-                            <option label="Statut en cour"></option>
+                        <div class="col-4" style="background-color: #D9D9D9;">Aut : {{infos_fichier[i][2]}}</div>
+                        <div class="col-2" style="background-color: #D9D9D9;">Stat: {{infos_fichier[i][12]}}</div>
+                        {# <select class="col-2 fs-5 border-0" id="statut" name="statut" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
+                            <option label="Statut en cour">{{infos_fichier[i][4]}}</option>
                             <option value="Enregistre">Enregistre</option>
                             <option value="Valide">Valide</option>
                             <option value="Cloture">Cloture</option>
-                        </select>
+                        </select> #}
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                        <input id="libelle" name="libelle" class="col-12 border-0" style="background-color: #D9D9D9;" type="text" value="{{ libelle_analyse }}">
+                        <input id="libelle" name="libelle" class="col-12 border-0" style="background-color: #D9D9D9;" type="text" value="{{infos_fichier[i][3]}}">
                         <!-- <div class="col-12" style="background-color: #D9D9D9;">libelle</div> -->
                     </div>
                     <div class="col-12 d-flex row text-center mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                        <input class="col-2 border-0" style="background-color: #D9D9D9;" value="KPI : {{ kpi }}" >
+                        <input class="col-2 border-0" style="background-color: #D9D9D9;" value="KPI : {{infos_fichier[i][4]}}" >
                         <div class="col-6 d-flex row">
                             <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
                             <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
                         </div>
                     <!-- <input class="col-3" style="background-color: #D9D9D9;" value="Periode"> -->
-                        <input class="col-3 border-0" style="background-color: #D9D9D9;" value="Equipe">
+                        <input class="col-3 border-0" style="background-color: #D9D9D9;" value="{{infos_fichier[i][5]}}">
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                         <div class="col-12 text-center" style="background-color: #D9D9D9;">Syntheses des resultats</div> 
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                        <div class="col-3 fs-5" style="background-color: #D9D9D9;">Nombres de mesures</div>
+                        <div class="col-3 fs-5" style="background-color: #D9D9D9;">Nombres de mesures: {{infos_fichier[i][11]}}</div>
                         <div class="col-2 fs-5" style="background-color: #D9D9D9;">Objectif</div>
-                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">VSF</div>
+                        <div class="col-2 fs-5" style="background-color: #D9D9D9;">VSF: {{infos_fichier[i][6]}}</div>
                         <div class="col-3 fs-5" style="background-color: #D9D9D9;">Mesures a l'objectif</div>
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                        <div class="col-6" style="background-color: #D9D9D9;">Limite de controle superieure : 1000</div>
-                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sur-perf : {{ nbr_va_sur_perf }}</div>
+                        <div class="col-6" style="background-color: #D9D9D9;">Limite de controle superieure : {{infos_fichier[i][7]}}</div>
+                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sur-perf : {{infos_fichier[i][9]}}</div>
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
-                        <div class="col-6" style="background-color: #D9D9D9;">Limite de controle inferieure : 600</div>
-                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sous-perf : {{ nbr_va_sou_perf }}</div>
+                        <div class="col-6" style="background-color: #D9D9D9;">Limite de controle inferieure : {{infos_fichier[i][8]}}</div>
+                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sous-perf : {{infos_fichier[i][10]}}</div>
                     </div>
                     <br>
+                    {% endfor %}
                 </form>
             </div>
         </div>
@@ -74,7 +77,7 @@
                                 <td>{{ liste[i].nom_cc }}</td>
                                 <td>{{ liste[i].valeurs }}</td>
                                 <td>
-                                    <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', reference=reference, n=i ) }}">
+                                    <a class="d-flex justify-content-center " href="{{ url_for('analyse_agent', fichier_id=fichier_id, id_va=i+1 ) }}">
                                         <i class="fa-solid fa-pen-to-square fs-5 lien_analyse"></i>
                                         <!--<div class="border border-info d-flex justify-content-center align-items-center" style="height:40px; width:40px;">
                                             <i class="fa-solid fa-pen-to-square"></i>

@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES VALEURS</div>
+    <div class="card bg-gray-100 bd-10">
+        <div class="card-body">
+
+            <table id="datatable1" class="display responsive nowrap" width="100%">
+                <thead class="bg-primary">
+                    <tr>
+                        <th class="wd-15p text-dark">Nom Conseiller</th>
+                        <th class="wd-20p tx-center text-dark">Valeurs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        {# <td class="tx-center">
+                            <a href="{{ url_for('listeVa', fichier_id=liste_fichier[i][0]) }}" class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                <i class="fa-sharp fa-solid fa-list-check fs-4"></i>
+
+                            </a>
+                        </td> #}
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <div class="btn-icon-list">
+
+                <a href="{{ url_for('fichiers') }}">
+                    <button class="btn btn-primary  border-0 rounded" title="Sortir">Retour</i></button></a>
+                &nbsp;&nbsp;
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

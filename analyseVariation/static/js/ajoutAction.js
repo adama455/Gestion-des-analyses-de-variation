@@ -1,5 +1,4 @@
-////////////////////////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////////
 enregistrement_cause = document.getElementById("enregistrement_action");
 console.log("enreg ", enregistrement_cause);
 
@@ -194,12 +193,14 @@ var liste_labelle = [
   "Libelle Action",
   "Porteur Acton",
   "Echeance Action",
+  "Code Action"
 ];
 var liste_id = [
   "reference_action",
   "libelle_action",
   "porteur_action",
   "echeance_action",
+  "code_action"
 ];
 var data_acton = [];
 
@@ -216,6 +217,11 @@ function sous_bloc_action(parent, n, i, id, label) {
   // console.log(input_ref.id);
   input_ref.name = `${id}_${n}.${i}`;
   //alert(label)
+  if (label == "Code Action") {  // div permettant de referencier les actions parrapport pourquoi 5 
+    input_ref.value = `${id}_${n}.${i}`;
+    div_ref.style.display = "none"; // Cacher le div pour qu'il ne figure pas dams le formulaire d'actions
+    div_ref.className = "col-1";
+  }
   if (label == "Ref Action") {
     input_ref.value = `${id}_${n}.${i}`;
   }
@@ -233,6 +239,7 @@ function sous_bloc_action(parent, n, i, id, label) {
   div_ref.appendChild(label_ref);
   div_ref.appendChild(input_ref);
   parent.appendChild(div_ref);
+
 }
 
 function bloc_actions(parent, n) {
@@ -244,7 +251,7 @@ function bloc_actions(parent, n) {
   row.className = "row mb-3";
   row.id = `row_action_${n}`;
   row.append(H3);
-  for (let index = 0; index < 4; index++) {
+  for (let index = 0; index < 5; index++) {
     sous_bloc_action(row, n, i, liste_id[index], liste_labelle[index]);
   }
   parent.appendChild(row);
@@ -325,9 +332,8 @@ function bloc_action(n){
 }
 /*/
 
-document.querySelectorAll(".definir_action").forEach((element) => {
+document.querySelectorAll(".definir_action").forEach((element) =>{
   //element.addEventListener('click', ()=>{
-    
   $(element).on('click', function (e) {
       e.preventDefault();
       console.log(element);
@@ -349,15 +355,17 @@ document.querySelectorAll(".definir_action").forEach((element) => {
         })
       })
   })
-});
+})
+
 
 function ajax(method, data, Url) {
   var url = new URL(window.location.href);
   var id = document.getElementById("identifiant_act").value;
   console.log(id);
   var reference = document.getElementById("reference_av_act").value;
-  var n = url.searchParams.get("n");
-  url = Url +'?reference='+reference+'&n='+n+'&id='+id
+  var id_va = url.searchParams.get("id_va");
+  var fichier_id = url.searchParams.get("fichier_id");
+  url = Url +'?fichier_id='+fichier_id+'&id_va='+id_va+'&id='+id
   console.log(url)
   $.ajax({
     data: { data: data }, //grab text between span tags
@@ -378,7 +386,7 @@ var ACTION = [];
 var test = ["encore testons"];
 $(document).ready(function () {
   $("#bouton_valider_action").click(function (event) {
-    //event.preventDefault();
+    // event.preventDefault();
     var nbre = document.getElementById("form-input").childNodes;
     for (let i = 1; i < nbre.length; i++) {
       var action = [];
@@ -430,7 +438,10 @@ document.getElementById('action_programme').firstElementChild.addEventListener('
   // e.preventDefault()
   var causes_racines = []
   causes_racines.push(document.getElementById('libelle_av').value)
-  for (let index = 1; index < 7; index++) {
+  var pr = document.getElementById("div-pourquoi5")
+  nbr_prq = pr.childElementCount
+  // console.log("ezzzertt", pr.childElementCount);
+  for (let index = 1; index < nbr_prq +1; index++) {
     if (document.getElementById(`input_5${index}_act`).value != "") {
       document.getElementById(`input_5${index}_act`).value
       causes_racines.push(document.getElementById(`input_5${index}_act`).value)
