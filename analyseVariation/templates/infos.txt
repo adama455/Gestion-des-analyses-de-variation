@@ -1,0 +1,72 @@
+5% des cas d'absence d'image ont été remonté au niveau 2
+31% des cas de souci d'emmision ont été remonté au niveau2
+2 conseillers en valeur aberrante sur les cas remontés
+il s'agit des cas de client absent sur Zmart
+cas de suspension, restriction remonté au nivau2
+46% des signalisations sont des cas intenet mobile
+Delai de previsionning des 48h non respecté par la majorité dans Zsmart
+absence d une bonne decouverte lors de la prise en charge client
+Suite verification il sagit des cas averés assistance KO suivi du process
+Defaut programme de deversement des  nouvelles lignes dans Zsmart
+Non respect process, souci emission
+Demande d'assistance qui necessite l'intervention du N2 
+Defaut programme de deversement des  nouvelles lignes dans Zsmart 
+Non utilisation du kmc 
+
+# class AnalyseApporter(db.Model):
+#     __tablename__='apporter_analyse'
+#     id = db.Column(db.Integer, primary_key=True)
+#     identifiant = db.Column(db.String(255), unique=True, nullable=False)
+#     famille_causes = db.Column(db.String(500))
+#     probleme = db.Column(db.String(100))
+#     pourquoi_1 = db.Column(db.String(300))
+#     pourquoi_2 = db.Column(db.String(500))
+#     pourquoi_3 = db.Column(db.String(500))
+#     pourquoi_4 = db.Column(db.String(500))
+#     pourquoi_5 = db.Column(db.String(500))
+#     def __init__(self, identifiant, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
+#         self.identifiant = identifiant
+#         self.famille_causes = famille_causes
+#         self.probleme = probleme
+#         self.pourquoi_1 = pourquoi_1
+#         self.pourquoi_2 = pourquoi_2
+#         self.pourquoi_3 = pourquoi_3
+#         self.pourquoi_4 = pourquoi_4
+#         self.pourquoi_5 = pourquoi_5
+#     def traitement_data_pourquoi(id, datacc):
+#         pourquoi_1 = [ elem.details for elem in Pourquoi1.query.filter_by(valeur_aberrante_id=id).all()]
+#         pourquoi_2 = [ elem.details for elem in Pourquoi2.query.filter_by(valeur_aberrante_id=id).all()]
+#         pourquoi_3 = [ elem.details for elem in Pourquoi3.query.filter_by(valeur_aberrante_id=id).all()]
+#         pourquoi_4 = [ elem.details for elem in Pourquoi4.query.filter_by(valeur_aberrante_id=id).all()]
+#         pourquoi_5 = [ elem.details for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
+#         axes_analyse_id = [ elem.axe_analyse_id for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
+#         axes_analyse = []
+#         for id in axes_analyse_id:
+#             axes_analyse.append(Cause.query.filter_by(id=int(id)).first().libelle)
+#         liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
+#         nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
+#         return liste_pourquoi, nbre_pourquoi
+
+# class Enregistrement_AV(UserMixin, db.Model):
+#     __table_args__ = {'extend_existing': True}
+#     __tablename__='enregistrement_av'
+#     id = db.Column(db.Integer, primary_key=True)
+#     agent = db.Column(db.String(80))
+#     reference_av = db.Column(db.String(80))
+#     libelle_av = db.Column(db.String(255))
+#     date = db.Column(db.Date)
+#     statut_analyse = db.Column(db.String(80))
+#     commentaire = db.Column(db.String(80), nullable=True)
+#     def __init__(self, agent, reference_av, libelle_av, date, statut_analyse, commentaire):
+#         self.agent = agent
+#         self.reference_av = reference_av
+#         self.libelle_av = libelle_av
+#         self.date = date
+#         self.statut_analyse = statut_analyse
+#         self.commentaire = commentaire
+#     def Valider(self, ):
+#         pass
+#     def Recherher(self, ):
+#         pass
+#     def Consulter(self, ):
+#         pass

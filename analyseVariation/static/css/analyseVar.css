@@ -11,8 +11,8 @@
     display: block;
 }
 .bouton{
-    background-color: #FF7900;
-    font-size: 1.5rem;
+background-color: #FF7900;
+color: white;
 }
 
 .ajout_analyse{
@@ -26,11 +26,11 @@
 
 .bouton:hover{
     background-color:#009088;
-    font-size: 1.5rem;
+    color: white;
 }
 #bouton{
     background-color: #FF7900;
-    font-size: 1.5rem;
+    color: white;
 }
 
 #bouton:hover{
@@ -82,6 +82,7 @@
     border-bottom:none;
     padding-bottom: 20px;
 }
+
 
 
 

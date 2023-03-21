@@ -175,12 +175,9 @@ for (let index = 1; index <causes_racines.length; index++) {
             alert("il faut avoir aumoins deux Aactions!")
           }
         });
-
       }
-
     });
   }
-  
 }
 
 function ajax(method, data, url) {
@@ -189,10 +186,15 @@ function ajax(method, data, url) {
     type: method,
     url: url, //post grabbed text to flask endpoint for saving role
     async: false,
+
     success: function (data) {
+      $(".alert-success").css("display", "block");
+      $(".alert-success").append("<h3>Sent Successfully...</h3>");
       console.log("Sent Successfully", url);
     },
     error: function (e) {
+      $(".alert-danger").css("display", "block");
+      $(".alert-danger").append("<h2>Submission failed...</h2>");
       console.log("Submission failed...");
     },
   });

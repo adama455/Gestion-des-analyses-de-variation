@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% block content %}
-<div class="container mb-3">
+<div class="container-fluid mb-3">
     <div class="synthese_av mb-5">
         <div class="jumbotron p-3 tx-center az-content-label mg-b-5">ENREGISTREMENT DES SYNTHESES D'ANALYSES DE VARIATION</div>
         <div class="card bg-gray-100 bd-10 shadow">
@@ -13,7 +13,7 @@
                             {{ infos_fichier[i][1] }}
                         </div>
                         <div class="col-4" style="background-color: #D9D9D9;">Aut : {{infos_fichier[i][2]}}</div>
-                        <div class="col-2" style="background-color: #D9D9D9;">Stat: {{infos_fichier[i][12]}}</div>
+                        <div class="col-2" style="background-color: #D9D9D9; display:flex; justify-content:end;">Stat: {{infos_fichier[i][12]}}</div>
                         {# <select class="col-2 fs-5 border-0" id="statut" name="statut" class="form-control select2" data-placeholder="Statut en cour" style="background-color: #D9D9D9;">
                             <option label="Statut en cour">{{infos_fichier[i][4]}}</option>
                             <option value="Enregistre">Enregistre</option>
@@ -29,7 +29,7 @@
                         <input class="col-2 border-0" style="background-color: #D9D9D9;" value="KPI : {{infos_fichier[i][4]}}" >
                         <div class="col-6 d-flex row">
                             <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
-                            <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9;">
+                            <input class="col-6 border-0" type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" style=" background-color: #D9D9D9; display:flex; justify-content:end;">
                         </div>
                     <!-- <input class="col-3" style="background-color: #D9D9D9;" value="Periode"> -->
                         <input class="col-3 border-0" style="background-color: #D9D9D9;" value="{{infos_fichier[i][5]}}">
@@ -41,15 +41,15 @@
                         <div class="col-3 fs-5" style="background-color: #D9D9D9;">Nombres de mesures: {{infos_fichier[i][11]}}</div>
                         <div class="col-2 fs-5" style="background-color: #D9D9D9;">Objectif</div>
                         <div class="col-2 fs-5" style="background-color: #D9D9D9;">VSF: {{infos_fichier[i][6]}}</div>
-                        <div class="col-3 fs-5" style="background-color: #D9D9D9;">Mesures a l'objectif</div>
+                        <div class="col-3 fs-5" style="background-color: #D9D9D9; display:flex; justify-content:end;">Mesures a l'objectif</div>
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                         <div class="col-6" style="background-color: #D9D9D9;">Limite de controle superieure : {{infos_fichier[i][7]}}</div>
-                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sur-perf : {{infos_fichier[i][9]}}</div>
+                        <div class="col-6 float-right" style="background-color: #D9D9D9; display:flex; justify-content:end;">Nombres de VA en sur-perf : {{infos_fichier[i][9]}}</div>
                     </div>
                     <div class="col-12 d-flex row mg-b-25" style="display: flex; justify-content: space-between; font-size: 1.5em;">
                         <div class="col-6" style="background-color: #D9D9D9;">Limite de controle inferieure : {{infos_fichier[i][8]}}</div>
-                        <div class="col-6" style="background-color: #D9D9D9;">Nombres de VA en sous-perf : {{infos_fichier[i][10]}}</div>
+                        <div class="col-6" style="background-color: #D9D9D9; display:flex; justify-content:end;">Nombres de VA en sous-perf : {{infos_fichier[i][10]}}</div>
                     </div>
                     <br>
                     {% endfor %}
@@ -95,7 +95,7 @@
                 <br>
                 <div class="btn-icon-list">
                     <a href="{{ url_for('home') }}">
-                        <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button>
+                        <button class="btn btn-danger  border-0 rounded" title="Sortir">Exit</i></button>
                     </a>
                     &nbsp;&nbsp;
                 </div>

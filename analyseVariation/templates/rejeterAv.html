@@ -2,29 +2,27 @@
 {% block content %}
 
 <div class="container-lg ">
-    <div class="jumbotron p-3 rounded tx-center az-content-label mg-b-20">Détail d'une analyse de variation</div>
+    <div class="jumbotron p-3 rounded tx-center az-content-label mg-b-20"> Notification rejet d'un rejet d'analyse de variation</div>
     {# <h1 class="text-white bg-primary rounded d-flex justify-content-center align-items-center py-1 my-4">Détail d'une analyse de variation</h1> #}
     <div class="card bg-gray-100 bd-10 rounded">
         <div class="card-body">
             <div class="section1 mb-3">
-
-                <div class="Libelle col-12">
-                    <label for="">Libellé</label>
-                </div>
+                {% for i in range(nbre_fichier) %}
                 <div class="row mb-5 mx-1">
                     <div class="col-4 d-flex flex-column">
-                        <label for="reference_av">Reference AV</label>
-                        <input type="text" name="reference_av" id="reference_av" class="fs-5" value="{{ reference }}" disabled>
+                        <label for="reference_av" class="fs-5">Reference AV</label>
+                        <input type="text" name="reference_av" id="reference_av" class="fs-5" value="{{ liste[i][0] }}" disabled>
                     </div>
                     <div class="col-4 d-flex flex-column">
-                        <label for="libelle_av">Libellé AV</label>
-                        <input type="text" name="libelle_av" id="libelle_av" class="fs-5" value="{{ libelle }}" disabled>
+                        <label for="libelle_av" class="fs-5">Libellé AV</label>
+                        <input type="text" name="libelle_av" id="libelle_av" class="fs-5" value="{{ liste[i][1]}}" disabled>
                     </div>
                     <div class="col-4 d-flex flex-column">
-                        <label for="responsable_av">Responssable AV</label>
-                        <input type="text" name="responsable_av" id="responsable_av " class="fs-5" value="{{ agent }}" disabled>
+                        <label for="responsable_av" class="fs-5">Responssable AV</label>
+                        <input type="text" name="responsable_av" id="responsable_av " class="fs-5" value="{{ liste[i][2] }}" disabled>
                     </div>
                 </div>
+                {% endfor %}
                 <div class="col-12 d-flex flex-column my-3">
                     <label for="lib-action" class="text-center fs-5">Commentaires</label>
                     <textarea name="lib-action" id="" cols="30" rows="4"></textarea>

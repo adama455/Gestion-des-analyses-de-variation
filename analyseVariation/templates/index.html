@@ -36,6 +36,10 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/analyseVar.css') }}" rel="stylesheet">
   <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/orange.png') }}"
     rel="stylesheet">
+  <!--Debut Link page not found -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}" rel="stylesheet">
+  <!--Fin Link page not found -->
 
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -220,9 +224,9 @@
             {% if messages %}
               {% for category, message in messages  %}
                 <div class="alert alert-{{ category }} alert-dismissable fs-4" role="alert">
-                  <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
-                    <span aria-hidden="true">x</span>
-                  </button>
+                <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
+                  <span aria-hidden="true">x</span>
+                </button>
                   {{ message }}
                 </div>
               {% endfor %}
@@ -236,7 +240,7 @@
 
   <!-- LE FOOTER DE L'APPLICATION -->
 
-  <div class="az-footer bg-light">
+  <div class="az-footer bg-light mt-5">
     <div class="container-fluid text-dark">
       <span>
         <img src="/static/img/orange_logo.svg" width="20" height="20" alt="" title="SONATEL"> SONATEL -
@@ -251,17 +255,16 @@
   <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header border-bottom-0 d-flex justify-content-end">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <div class="modal-content  rounded">
+        <div class="modal-header border-bottom-0 d-flex justify-content-beetwen">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Chargement Fichier</h1>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-title text-center">
-            <h4>Saisir le libelle et charger le fichier</h4>
-          </div>
-          <div class="d-flex flex-column text-center">
+          <p> <em><b>NB: </b></em> Saisir le libelle et choisir un KPI avant de charger le fichier</p>
+          <div class="d-flex flex-column text-center ">
             <form action="{{ url_for('upload_file') }}" method="post" enctype=multipart/form-data>
               <div class="form-group">
                 <input type="text" class="form-control" name="libelle_analyse" id="libelle_analyse" value="libelle_analyse" placeholder="Libelle analyse">
@@ -274,8 +277,8 @@
                   <option value="DSAT">DSAT</option>
                 </select>
               </div>
-              <input type="file" name="file">
-              <button type="submit" class="btn btn-info btn-block btn-round">Fichier</button>
+              <input type="file" name="file" class="float-left mb-3" required>
+              <button type="submit" class="btn bouton tx-white fs-5 btn-block rounded">Valider</button>
             </form>
           </div>
         </div>

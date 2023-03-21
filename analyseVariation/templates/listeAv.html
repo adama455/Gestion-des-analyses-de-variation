@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
     <div class="jumbotron p-3 tx-center az-content-label mg-b-5">LISTE DES ANALYSES DE VARIATION</div>
 
     {# <div class="row w-100  recherche mx-0  my-3">
@@ -19,32 +19,29 @@
             <table id="datatable1" class="display responsive nowrap" width="100%">
                 <thead class="bg-primary">
                     <tr>
-                        <th class="wd-15p text-dark">Rechercher une AV</th>
-                        <th class="wd-15p text-dark">Libelle AV</th>
-                        <th class="wd-10p text-dark">Responsable AV</th>
-                        <th class="wd-10p text-dark">Date AV</th>
-                        <th class="wd-10p text-dark">Action Individuelle</th>
-                        <th class="wd-10p text-dark">Action Programme</th>
+                        <th class="wd-5p text-dark">Numero</th>
+                        <th class="wd-10p text-dark">Libelle</th>
+                        <th class="wd-15p text-dark">Responsable</th>
+                        <th class="wd-15p text-dark">Date </th>
+                        <th class="wd-15p text-dark">Statut </th>
+                        <th class="wd-5p text-dark">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in range(nbre_av) %}
-                        <tr>
-                            <td class="">{{ liste_analyse_variation[i][0] }}</td>
-                            <td class="">{{ liste_analyse_variation[i][1] }}</td>
-                            <td class="">{{ liste_analyse_variation[i][2] }}</td>
-                            <td class="">{{ liste_analyse_variation[i][3] }}</td>
-                            <td class=" tx-center">
-                                <a href="{{ url_for('recap_value',reference = liste_analyse_variation[i][0]) }}" class="text-center" title="liste" id="edituser" data-toggle="modal">
-                                    <i class="fa-sharp fa-solid fa-list-check fs-4"></i>
-                                </a>
-                            </td>
-                            <td class=" tx-center">
-                                <a href="{{ url_for('recap_action_programme',reference = liste_analyse_variation[i][0]) }}" class="text-center" title="liste" id="edituser" data-toggle="modal">
-                                    <i class="fa-sharp fa-solid fa-list-check fs-4"></i>
-                                </a>
-                            </td>
-                        </tr>
+                    {% for i in range(nbre_valeurs_ab) %}
+                    <tr>
+                        <td>{{ liste[i][0] }}</td>
+                        <td>{{ liste[i][1] }}</td>
+                        <td>{{ liste[i][2] }}</td>
+                        <td>{{ liste[i][3] }}</td>
+                        <td>{{ liste[i][4] }}</td> 
+                        <td>
+                            <a href="{{ url_for('recap_value', fichier_id = liste[i][0])}}"
+                                class="text-center" title="edit" id="edituser" data-toggle="modal">
+                                <i class="fa-solid fa-pen-to-square fs-4 me-3 tx-primary"></i>
+                            </a>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -53,7 +50,7 @@
             <div class="btn-icon-list">
 
                 <a href="{{ url_for('home') }}">
-                    <button class="btn btn-primary  border-0 rounded" title="Sortir">Sortir</i></button></a>
+                    <button class="btn btn-danger border-0 rounded" title="Sortir">Exit</i></button></a>
                 &nbsp;&nbsp;
 
             </div>

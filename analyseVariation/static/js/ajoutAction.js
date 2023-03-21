@@ -44,63 +44,6 @@ function cre_bloc(parent, i) {
   div_parent.appendChild(div_input_button);
   div_parent.className = " d-flex row";
   parent.appendChild(div_parent);
-  /*/  var liste1 = []
-  var liste2 = []
-  var liste3 = []
-  //if (i>=2){
-    console.log('cool')
-    cre_boutton_plus_input(div_button, i)
-    cre_boutton_moins_input(div_button, i)
-    id_bouton_plus = document.getElementById(`bouton_plus_${i}`)
-    id_bouton_moins = document.getElementById(`bouton_moins_${i}`)
-    id_input = document.getElementById(`input_${i}`)
-    liste1.push(id_input)
-    liste2.push(id_bouton_plus)
-    liste3.push(id_bouton_moins)
-    console.log('this ',id_input)
-    liste1.forEach((elements)=>{
-      liste3.forEach((el)=>{
-        liste2.forEach((elem)=>{
-          ///Ecouter chaque bouton plus pour ajouter des input au besoin
-          elem.addEventListener('click', (e)=>{
-            e.preventDefault()
-            liste2 = liste2.filter((element) => element !== elem)
-            if (elements.childNodes.length>=1){
-              el.style.visibility = 'visible'
-            }
-            if (elements.childNodes.length==10){
-              elem.style.visibility = 'hidden'
-            }else {
-              n=Number(elements.lastElementChild.id.split('_').pop())+1
-              cre_input(elements, `input_${elem.id.split('_').pop()+n}`, `input_${elem.id.split('_').pop()+n}`)
-            }
-          })
-
-          ////Ecouter chaque bouton moin pour pouvoir supprimer des inputs
-        el.addEventListener('click', (e)=>{
-          e.preventDefault()
-          if (elements.childNodes.length<=2){
-            el.style.visibility = 'hidden'
-            console.log('n',elements.childNodes.length);
-          }
-          elem.style.visibility = 'visible'
-          elements.removeChild(elements.lastElementChild)
-          liste3 = liste3.filter((element) => element !== el)
-          n=Number(elements.lastElementChild.id.split('_').pop())+1
-        })
-
-      })
-    })
-
-        if (elements.id=='input_5') {
-          divBt=document.getElementById('div-btn')
-          for (let i = 1; i < 5; i++) {
-           bloc_pourquoi = document.getElementById(`input_${i}`)
-           nbre_fils = bloc_pourquoi.childNodes.length
-           console.log(nbre_fils)
-          }
-        }
-    }) /*/
 }
 
 function cre_input(parent, id, name) {
@@ -123,18 +66,6 @@ function cre_boutton(parent) {
   parent.appendChild(div);
   console.log(div);
   var i = parent.childNodes.length - 1;
-  /*/div.addEventListener('click', (e)=>{
-    e.preventDefault();
-    if (i<5){
-      cre_bloc(enregistrement_cause, i)
-      parent.removeChild(div_parent.previousSibling)
-      cre_boutton(enregistrement_cause);
-    }else if(i==5){
-      cre_bloc(enregistrement_cause, i)
-      parent.removeChild(div_parent.previousSibling)
-      
-    }
-  })/*/
 }
 
 function cre_boutton_moins_input(parent, id) {
@@ -154,36 +85,6 @@ valider.addEventListener("click", (e) => {
   e.preventDefault();
 });
 
-/*/document.getElementById("enregistrement_de_detail").addEventListener('click', (e)=>{
-  //e.preventDefault()
-  divBt=document.getElementById('div-btn')
-      for (let i = 1; i < 5; i++) {
-        bloc_pourquoi = document.getElementById(`input_${i}`)
-       //nbre_fils = bloc_pourquoi.childNodes.length
-       console.log(bloc_pourquoi)
-      }
-})/*/
-
-//var i = 1;
-/*/for (let index = 1; index < 6; index++) {
-  //const element = array[index];
-  cre_bloc(enregistrement_cause, index);
-  id_input = document.getElementById(`input_${index}`)
-  //console.log(i,id_input);
-  n = Number(localStorage.getItem(`pourquoi${index}`))
-  test = localStorage.getItem('test')
-  //n=Number(id_input.lastElementChild.id.split('_').pop())+1
-  console.log(n, test);
-  for (let j = 1; j < n; j++) {
-    cre_input(id_input, `input_${index}${j}`, `input_${index}${j}`)
-  }
-}/*/
-
-//cre_boutton(enregistrement_cause);
-
-//form = document.getElementById('form_action')
-
-// Accédez à l'élément form …
 var bouton_form = document.getElementById("bouton_form");
 
 //////////////////////////////////---MODAL ACTION---/////////////////////////////
@@ -262,77 +163,7 @@ const form_input = document.getElementById("form-input");
 const recap_action = document.getElementById("recaputilatif");
 const array = [];
 
-/*/
-function bloc_action(n){
-	let i =form_input.childNodes.length -1 ;
-	const H3 = document.createElement('h3');
-	H3.innerHTML = `Action_n°${i+1}`
-	H3.className = "modal-title fs-5 py-2"
-	const div_ref =document.createElement("div");
-	div_ref.className="col-3 d-flex flex-column"
-	label_ref = document.createElement("label");
-	label_ref.for=`reference_action_${n}${i+1}`
-	label_ref.className="d-flex justify-content-start"
-	label_ref.innerHTML = 'Ref action'
-	input_ref = document.createElement("input");
-	input_ref.className='fs-5'
-	input_ref.id= `reference_action_${n}${i+1}`
-	input_ref.name= `reference_action_${n}${i+1}`
-	input_ref.value= `reference_action_${n}${i+1}`
-	div_ref.appendChild(label_ref);
-	div_ref.appendChild(input_ref);
-	const div_lib =document.createElement("div");
-	div_lib.className="col-3 d-flex flex-column"
-	label_lib = document.createElement("label");
-	label_lib.for=`libelle_action_${n}${i+1}`
-	label_lib.className="d-flex justify-content-start"
-	label_lib.innerHTML = 'Libelle Action'
-	input_lib = document.createElement("input");
-	input_lib.className='fs-5'
-	input_lib.id= `libelle_action_${n}${i+1}`
-	input_lib.name= `libelle_action_${n}${i+1}`
-	div_lib.appendChild(label_lib);
-	div_lib.appendChild(input_lib);
-	const div_porteur =document.createElement("div");
-	div_porteur.className="col-3 d-flex flex-column"
-	label_porteur = document.createElement("label");
-	label_porteur.for=`porteur_action_${n}${i+1}`
-	label_porteur.className="d-flex justify-content-start"
-	label_porteur.innerHTML = 'Porteur Action'
-	input_porteur = document.createElement("input");
-	input_porteur.className='fs-5'
-	input_porteur.id= `porteur_action_${n}${i+1}`
-	input_porteur.name= `porteur_action_${n}${i+1}`
-	div_porteur.appendChild(label_porteur);
-	div_porteur.appendChild(input_porteur);
-	const div_echeance =document.createElement("div");
-	div_echeance.className="col-3 d-flex flex-column"
-	label_echeance = document.createElement("label");
-	label_echeance.for=`echeance_action_${n}${i+1}`
-	label_echeance.className="d-flex justify-content-start"
-	label_echeance.innerHTML = 'Echeance'
-	input_echeance = document.createElement("input");
-	input_echeance.className='fs-5'
-	input_echeance.id= `echeance_action_${n}${i+1}`
-	input_echeance.name= `echeance_action_${n}${i+1}`
-	input_echeance.type= 'date'
-	div_echeance.appendChild(label_echeance);
-	div_echeance.appendChild(input_echeance);
-
-	const row = document.createElement("div");
-	row.className="row mb-3"
-	row.id="row_action"
-	row.append(H3,div_ref,div_lib,div_porteur,div_echeance);
-	form_input.appendChild(row);
-
-	// array.splice(row);
-	// console.log(array);
-	array.push(row);
-	console.log(array);
-}
-/*/
-
-document.querySelectorAll(".definir_action").forEach((element) =>{
+document.querySelectorAll(".definir_action").forEach((element) => {
   //element.addEventListener('click', ()=>{
   $(element).on('click', function (e) {
       e.preventDefault();
@@ -365,7 +196,7 @@ function ajax(method, data, Url) {
   var reference = document.getElementById("reference_av_act").value;
   var id_va = url.searchParams.get("id_va");
   var fichier_id = url.searchParams.get("fichier_id");
-  url = Url +'?fichier_id='+fichier_id+'&id_va='+id_va+'&id='+id
+  url = Url +'?fichier_id='+fichier_id+'&id_va='+id_va
   console.log(url)
   $.ajax({
     data: { data: data }, //grab text between span tags
@@ -449,49 +280,3 @@ document.getElementById('action_programme').firstElementChild.addEventListener('
   }
   sessionStorage.setItem('causes_racines',causes_racines)
 })
-
-// console.log(terminer)
-
-/////////////////////////* Récaputilatif *//////////////////////////////////
-/*/const row_actions =document.getElementById('row_action');
-console.log(row_actions);
-const row_recap = document.createElement('div');
-const hr = document.createElement('hr');
-const div1 = document.createElement('div');
-const h2 = document.createElement('h2');
-const div2 = document.createElement('div');
-const h3 = document.createElement('h3');
-document.getElementById('bouton_valider_action').addEventListener('click', ()=>{
-	if (row_recap.parentElement!=null) {
-		//row_recap.parentElement.remove()
-		div1.removeChild(h2)
-		div2.removeChild(h3)
-		row_recap.removeChild(div1,div2)
-		recap_action.removeChild(row_recap,hr)
-
-		alert('okk!')
-	}
-	array.forEach(element => {
-		
-		row_recap.className ="row pourquoi51 d-flex justify-content-center align-items-center";
-		div1.className = "col-3"
-		h2.innerHTML='pourquoi51';
-		div1.appendChild(h2);
-		div2.className = "col-9"
-		h3.innerHTML='Actions P51';
-		hr.className ="border border-secondary"
-		form_input.append(element)
-		div2.append(h3, element);
-		row_recap.append(div1,div2)
-		recap_action.append(row_recap,hr)
-		
-	});
-	
-});/*/
-/*/
-bntAutreAct = document.getElementById('btn_autre_action')
-autreAction = document.getElementById('autre_action')
-bntAutreAct.addEventListener('click', ()=>{
-	autreAction.classList.toggle('autre_action_show')
-	document.getElementById('reference_autre_action').value = document.getElementById('reference_action').value+'2'
-})/*/

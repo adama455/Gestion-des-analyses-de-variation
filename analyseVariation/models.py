@@ -8,7 +8,6 @@ from flask import current_app, request #<---HERE
 from analyseVariation import db, init_base, login_manager,app
 from sqlalchemy.orm import *
 from flask_login import UserMixin
-import enum
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 
 
@@ -24,9 +23,8 @@ class User(UserMixin, db.Model):
     prenom=db.Column(db.String(150), nullable=False)
     username=db.Column(db.String(50), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
-    profil=db.Column(db.String(150), unique=True, nullable=False)
+    profil=db.Column(db.String(150), unique=False, nullable=False)
     # plateau=db.Column(db.String(150), unique=True, nullable=True)
-    # profil = db.Column(db.Enum(TypeProfil))
     plateau_id = db.Column(db.Integer, db.ForeignKey('plateaux.id', ondelete='CASCADE'))
     
     password = db.Column(db.String(120), nullable=False)
@@ -51,7 +49,7 @@ class User(UserMixin, db.Model):
 class Role(db.Model):
     __table_args__ = {'extend_existing': True} 
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(50), unique=True)
+    name = db.Column(db.String(50), unique=False)
 
 # Define the UserRoles data model
 class UserRoles(db.Model):
@@ -82,7 +80,6 @@ class ActionProgramme(UserMixin,db.Model):
         self.status = statut
         self.commentaire = commentaire
         
-
 class ActionIndividuelle(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='action_individuelle'
@@ -129,6 +126,7 @@ class ActionIndividuelle(UserMixin, db.Model):
                     lib = []
                     por = []
                     ech = []
+                    stat = []
                     for elem in action:
                         ref.append(elem.reference_action)
                         reference.append(elem.reference_action)
@@ -138,12 +136,14 @@ class ActionIndividuelle(UserMixin, db.Model):
                         porteur.append(elem.porteur)
                         ech.append(elem.echeance)
                         echeance.append(elem.echeance)
+                        stat.append(elem.status)
                         id.append(elem.id)
                         statut.append(elem.status)
                     liste_action[n-1].append(ref)
                     liste_action[n-1].append(lib)
                     liste_action[n-1].append(por)
                     liste_action[n-1].append(ech)
+                    liste_action[n-1].append(stat)
                 n+=1
             table.append(libelle)
             table.append(porteur)
@@ -206,30 +206,6 @@ class Equipe(UserMixin, db.Model):
         self.description = description
         self.plateau_id = plateau_id
 
-class Enregistrement_AV(UserMixin, db.Model):
-    __table_args__ = {'extend_existing': True}
-    __tablename__='enregistrement_av'
-    id = db.Column(db.Integer, primary_key=True)
-    agent = db.Column(db.String(80))
-    reference_av = db.Column(db.String(80))
-    libelle_av = db.Column(db.String(255))
-    date = db.Column(db.Date)
-    statut_analyse = db.Column(db.String(80))
-    commentaire = db.Column(db.String(80), nullable=True)
-    def __init__(self, agent, reference_av, libelle_av, date, statut_analyse, commentaire):
-        self.agent = agent
-        self.reference_av = reference_av
-        self.libelle_av = libelle_av
-        self.date = date
-        self.statut_analyse = statut_analyse
-        self.commentaire = commentaire
-    def Valider(self, ):
-        pass
-    def Recherher(self, ):
-        pass
-    def Consulter(self, ):
-        pass
-
 class Fichiers(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='fichiers'
@@ -265,6 +241,35 @@ class Fichiers(UserMixin, db.Model):
         self.user_id = user_id
     def Importer(self, ):
         pass
+    def traitement_data_pourquoi(id):
+        pourquoi_1 = [ elem.details for elem in Pourquoi1.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_2 = [ elem.details for elem in Pourquoi2.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_3 = [ elem.details for elem in Pourquoi3.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_4 = [ elem.details for elem in Pourquoi4.query.filter_by(valeur_aberrante_id=id).all()]
+        pourquoi_5 = [ elem.details for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
+        axes_analyse_id = [ elem.axe_analyse_id for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
+        axes_analyse = []
+        for id in axes_analyse_id:
+            axes_analyse.append(Cause.query.filter_by(id=int(id)).first().libelle)
+        liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
+        nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
+        return liste_pourquoi, nbre_pourquoi
+
+    def update_p1(id):
+        for i in range(1,4):
+            if i==1:
+                data = Pourquoi1.query.filter_by(valeur_aberrante_id=int(id),code=f'P11').first()
+                tmp=request.form.get('input_1') 
+            else:
+                data = Pourquoi1.query.filter_by(valeur_aberrante_id=int(id),code=f'P1{i}').first()
+                tmp=request.form.get(f'input_1{i}')
+            if data and tmp:
+                data = Pourquoi1(f'P1{i}', tmp, int(id))
+                data.details = tmp
+                print("Pourquoi11: ", data.details) 
+                print("Details 11 : ", request.form.get('input_1')) 
+                db.session.commit()
+                
 
 class ValeursFichier(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
@@ -280,39 +285,6 @@ class ValeursFichier(UserMixin, db.Model):
     def Importer(self, ):
         pass
 
-class AnalyseApporter(db.Model):
-    __tablename__='apporter_analyse'
-    id = db.Column(db.Integer, primary_key=True)
-    identifiant = db.Column(db.String(255), unique=True, nullable=False)
-    famille_causes = db.Column(db.String(500))
-    probleme = db.Column(db.String(100))
-    pourquoi_1 = db.Column(db.String(300))
-    pourquoi_2 = db.Column(db.String(500))
-    pourquoi_3 = db.Column(db.String(500))
-    pourquoi_4 = db.Column(db.String(500))
-    pourquoi_5 = db.Column(db.String(500))
-    def __init__(self, identifiant, famille_causes, probleme, pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5):
-        self.identifiant = identifiant
-        self.famille_causes = famille_causes
-        self.probleme = probleme
-        self.pourquoi_1 = pourquoi_1
-        self.pourquoi_2 = pourquoi_2
-        self.pourquoi_3 = pourquoi_3
-        self.pourquoi_4 = pourquoi_4
-        self.pourquoi_5 = pourquoi_5
-    def traitement_data_pourquoi(id, datacc):
-        pourquoi_1 = [ elem.details for elem in Pourquoi1.query.filter_by(valeur_aberrante_id=id).all()]
-        pourquoi_2 = [ elem.details for elem in Pourquoi2.query.filter_by(valeur_aberrante_id=id).all()]
-        pourquoi_3 = [ elem.details for elem in Pourquoi3.query.filter_by(valeur_aberrante_id=id).all()]
-        pourquoi_4 = [ elem.details for elem in Pourquoi4.query.filter_by(valeur_aberrante_id=id).all()]
-        pourquoi_5 = [ elem.details for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
-        axes_analyse_id = [ elem.axe_analyse_id for elem in Pourquoi5.query.filter_by(valeur_aberrante_id=id).all()]
-        axes_analyse = []
-        for id in axes_analyse_id:
-            axes_analyse.append(Cause.query.filter_by(id=int(id)).first().libelle)
-        liste_pourquoi = [pourquoi_1, pourquoi_2, pourquoi_3, pourquoi_4, pourquoi_5, axes_analyse]
-        nbre_pourquoi = [len(pourquoi_1), len(pourquoi_2), len(pourquoi_3), len(pourquoi_4), len(pourquoi_5)]
-        return liste_pourquoi, nbre_pourquoi
 
 class ValeursAberrante(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
@@ -320,7 +292,7 @@ class ValeursAberrante(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom_cc = db.Column(db.String(80))
     valeurs = db.Column(db.Float)
-    probleme = db.Column(db.String(100), default='',nullable=True)
+    probleme = db.Column(db.String(100))
     statut = db.Column(db.String(50))
     fichier_id = db.Column(db.Integer, db.ForeignKey('fichiers.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
@@ -348,15 +320,12 @@ class Plateau(UserMixin, db.Model):
     libelle = db.Column(db.String(100))
     description = db.Column(db.String(255))
     univers=db.Column(db.String(255))
-    def __init__(self, libelle, description, univers):
+    def __init__(self, libelle, description, univers):  
         self.libelle = libelle
         self.description = description
         self.univers = univers
 
-
-        
 ##################################### MODELISATION 2.0 ###################################################
-
 
 class Pourquoi1(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
@@ -381,14 +350,25 @@ class Pourquoi1(UserMixin, db.Model):
                 data = Pourquoi1(f'P1{i}', tmp, int(id))
                 db.session.add(data)
                 db.session.commit()
-            elif tmp:
-                # Pourquoi1.valeur_aberrante_id = int(id)
-                # Pourquoi1.code = f'P1{i}'
-                Pourquoi1.details = tmp
+            # elif tmp:
+            #     # Pourquoi1.valeur_aberrante_id = int(id)
+            #     # Pourquoi1.code = f'P1{i}'
+            #     Pourquoi1.details = tmp
+            #     db.session.commit()
+    
+    def update_p1(id):
+        for i in range(1,4):
+            if i==1:
+                data = Pourquoi1.query.filter_by(valeur_aberrante_id=int(id),code=f'P11').first()
+                data.details=request.form.get('input_1') 
                 db.session.commit()
-
-
-
+            else:
+                data = Pourquoi1.query.filter_by(valeur_aberrante_id=int(id),code=f'P1{i}').first()
+                print("Pourquoi1 : ",data)
+                if data:
+                    data.details=request.form.get(f'input_1{i}')
+                    db.session.commit()
+                
 class Pourquoi2(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='pourquoi2'
@@ -412,12 +392,27 @@ class Pourquoi2(UserMixin, db.Model):
                 data = Pourquoi2(f'P2{i}', tmp, int(id))
                 db.session.add(data)
                 db.session.commit()
-            else:
-                # Pourquoi2.valeur_aberrante_id = int(id)
-                # Pourquoi2.id = f'P2{i}'
-                Pourquoi2.details = tmp
-                db.session.commit()
+            # else:
+            #     # Pourquoi2.valeur_aberrante_id = int(id)
+            #     # Pourquoi2.id = f'P2{i}'
+            #     Pourquoi2.details = tmp
+            #     db.session.commit()
 
+    def update_p2(id):
+        for i in range(1,7):
+            if i==1:
+                data = Pourquoi2.query.filter_by(valeur_aberrante_id=int(id),code=f'P21').first()
+                data.details=request.form.get('input_2') 
+                print("Pourquoi21 : ",data.details)
+                # db.session.commit()
+            else:
+                data = Pourquoi2.query.filter_by(valeur_aberrante_id=int(id),code=f'P2{i}').first()
+                if data != None:
+                    data.details=request.form.get(f'input_2{i}')
+                    print("Pourquoi23 : ",data.details)
+                    db.session.commit()
+                else:
+                    print('vide')
 
 class Pourquoi3(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
@@ -442,11 +437,28 @@ class Pourquoi3(UserMixin, db.Model):
                 data = Pourquoi3(f'P3{i}', tmp, int(id))
                 db.session.add(data)
                 db.session.commit()
-            else:
-                # Pourquoi3.valeur_aberrante_id = int(id)
-                # Pourquoi3.id = f'P3{i}'
-                Pourquoi3.details = tmp
+            # else:
+            #     # Pourquoi3.valeur_aberrante_id = int(id)
+            #     # Pourquoi3.id = f'P3{i}'
+            #     Pourquoi3.details = tmp
+            #     db.session.commit()
+                
+    def update_p3(id):
+        for i in range(1,7):
+            if i==1:
+                data = Pourquoi3.query.filter_by(valeur_aberrante_id=int(id),code=f'P31').first()
+                data.details=request.form.get('input_3') 
+                print("Pourquoi31 : ",data)
                 db.session.commit()
+            else:
+                data = Pourquoi3.query.filter_by(valeur_aberrante_id=int(id),code=f'P3{i}').first()
+                if data != None:
+                    data.details=request.form.get(f'input_3{i}')
+                    print("Pourquoi32 : ",data.details)
+                    db.session.commit()
+                else:
+                    print('vide')
+
 
 class Pourquoi4(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
@@ -471,12 +483,30 @@ class Pourquoi4(UserMixin, db.Model):
                 data = Pourquoi4(f'P4{i}', tmp, int(id))
                 db.session.add(data)
                 db.session.commit()
-            else:
-                # Pourquoi4.valeur_aberrante_id = int(id)
-                # Pourquoi4.id = f'P4{i}'
-                Pourquoi4.details = tmp
+            # else:
+            #     # Pourquoi4.valeur_aberrante_id = int(id)
+            #     # Pourquoi4.id = f'P4{i}'
+            #     Pourquoi4.details = tmp
+            #     db.session.commit()
+                
+    def update_p4(id):
+        for i in range(1,7):
+            if i==1:
+                data = Pourquoi4.query.filter_by(valeur_aberrante_id=int(id),code=f'P41').first()
+                data.details=request.form.get('input_4') 
+                print("Pourquoi41 : ",data.details)
                 db.session.commit()
+            else:
+                data = Pourquoi4.query.filter_by(valeur_aberrante_id=int(id),code=f'P4{i}').first()
+                if data != None:
+                    data.details=request.form.get(f'input_4{i}')
+                    print("Pourquoi42 : ",data.details)
+                    db.session.commit()
+                else:
+                    print('vide')
 
+    
+    
 class Pourquoi5(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='pourquoi5'
@@ -501,11 +531,11 @@ class Pourquoi5(UserMixin, db.Model):
                     data = Pourquoi5(f'P5{i}', tmp, axe_id, int(id))
                     db.session.add(data)
                     db.session.commit()
-                else:
-                    # Pourquoi5.valeur_aberrante_id = int(id)
-                    # Pourquoi5.id = f'P5{i}'
-                    Pourquoi5.details = tmp
-                    db.session.commit()
+                # else:
+                #     # Pourquoi5.valeur_aberrante_id = int(id)
+                #     # Pourquoi5.id = f'P5{i}'
+                #     Pourquoi5.details = tmp
+                #     db.session.commit()
             elif axe:
                 data = Pourquoi5.query.filter_by(valeur_aberrante_id=int(id),code=f'P5{i}').first()
                 tmp = request.form.get(f'input_5{i}')
@@ -514,11 +544,28 @@ class Pourquoi5(UserMixin, db.Model):
                     data = Pourquoi5(f'P5{i}', tmp, axe_id, int(id))
                     db.session.add(data)
                     db.session.commit()
-                else:
-                    # Pourquoi5.valeur_aberrante_id = int(id)
-                    # Pourquoi5.id = f'P5{i}'
-                    Pourquoi5.details = tmp
+                # else:
+                #     # Pourquoi5.valeur_aberrante_id = int(id)
+                #     # Pourquoi5.id = f'P5{i}'
+                #     Pourquoi5.details = tmp
+                #     db.session.commit()
+                    
+    def update_p5(id):
+        for i in range(1,7):
+            if i==1:
+                data = Pourquoi5.query.filter_by(valeur_aberrante_id=int(id),code=f'P51').first() 
+                data.details=request.form.get('input_5') 
+                print("Pourquoi51 : ",data.details)
+                db.session.commit()
+            else:
+                data = Pourquoi5.query.filter_by(valeur_aberrante_id=int(id),code=f'P5{i}').first()
+                if data != None:
+                    data.details=request.form.get(f'input_5{i}')
+                    print("Pourquoi52 : ",data.details)
                     db.session.commit()
+                else:
+                    print('vide')
+
     def recup_all_pourquoi(all_va):
         table_pourquoi1 = []
         table_pourquoi2 = []
@@ -542,6 +589,7 @@ class Pourquoi5(UserMixin, db.Model):
                 if element.id not in liste_id:
                     liste_id.append(element.id)
         # Pour chaque id on recupere l'ensemble des causes racines et les axes d'analyses correspondante
+        nbre_p1 = []
         for element in liste_id:
             #print(element, liste_id)
             all_pourquoi1 = Pourquoi1.query.filter_by(valeur_aberrante_id=element).all()
@@ -570,10 +618,10 @@ class Pourquoi5(UserMixin, db.Model):
             valeur_cc = ValeursAberrante.query.filter_by(id=element).first().valeurs
             Valeur_cc.append(valeur_cc)
             # Pour chaque cause racine on recupere l'ensemble des actions definis 
-            #liste_action = ActionIndividuelle.recup_action(all_pourquoi5)[0] #l'ensemble des actions par id
             table = ActionIndividuelle.recup_action(all_pourquoi5)[2] #l'ensemble des actions par id
             act = ActionIndividuelle.recup_action(all_pourquoi5)[1] # liste nombre d'actions par id
             table_pourquoi1.append(all_p1) # l'ensemble des pourquoi1 pour tous les conseillers
+            nbre_p1.append(len(all_p1)) # l'ensemble des pourquoi1 pour tous les conseillers
             table_pourquoi2.append(all_p2) # l'ensemble des pourquoi2 pour tous les conseillers
             table_pourquoi3.append(all_p3) # l'ensemble des pourquoi3 pour tous les conseillers
             table_pourquoi4.append(all_p4) # l'ensemble des pourquoi4 pour tous les conseillers
@@ -585,8 +633,9 @@ class Pourquoi5(UserMixin, db.Model):
             nbre_cc += 1
         cc = [nbre_cc, Nom_cc, Valeur_cc]
         Action = [N, nbre_act, table_action]
-        table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe]
+        table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe, nbre_p1]
         return table_pourquoi_axe, Action, cc
+    
 
     def position_button(all_causes_racines):
         if len(all_causes_racines) == 6:
