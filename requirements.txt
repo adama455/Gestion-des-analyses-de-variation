@@ -12,4 +12,4 @@ flask-user
 Flask-Session==0.4.0
 pycryptodome==3.16.0
 itsdangerous==2.1.2
-Flask-Migrate
+Flask-Migrateflask-paginate==2022.1.8

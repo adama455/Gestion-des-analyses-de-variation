@@ -180,13 +180,18 @@ for (let index = 1; index <causes_racines.length; index++) {
   }
 }
 
-function ajax(method, data, url) {
+function ajax(method, data, Url) {
+  var url = new URL(window.location.href);
+  var id_va = url.searchParams.get("id_va");
+  var fichier_id = url.searchParams.get("fichier_id");
+  url = Url +'?fichier_id='+fichier_id+'&id_va='+id_va
+  console.log(url);
   $.ajax({
     data: { data: data }, //grab text between span tags
     type: method,
     url: url, //post grabbed text to flask endpoint for saving role
     async: false,
-
+    
     success: function (data) {
       $(".alert-success").css("display", "block");
       $(".alert-success").append("<h3>Sent Successfully...</h3>");
@@ -203,7 +208,8 @@ function ajax(method, data, url) {
 $(document).ready(function () {
   $("#action_programme").click(function (event) {
     var n = document.getElementById("corps").childNodes;
-    // console.log(n);
+    var m = document.getElementById("corps").children
+    console.log(m);
     var ACTION = [];
     var actions = [];
     n.forEach((element) => { //lines
@@ -217,6 +223,7 @@ $(document).ready(function () {
           console.log(element.children[1].childNodes[k]);
           colonnes.push(element.children[2].childNodes[k].value);
           colonnes.push(element.children[3].childNodes[k].value);
+          colonnes.push(`code_${element.id}.${k+1}`)
           console.log(actions);
           colonnes.push('{');
         }

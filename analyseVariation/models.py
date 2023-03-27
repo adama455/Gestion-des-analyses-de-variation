@@ -5,7 +5,7 @@ from time import time
 sys.path.append('.')
 sys.path.append('..')
 from flask import current_app, request #<---HERE
-from analyseVariation import db, init_base, login_manager,app
+from analyseVariation import db, init_base, login_manager
 from sqlalchemy.orm import *
 from flask_login import UserMixin
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
@@ -65,20 +65,82 @@ class ActionProgramme(UserMixin,db.Model):
     __tablename__='action_programme'
     id=db.Column(db.Integer, primary_key=True)
     cause_racine=db.Column(db.String(255))
-    action=db.Column(db.String(255))
+    libelle_action=db.Column(db.String(255))
     porteur=db.Column(db.String(80))
     echeance=db.Column(db.String(80))
     status=db.Column(db.String(80))
     commentaire=db.Column(db.String(80))
-    # pourquoi5_id = db.Column(db.Integer(), db.ForeignKey('pourquoi5.id', ondelete='CASCADE'))
+    pourquoi5_id = db.Column(db.Integer(), db.ForeignKey('pourquoi5.id', ondelete='CASCADE'))
     
-    def __init__(self, cause_racine, action, porteur, echeance, statut,commentaire):
+    def __init__(self, cause_racine, libelle_action, porteur, echeance, statut, commentaire, pourquoi5_id):
         self.cause_racine = cause_racine
-        self.action = action
+        self.libelle_action = libelle_action
         self.porteur = porteur
         self.echeance = echeance
         self.status = statut
         self.commentaire = commentaire
+        self.pourquoi5_id = pourquoi5_id
+        
+    def recup_action(data):
+        try:
+            act_1 = []
+            act_2 = []
+            act_3 = []
+            act_4 = []
+            act_5 = []
+            act_6 = []
+            # reference = []
+            libelle = []
+            porteur = []
+            echeance = []
+            statut = []
+            id = []
+            table = []
+            liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
+            n=1
+            for element in data: 
+                #print(element.id)
+                action = ActionProgramme.query.filter_by(pourquoi5_id=element.id).all()
+                if f'P5{n}'==((element.code)):
+                    # ref = []
+                    lib = []
+                    por = []
+                    ech = []
+                    stat = []
+                    for elem in action:
+                        # ref.append(elem.reference_action)
+                        # reference.append(elem.reference_action)
+                        lib.append(elem.libelle_action)
+                        libelle.append(elem.libelle_action)
+                        por.append(elem.porteur)
+                        porteur.append(elem.porteur)
+                        ech.append(elem.echeance)
+                        echeance.append(elem.echeance)
+                        stat.append(elem.status)
+                        id.append(elem.id)
+                        statut.append(elem.status)
+                    # liste_action[n-1].append(ref)
+                    liste_action[n-1].append(lib)
+                    liste_action[n-1].append(por)
+                    liste_action[n-1].append(ech)
+                    liste_action[n-1].append(stat)
+                n+=1
+            table.append(libelle)
+            table.append(porteur)
+            table.append(echeance)
+            table.append(id)
+            table.append(statut)
+            nbre_act = []
+            for elem in liste_action:
+                if elem:
+                    nbre_act.append(len(elem[0]))
+                else:
+                    nbre_act.append(0)
+        except:
+            nbre_act = [0, 0, 0, 0, 0, 0]
+            print('on a pas pu recuperer les infos correspondant a cette reference')
+        return liste_action, nbre_act, table
+
         
 class ActionIndividuelle(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}
@@ -118,7 +180,7 @@ class ActionIndividuelle(UserMixin, db.Model):
             table = []
             liste_action = [act_1, act_2, act_3, act_4, act_5, act_6]
             n=1
-            for element in data:
+            for element in data: 
                 #print(element.id)
                 action = ActionIndividuelle.query.filter_by(pourquoi5_id=element.id).all()
                 if f'P5{n}'==((element.code)):
@@ -222,7 +284,7 @@ class Fichiers(UserMixin, db.Model):
     nbre_va_sur_perf = db.Column(db.String(50))
     nbre_va_sous_perf = db.Column(db.String(50))
     statut = db.Column(db.String(50))
-    kpi_id = db.Column(db.Integer, db.ForeignKey('kpi.id', ondelete='CASCADE'))
+    kpi_id = db.Column(db.Integer, db.ForeignKey('kpi.id', ondelete='CASCADE'),nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     def __init__(self, nom_fichier, libelle, effectif, date, intervale_analyse, equipe, vsf, limite_ctrl_sup, limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, statut, kpi_id, user_id):
         self.nom_fichier = nom_fichier
@@ -565,7 +627,32 @@ class Pourquoi5(UserMixin, db.Model):
                     db.session.commit()
                 else:
                     print('vide')
-
+    
+    def update_axe_cause(id):
+        for i in range(1,7):
+            axe = request.form.get(f'axes_{i}_analyse')
+            if i==1:
+                data = Pourquoi5.query.filter_by(valeur_aberrante_id=int(id),code='P51').first()
+                axe_id = Cause.query.filter_by(libelle=axe).first().id
+                print("axe_id : ",axe_id)
+                print("data_1 : ",data.axe_analyse_id )
+                if data:
+                    # data = Pourquoi5(f'P5{i}', axe_id, int(id))
+                    data.axe_analyse_id = axe_id
+                    print("data_2 : ",data.axe_analyse_id)
+                    db.session.commit()
+            else:
+                if axe:
+                    data = Pourquoi5.query.filter_by(valeur_aberrante_id=int(id),code=f'P5{i}').first()
+                    axe_id = Cause.query.filter_by(libelle=axe).first().id
+                    print("axe_id2 : ",axe_id)
+                    print("data_11  : ",data.axe_analyse_id )
+                    if data:
+                        data.axe_analyse_id = axe_id
+                        print("data_22  : ",data.axe_analyse_id ) 
+                        # db.session.add(data)
+                        db.session.commit()
+    
     def recup_all_pourquoi(all_va):
         table_pourquoi1 = []
         table_pourquoi2 = []

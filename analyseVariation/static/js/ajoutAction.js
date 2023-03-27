@@ -198,7 +198,7 @@ function ajax(method, data, Url) {
   var fichier_id = url.searchParams.get("fichier_id");
   url = Url +'?fichier_id='+fichier_id+'&id_va='+id_va
   console.log(url)
-  $.ajax({
+  $.ajax({ 
     data: { data: data }, //grab text between span tags
     type: method,
     url: url, //post grabbed text to flask endpoint for saving role

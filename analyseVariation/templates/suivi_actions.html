@@ -1,108 +1,171 @@
 {% extends 'index.html' %}
+{% block css %}
+{#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">#}
+{% endblock css %}
+
 {% block content %}
-<div class="jumbotron p-3 mb-2 mt-5 tx-center az-content-label">SUIVI DES ACTIONS</div>
-{# <div class="recap p-3 shadow"> #}
+<div class="jumbotron p-3 mb-2 mt-5 tx-center az-content-label">SUIVI DES ACTIONS INDIVIDUELLES</div>
 <div class="card bg-gray-100 shadow">
-    <div class="card-body">
-        <table id="datatable1" class="display responsive nowrap" width="100%">
-            <thead class="bg-primary">
-                <tr>
-                    <thead class="bg-primary">
-                        <tr class="tx-center py-2 fs-5">
-                            <th class="wd-15p text-dark">
-                                Conseiller
-                            </th>
-                            <th class="wd-10p text-dark">
-                                valeur
-                            </th>
+<div class="card-body">
+    {# <form method="post" class="my-3 float-right">
+        <input type="text" name="search" class="p-2 live-search-box" required>
+        <input type="submit" value="Search" class="p-2">
+    </form> #}
+    <input type="text" class="live-search-box p-2 my-3 float-right " placeholder="search here" />
+    {# {{ pagination.links | safe }}
+    {{ pagination.info | safe  }} #}
+    {# <h2>(Page {{ pagination.page }})</h2> #}
+    <table id="datatable1" class="display responsive nowrap table-sm" width="100%">
+        <thead class="bg-primary">
+            <tr class="tx-center py-2 fs-5">
+                <th class="wd-15p text-dark">
+                    Conseiller
+                </th>
+                <th class="wd-10p text-dark">
+                    valeur
+                </th>
 
-                            <th class="wd-20p text-dark">
-                                Cause racine
-                            </th>
-                            <th class="wd-10p text-dark">
-                                Famille cause
-                            </th>
-                            <th class="wd-20p text-dark">
-                                Actions
-                            </th>
-                            <th class="wd-5p text-dark">
-                                Porteurs
-                            </th>
-                            <th class="wd-10p text-dark">
-                                Echeances
-                            </th>
-                            <th class="wd-5p text-dark">
-                                Statut
-                            </th>
-                            <th class="wd-5p text-dark">
-                                Edit
-                            </th>
-                        </tr>
-                    </thead>
-            <tbody>
-                {% for j in range(nbre_cc) %}
-                {% for i in range(N[j]) %}
-                <tr>
-                    {% if i==0 %}
-                    <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                        {{ Nom_cc[j] }}
-                    </td>
-                    <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
-                        {{ Valeur_cc[j] }}
-                    </td>
-                    {%  endif %}
-                    {%  for m in range(2) %}
-                    {% if i==0 %}
-                    <td rowspan="{{ nbre_act[j][0] }}" class="col-2 tx-center border">
-                        {{ table_pourquoi_axe[m][j][0] }}
-                    </td>
-                    {% elif i==nbre_act[j][0] %}
-                    <td rowspan="{{ nbre_act[j][1] }}" class="col-2 tx-center border">
-                        {{ table_pourquoi_axe[m][j][1] }}
-                    </td>
-                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]) %}
-                    <td rowspan="{{ nbre_act[j][2] }}" class="col-2 tx-center border">
-                        {{ table_pourquoi_axe[m][j][2] }}
-                    </td>
-                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]) %}
-                    <td rowspan="{{ nbre_act[j][3] }}" class="col-2 tx-center border">
-                        {{ table_pourquoi_axe[m][j][3] }}
-                    </td>
-                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]) %}
-                    <td rowspan="{{ nbre_act[j][4] }}" class="col-2 tx-center border">
-                        {{ table_pourquoi_axe[m][j][4] }}
-                    </td>
-                    {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]+nbre_act[j][4]) %}
-                    <td rowspan="{{ nbre_act[j][5] }}" class="col-2 tx-center border">
-                        {{ table_pourquoi_axe[m][j][5] }}
-                    </td>
-                    {%  endif %}
-                    {%  endfor %}
+                <th class="wd-20p text-dark">
+                    Cause racine
+                </th>
+                <th class="wd-5p text-dark">
+                    Famille cause
+                </th>
+                <th class="wd-20p text-dark">
+                    Actions
+                </th>
+                <th class="wd-5p text-dark">
+                    Porteurs
+                </th>
+                <th class="wd-10p text-dark">
+                    Echeances
+                </th>
+                <th class="wd-5p text-dark">
+                    Statut
+                </th>
+                <th class="wd-5p text-dark">
+                    Edit
+                </th>
+                {# <th class="wd-5p text-dark">
+                    Act prog
+                </th> #}
+            </tr>
+        </thead>
+        <tbody class="live-search-list">
 
-                    <td class="col-2 tx-center border">
-                        {{ table_action[j][0][i] }}
-                    </td>
-                    <td class="col-1 tx-center border">
-                        {{ table_action[j][1][i] }}
-                    </td>
-                    <td class="col-1 tx-center border">
-                        {{ table_action[j][2][i] }}
-                    </td>
-                    <td class="col-1 tx-center border">
-                        {{ table_action[j][4][i] }}
-                    </td>
-                    <td class="col-1 tx-center border">
-                        <a href="{{ url_for('editpa', id_action=table_action[j][3][i]) }}" class="text-center"
-                            title="edit" id="edituser" data-toggle="modal">
-                            <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
-                        </a>
-                    </td>
-                </tr>
+            {% for j in range(nbre_cc) %}
+            {% for i in range(N[j]) %}
+            <tr>
+                {% if i==0 %}
+                <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
+                    {{ Nom_cc[j] }}
+                </td>
+                <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
+                    {{ Valeur_cc[j] }}
+                </td>
+                {%  endif %}
+                {%  for m in range(2) %}
+                {% if i==0 %}
+                <td rowspan="{{ nbre_act[j][0] }}" class="col-2 tx-center border">
+                    {{ table_pourquoi_axe[m][j][0] }}
+                </td>
+                {% elif i==nbre_act[j][0] %}
+                <td rowspan="{{ nbre_act[j][1] }}" class="col-2 tx-center border">
+                    {{ table_pourquoi_axe[m][j][1] }}
+                </td>
+                {% elif i==(nbre_act[j][0]+nbre_act[j][1]) %}
+                <td rowspan="{{ nbre_act[j][2] }}" class="col-2 tx-center border">
+                    {{ table_pourquoi_axe[m][j][2] }}
+                </td>
+                {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]) %}
+                <td rowspan="{{ nbre_act[j][3] }}" class="col-2 tx-center border">
+                    {{ table_pourquoi_axe[m][j][3] }}
+                </td>
+                {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]) %}
+                <td rowspan="{{ nbre_act[j][4] }}" class="col-2 tx-center border">
+                    {{ table_pourquoi_axe[m][j][4] }}
+                </td>
+                {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]+nbre_act[j][4]) %}
+                <td rowspan="{{ nbre_act[j][5] }}" class="col-2 tx-center border">
+                    {{ table_pourquoi_axe[m][j][5] }}
+                </td>
+                {%  endif %}
                 {%  endfor %}
-                {%  endfor %}
-            </tbody>
-        </table>
+
+                <td class="col-2 tx-center border">
+                    {{ table_action[j][0][i] }}
+                </td>
+                <td class="col-1 tx-center border">
+                    {{ table_action[j][1][i] }}
+                </td>
+                <td class="col-1 tx-center border">
+                    {{ table_action[j][2][i] }}
+                </td>
+                <td class="col-1 tx-center border">
+                    {{ table_action[j][4][i] }}
+                </td>
+                <td class="col-1 tx-center border">
+                    <a href="{{ url_for('editpa', id_action=table_action[j][3][i]) }}" class="text-center"
+                        title="edit" id="edituser" data-toggle="modal">
+                        <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
+                    </a>
+                </td>
+            </tr>
+            {%  endfor %}
+            {%  endfor %}
+        </tbody>
+    </table>
+    {# {{ pagination.links | safe }} #}
+    <div class="d-flex justify-content-between">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+            </nav>
+        <div class="col-2 d-flex justify-content-end p-0 mg-r-40">
+            <a href="{{ url_for('suivi_action_programme', fichier_id=fichier_id) }}">
+                <button type="submit" class="btn  bouton rounded" id="enregistrement_de_detail">Suivi A.P</button>
+            </a>
+        </div>
     </div>
 </div>
 </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function ($) {
+
+    $('.live-search-list tr').each(function () {
+        $(this).attr('data-search-term', $(this).text().toLowerCase());
+    });
+
+    $('.live-search-box').on('keyup', function () {
+
+        var searchTerm = $(this).val().toLowerCase();
+
+        $('.live-search-list tr').each(function () {
+
+            if ($(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 || searchTerm.length < 1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+});
+</script>
+
 {% endblock content %}

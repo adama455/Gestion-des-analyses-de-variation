@@ -1,1 +1,3 @@
 link_export_basededonneemysql: https://www.google.com/search?q=mysqldump%3A+Error%3A+%27Access+denied%3B+you+need+(at+least+one+of)+the+PROCESS+privilege(s)+for+this+operation%27+when+trying+to+dump+tablespaces&oq=mysqldump%3A+Error%3A+%27Access+denied%3B+you+need+(at+least+one+of)+the+PROCESS+privilege(s)+for+this+operation%27+when+trying+to+dump+tablespaces&aqs=chrome..69i57j69i58.511j0j4&sourceid=chrome&ie=UTF-8
+
+kill $(lsof -t -i:5000) commande pour tuer un port en cours d'utilisation...
