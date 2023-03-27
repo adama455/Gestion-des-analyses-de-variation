@@ -521,7 +521,6 @@ class Pourquoi3(UserMixin, db.Model):
                 else:
                     print('vide')
 
-
 class Pourquoi4(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='pourquoi4'
@@ -631,7 +630,7 @@ class Pourquoi5(UserMixin, db.Model):
     def update_axe_cause(id):
         for i in range(1,7):
             axe = request.form.get(f'axes_{i}_analyse')
-            if i==1:
+            if i==1 and axe:
                 data = Pourquoi5.query.filter_by(valeur_aberrante_id=int(id),code='P51').first()
                 axe_id = Cause.query.filter_by(libelle=axe).first().id
                 print("axe_id : ",axe_id)
