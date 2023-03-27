@@ -390,7 +390,7 @@ class Plateau(UserMixin, db.Model):
 ##################################### MODELISATION 2.0 ###################################################
 
 class Pourquoi1(UserMixin, db.Model):
-    __table_args__ = {'extend_existing': True} 
+    __table_args__ = {'extend_existing': True}
     __tablename__='pourquoi1'
     id=db.Column(db.Integer,primary_key=True, autoincrement=True)
     code = db.Column(db.String(100))
@@ -566,8 +566,6 @@ class Pourquoi4(UserMixin, db.Model):
                 else:
                     print('vide')
 
-    
-    
 class Pourquoi5(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True} 
     __tablename__='pourquoi5'
@@ -722,7 +720,6 @@ class Pourquoi5(UserMixin, db.Model):
         table_pourquoi_axe = [table_pourquoi1, table_pourquoi2, table_pourquoi3, table_pourquoi4, table_pourquoi5, table_axe, nbre_p1]
         return table_pourquoi_axe, Action, cc
     
-
     def position_button(all_causes_racines):
         if len(all_causes_racines) == 6:
             return "col-2"
