@@ -85,9 +85,45 @@ def detailUser(id):
     return f"Utilisateur avec id ={id} n'existe pas!"    
 
 #C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
-@app.route("/change-password")
+@app.route("/change-password",methods=['GET', 'POST'])
 @login_required
 def changepassword():
+    if request.method == "POST":
+        ancien = request.form['ancien-password']
+        nouveau = request.form['nouveau-password']
+        confirmer_mot_de_passe = request.form['password-confirmer']
+        
+        # récupérer l'utilisateur correspondant dans la base de données
+        utilisateur = User.query.first()
+        
+        # vérifier si l'utilisateur existe dans la base de données
+        if utilisateur is None:
+            flash("Uti1isateur non trouvé",'danger')
+            return redirect(url_for("changepassword"))
+        
+        # vérifier L'ancien not de passe
+        if not bcrypt.check_password_hash(utilisateur.password, ancien):
+            flash("Ancien mot de passe incorrect", 'danger')
+            return redirect(url_for("changepassword"))
+        
+        # vérifier 1a confirmation du nouveau mot de passe
+        if nouveau != confirmer_mot_de_passe:
+            flash("Les mots de passe ne correspondent pas", 'warning')
+            return redirect(url_for("changepassword"))
+            
+        if len(nouveau) > 6:
+            # mettre à jour le mot de passe dans la base de données
+            utilisateur.password = bcrypt.generate_password_hash(nouveau).decode('utf-8')
+            db.session.commit()
+        else:
+            message = flash("Le mot de passe doit-être superieur à cinq carac.…")
+            return render_template( 'profil .html', message=message)
+
+        flash("mot de passe modifié avec succès",'success')
+        return redirect(url_for('home'))
+
+    return render_template("profil.html")
+
     return render_template('changepassword.html')    
 
 @app.route("/compte", methods=('GET', 'POST'))
