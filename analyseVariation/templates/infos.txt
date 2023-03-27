@@ -70,3 +70,9 @@ Non utilisation du kmc
 #         pass
 #     def Consulter(self, ):
 #         pass
+
+#C'est ici que le changement de mot de passe est effectuer pour les utilisateurs
+@app.route("/change-password")
+@login_required
+def changepassword():
+    return render_template('changepassword.html')    
