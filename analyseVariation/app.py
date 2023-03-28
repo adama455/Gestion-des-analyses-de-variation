@@ -14,8 +14,8 @@ from flask_user import login_required, UserManager, SQLAlchemyAdapter
 from flask_user import roles_required
 from functools import wraps
 import os
-from tkinter import filedialog
-from tkinter import *
+# from tkinter import filedialog
+# from tkinter import *
 from openpyxl import load_workbook
 import csv
 import pandas as pd
