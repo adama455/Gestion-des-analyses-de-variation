@@ -7,7 +7,7 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
-from analyseVariation.models import User, ValeursAberrante, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
+from analyseVariation.models import User, ValeursAberrante,ValeursFichier, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
 from analyseVariation import app, db, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_user import login_required, UserManager, SQLAlchemyAdapter
@@ -346,7 +346,18 @@ def fichiers():
 @app.route("/fichiers_global")
 @login_required
 def fichiers_global():
-    return render_template('fichiers_global.html', title='fichier global')
+    liste_fichier = []
+    all_av = ValeursFichier.query.all() 
+    nbre_av =len(all_av)
+    for elem in all_av:
+        print('elem: %s' % elem)
+        id = Fichiers.query.filter_by(id=elem.fichier_id).first().id
+        conseiller = ValeursFichier.query.filter_by(id=elem.fichier_id).first().conseiller
+        Valeurs = ValeursFichier.query.filter_by(id=elem.fichier_id).first().valeur
+        # agent = Valeurs + ' '+ conseiller.upper()
+        champ_fichier = [elem.id, elem.conseiller, elem.valeur,elem.fichier_id]
+        liste_fichier.append(champ_fichier)
+    return render_template('fichiers_global.html', title='fichier global',liste_fichier=liste_fichier, nbre_av=nbre_av)
     
 @app.route("/listepa")
 @login_required
@@ -411,7 +422,7 @@ def editact_prog():
 def listeVa():
     form = RegistrationForm()
     infos_fichier = []
-    fichier_id = int(request.args.get('fichier_id')) 
+    fichier_id = int(request.args.get('fichier_id'))
     liste = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
     n = len(liste) 
     data = Fichiers.query.filter_by(id=fichier_id).all()
@@ -665,18 +676,52 @@ def logout():
     logout_user()
     return redirect('login')
 
+
+# Faire une fonction qui extrait les chaines de caractères et les convertissent en entier
+
+def replace_comma_with_dot(lst):
+    """Replace commas with dots in all elements of a list."""
+    new_lst = []
+    for element in lst:
+        if isinstance(element, str) and ',' in element:
+            element = element.replace(',', '.').split('.')[0]
+        new_lst.append(int(element))
+    return new_lst
+
+def dataset(list1,liste2):
+    d = list(zip(list1,replace_comma_with_dot(liste2)))
+    new_df = pd.DataFrame(d, columns=['Nom', 'Mesures'])
+    return new_df
+
+def preprocess_data(data):
+    # Remplacer les valeurs manquantes par la médiane de la colonne
+    data = data.fillna(data.median())
+    # Eliminer les observations ayant des valeurs manquantes
+    data = data.dropna()
+    return data
+
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
     try :
+        info = request.args
+        print('================================>',info)
         nom_fichier = request.args.get('filename')
+        print('==========TEST===============>',pd.read_excel(nom_fichier))
         kpi = request.args.get('kpi')
+        print('le kpi',kpi)
         libelle_analyse = request.args.get('libelle_analyse')
+        print('le libelle_analyse',libelle_analyse) 
         equipe = request.args.get('equipe')
-        #reference = '000012'
         data = pd.read_excel(nom_fichier)
+        copy = data.copy()
+        data = preprocess_data(data)
+        
+        
+        # print(df['Mesures'])
         #mesures = data.Mesures.dropna()
-        data = data.dropna()
+        
         Date = date.today()
+        # print("debug :",Date)
         effectif = data["Mesures"].count()
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         #print(current_user.id)
@@ -687,15 +732,28 @@ def synthese_av():
         VSF = round((data['Mesures'].std()*6)/data['Mesures'].mean(), 2)
         nbre_mesure = data.Nom.count()
         #print( limite_ctrl_sup, data['Mesures'].std(), data['Mesures'].mean())
-        if kpi == 'DMT':
+        if kpi == 'DMT' or kpi == 'CSAT' or kpi == 'DSAT' :
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
             data = data[(data["Mesures"]<650)|(data['Mesures']> 1000)]
+            print('present etape de calcul')
+            ## Traitement des valeurs non aberrantes
+            copy = preprocess_data(copy)
+            mesures = list(copy['Mesures'])
+            l = list(copy['Nom'])
+            print('deuxieme etape de calcul')
+            # Construire un nouveau dataset
+            r = dataset(l, mesures)
+
+            valeursNonAberrants = r[(r["Mesures"]<650)|(r['Mesures']> 1000)] # Les valeurs non aberrantes
+            print('VNA : ', valeursNonAberrants)
+            print('Troisieme etape de calcul')
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
         paramettre_analyse_variation = [ limite_ctrl_sup, limite_ctrl_inf, VSF, nbre_mesure, mesures_a_objectif]
         prenom = current_user.prenom
         nom = current_user.nom
+        
         insert_fichier = Fichiers(nom_fichier, libelle_analyse, effectif, Date, ' ', 'Equipe', VSF, limite_ctrl_sup, 
                                   limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
                                   int(current_user.id))
@@ -709,13 +767,23 @@ def synthese_av():
     try:
         fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         valeur_exist = ValeursAberrante.query.filter_by(fichier_id=fichier.id).first()
-        if not valeur_exist:
+        exist = ValeursFichier.query.filter_by(fichier_id=fichier.id).first()
+        if not valeur_exist and not exist:
             for i in range(data.shape[0]):
+                print('Valeurs :',data['Mesures'][data.index[i]])
+                print('Nom :',data['Nom'][data.index[i]])
                 valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], ' ', 'En attente', fichier.id, int(current_user.id))
+                valeur = ValeursFichier(valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]],valeursNonAberrants['Nom'][valeursNonAberrants.index[i]], fichier.id)
+                
                 db.session.add(valeur_aberante)
-                db.session.commit()
-    except AttributeError:
-        print("Erreur d'atribut")
+                db.session.add(valeur)
+                try:
+                    print('Onnnnnnnnnnnnnn')
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+    except AttributeError as e:
+        print("Erreur d'atribut : ",e)
     if request.method=='POST':
         libelle = request.form['libelle']
         statut = request.form['statut']
