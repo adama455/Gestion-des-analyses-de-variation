@@ -4,8 +4,9 @@ import datetime
 import subprocess
 sys.path.append('.')
 sys.path.append('..')
-from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask import Flask, render_template, url_for, request, redirect, flash, session,make_response
 from flask_sqlalchemy import SQLAlchemy
+from io import BytesIO
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
 from analyseVariation.models import User, ValeursAberrante,ValeursFichier, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
 from analyseVariation import app, db, bcrypt
@@ -16,7 +17,8 @@ from functools import wraps
 import os
 # from tkinter import filedialog
 # from tkinter import *
-from openpyxl import load_workbook
+from openpyxl import load_workbook,Workbook
+
 import csv
 import pandas as pd
 from datetime import date
@@ -27,7 +29,6 @@ user_manager = UserManager(db_adapter, app) # Initialize Flask-User
 # user_datastore = SQLAlchemyUserDatastore(db,User,Role)
 # security = Security(app,user_datastore)
 from werkzeug.utils import secure_filename
-
 
 
 #la racine ou page connexion des utilisateurs
@@ -347,10 +348,17 @@ def fichiers():
 @login_required
 def fichiers_global():
     liste_fichier = []
-    all_av = ValeursFichier.query.all() 
+    ma_variable = session.get('ma_variable',{})
+
+    # Faire quelque chose avec la variable (par exemple l'afficher)
+    data = str(ma_variable)
+    id = request.args.get('id')
+
+    print("====================>",data)
+    all_av = ValeursFichier.query.filter_by(fichier_id=id).all() 
     nbre_av =len(all_av)
     for elem in all_av:
-        print('elem: %s' % elem)
+        print('elem1: %s' % elem)
         id = Fichiers.query.filter_by(id=elem.fichier_id).first().id
         conseiller = ValeursFichier.query.filter_by(id=elem.fichier_id).first().conseiller
         Valeurs = ValeursFichier.query.filter_by(id=elem.fichier_id).first().valeur
@@ -424,9 +432,14 @@ def listeVa():
     infos_fichier = []
     fichier_id = int(request.args.get('fichier_id'))
     liste = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
-    n = len(liste) 
+    
+    # On recupere tous les valeurs valeurs non-aberrantes correspondantes selon fichier_id correspond
+    liste1 = ValeursFichier.query.filter_by(fichier_id=fichier_id).all()
+
+    # Calcule de la longueur correspond de m et n
+    n = len(liste)
     data = Fichiers.query.filter_by(id=fichier_id).all()
-    nbre_fichier = len(data) 
+    nbre_fichier = len(data)
     print ("Liste va :", data) 
     for elem in data:
         nom = User.query.filter_by(id=elem.user_id).first().nom
@@ -442,7 +455,7 @@ def listeVa():
         print("info : ", infos_fichier)
     statut_action = 'En attente'
     return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, fichier_id=fichier_id, 
-                           statut_action=statut_action, nbre_fichier=nbre_fichier, infos_fichier=infos_fichier)
+                        statut_action=statut_action, nbre_fichier=nbre_fichier, infos_fichier=infos_fichier)
 
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
@@ -497,7 +510,7 @@ def profil():
 @login_required
 def analyse_agent():
     #recuperer la reference de l'AV au niveaude l'url et l'utiliser pour recuperer les infos corespondantes
-    fichier_id = int(request.args.get('fichier_id'))
+    fichier_id = request.args.get('fichier_id')
     try:
         data_fichier = Fichiers.query.filter_by(id=fichier_id).first()
         cause = Cause.query.all()
@@ -546,7 +559,7 @@ def analyse_agent():
         data_exist = 1
         liste_pourquoi = Fichiers.traitement_data_pourquoi(id_va)[0]
         
-        return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi, 
+        return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi,
                                fichier_id=fichier_id, libelle=libelle, cause=cause, liste=liste)
     try:
         return render_template('analyse-agent.html', fichier_id=id, libelle=libelle, cause=cause, liste=liste)   
@@ -659,6 +672,7 @@ def action_programme():
         
 
 
+############################# Route vers la page recap.html #########################
 @app.route("/recaputilatif", methods=('POST', 'GET'))
 @login_required
 def recap_value():
@@ -669,8 +683,61 @@ def recap_value():
     Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
     Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
     CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
-    return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+    
+    try:
+        # return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+        return render_template('recap.html',fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+    except:
+        return export(data)
 
+############################ Fonction d'exportation ###############################
+@app.route("/export", methods=['GET','POST'])
+@login_required
+def export():
+    fichier_id=request.args.get('fichier_id')
+    print("fichier_id ===============: ", fichier_id)
+    
+    all_va = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
+    Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
+    Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
+    CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
+    # print('Les CC: ',CC[1])
+    # print('Les Valeurs: ',CC[2])
+    # print('Les pourquois0: ',Pourquoi[5][0][0])
+    # print('Les pourquois0: ',Pourquoi[0][0][0])
+    # print('Les pourquois1: ',Pourquoi[1][0][0])
+    # print('Les pourquois2: ',Pourquoi[2][0][0])
+    # print('Les pourquois3: ',Pourquoi[3][0][0])
+    # print('Les pourquois4: ',Pourquoi[4][0][0])
+    # print('Les Actions: ',Action)
+    # print('Les Actions: ',Action[2][0][0][0])
+    # print('Les Porteurs: ',Action[2][0][1][0])
+    # print('Les Echeances: ',Action[2][0][2][0])
+    # print('Les attentes: ',Action[2][0][4][0])
+    # print('Les autres: ',Action)
+
+    # Construire les données excel à extraire
+    data = [
+        ["Conseiller", "Valeurs", "Pourquoi1","Pourquoi2","Pourquoi3","Pourquoi4","Pourquoi5","Famille-cause","Action","Porteurs","Echeances","Status"],
+        [CC[1][0], CC[2][0], Pourquoi[0][0][0],Pourquoi[1][0][0],Pourquoi[2][0][0],Pourquoi[3][0][0],Pourquoi[4][0][0],Pourquoi[5][0][0],Action[2][0][0][0],Action[2][0][1][0],Action[2][0][2][0],Action[2][0][4][0]]
+    ]
+    df = pd.DataFrame(data[1:], columns=data[0])
+    print("DataFrame :", df)
+    try:
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        df.to_excel(writer, sheet_name='Sheet1', index=False)
+        writer.save()
+        response = make_response(output.getvalue())
+        response.headers['Content-Disposition'] = 'attachment; filename=export.xlsx'
+        response.headers['Content-Type'] = 'application/vnd.ms-excel'
+    except Exception as e:
+        print('echec de recuperation des elements',e)
+    return response
+
+
+
+###################""
 @app.route("/logout")
 def logout():
     logout_user()
@@ -687,6 +754,7 @@ def replace_comma_with_dot(lst):
             element = element.replace(',', '.').split('.')[0]
         new_lst.append(int(element))
     return new_lst
+
 
 def dataset(list1,liste2):
     d = list(zip(list1,replace_comma_with_dot(liste2)))
@@ -745,7 +813,7 @@ def synthese_av():
             # Construire un nouveau dataset
             r = dataset(l, mesures)
 
-            valeursNonAberrants = r[(r["Mesures"]<650)|(r['Mesures']> 1000)] # Les valeurs non aberrantes
+            valeursNonAberrants = r[(r["Mesures"]>650) | (r['Mesures']<1000)] # Les valeurs non aberrantes
             print('VNA : ', valeursNonAberrants)
             print('Troisieme etape de calcul')
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
@@ -1010,6 +1078,8 @@ def suivi_action_programme():
     #                         table_liste_causes=table_liste_causes,table_liste_action=table_liste_action,
     #                         table_liste_porteur=table_liste_porteur,table_liste_echeance=table_liste_echeance
     #                     )
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly

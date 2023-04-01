@@ -146,9 +146,9 @@
     </div>
     {% endif %}
     {% if current_user.is_authenticated and (current_user.profil)!='MANAGER_OPERATIONNEL' %}
-    <div class="detail-analyse d-flex row">
-        <a href="#" id="action_programme" class="w-100 fs-5 col-3">
-        <button type="button" class="btn bouton rounded my-3 float-left" id="exporter-an">Exporter</button>
+    <div class="detail-analyse d-flex row"> 
+        <a href="{{ url_for('export', fichier_id=fichier_id) }}" id="action_programme" class="w-100 fs-5 col-3">
+            <button type="button" class="btn bouton rounded my-3 float-left" id="exporter-an">Exporter</button>
         </a>
         <a href="{{ url_for('rejeterAv', fichier_id=fichier_id) }}" id="action_programme" class="w-100 fs-5 col-8">
             <button type="button" class="btn btn-danger tx-white rounded my-3 float-right" id="rejet-av">Rejeter</button>
@@ -157,6 +157,6 @@
             <button type="button" class="btn btn-success tx-white rounded my-3 float-right" id="valider-av">Valider</button>
         </a>
     </div>
-    {% endif %}
+    {% endif %}    
 </div>
 {% endblock content %}
