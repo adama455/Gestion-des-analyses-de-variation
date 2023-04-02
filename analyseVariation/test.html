@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exemple de tableau dynamique</title>
+	<style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+	<label for="search-input">Recherche :</label>
+	<input type="text" id="search-input" onkeyup="searchTable()"><button type="submit">btn</button>
+	<br><br>
+	<table id="myTable">
+		<thead>
+			<tr>
+				<th>Colonne 1</th>
+				<th>Colonne 2</th>
+				<th>Colonne 3</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td rowspan="2">Ligne 1</td>
+				<td>Cellule 1-2</td>
+				<td>Cellule 1-3</td>
+			</tr>
+			<tr>
+				<td>Cellule 2-2</td>
+				<td>Cellule 2-3</td>
+			</tr>
+			<tr>
+				<td rowspan="3">Ligne 2</td>
+				<td>Cellule 3-2</td>
+				<td>Cellule 3-3</td>
+			</tr>
+			<tr>
+				<td>Cellule 4-2</td>
+				<td>Cellule 4-3</td>
+			</tr>
+			<tr>
+				<td>Cellule 5-2</td>
+				<td>Cellule 5-3</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Ligne 3</td>
+				<td>Cellule 6-2</td>
+				<td>Cellule 6-3</td>
+			</tr>
+			<tr>
+				<td>Cellule 7-2</td>
+				<td>Cellule 7-3</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<script>
+		function searchTable() {
+			// Récupérer l'entrée de l'utilisateur
+			var input = document.getElementById("search-input");
+			var filter = input.value.toUpperCase();
+
+			// Récupérer les lignes du tableau
+			var table = document.getElementById("myTable");
+			var rows = table.getElementsByTagName("tr");
+
+			// Parcourir les lignes et cacher celles qui ne correspondent pas à la recherche
+			for (var i = 0; i < rows.length; i++) {
+				var cells = rows[i].getElementsByTagName("td");
+				var showRow = false;
+				for (var j = 0; j < cells.length; j++) {
+					if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+						showRow = true;
+						break;
+					}
+				}
+				if (showRow) {
+					rows[i].style.display = "";
+				} else {
+					rows[i].style.display = "none";
+				}
+			}
+		}
+
+        
+
+	</script>
+</body>
+</html>

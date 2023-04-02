@@ -698,29 +698,46 @@ def export():
     print("fichier_id ===============: ", fichier_id)
     
     all_va = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
-    Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
-    Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
-    CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
-    # print('Les CC: ',CC[1])
-    # print('Les Valeurs: ',CC[2])
-    # print('Les pourquois0: ',Pourquoi[5][0][0])
-    # print('Les pourquois0: ',Pourquoi[0][0][0])
-    # print('Les pourquois1: ',Pourquoi[1][0][0])
-    # print('Les pourquois2: ',Pourquoi[2][0][0])
-    # print('Les pourquois3: ',Pourquoi[3][0][0])
-    # print('Les pourquois4: ',Pourquoi[4][0][0])
-    # print('Les Actions: ',Action)
-    # print('Les Actions: ',Action[2][0][0][0])
-    # print('Les Porteurs: ',Action[2][0][1][0])
-    # print('Les Echeances: ',Action[2][0][2][0])
-    # print('Les attentes: ',Action[2][0][4][0])
-    # print('Les autres: ',Action)
 
-    # Construire les données excel à extraire
+    Pourquoi = []
+    Action = []
+    CC = []
+
+    for va in all_va:
+        Pourquoi.append(Pourquoi5.recup_all_pourquoi([va])[0])
+        Action.append(Pourquoi5.recup_all_pourquoi([va])[1])
+        CC.append(Pourquoi5.recup_all_pourquoi([va])[2])
+
+    print("CC:", CC)
+    print("Pourquoi:", Pourquoi)
+    print("Action:", Action)
+
     data = [
-        ["Conseiller", "Valeurs", "Pourquoi1","Pourquoi2","Pourquoi3","Pourquoi4","Pourquoi5","Famille-cause","Action","Porteurs","Echeances","Status"],
-        [CC[1][0], CC[2][0], Pourquoi[0][0][0],Pourquoi[1][0][0],Pourquoi[2][0][0],Pourquoi[3][0][0],Pourquoi[4][0][0],Pourquoi[5][0][0],Action[2][0][0][0],Action[2][0][1][0],Action[2][0][2][0],Action[2][0][4][0]]
+        ["Conseiller", "Valeurs", "Pourquoi1","Pourquoi2","Pourquoi3","Pourquoi4","Pourquoi5","Famille-cause","Action","Porteurs","Echeances","Status"]
     ]
+
+    # for i in range(len(CC)):
+    data.append([CC[0][1][0], CC[0][2][0], Pourquoi[0][0][0][0],Pourquoi[0][1][0][0],Pourquoi[0][2][0][0],Pourquoi[0][3][0][0],Pourquoi[0][4][0][0],Pourquoi[0][5][0][0],Action[0][2][0][0][0],Action[0][2][0][1][0],Action[0][2][0][2][0],Action[0][2][0][4][0]])
+
+    # for i in range(len(CC)):
+    #     try:
+    #         data.append([
+    #             CC[i][1][0],
+    #             CC[i][2][0],
+    #             Pourquoi[i][0][0],
+    #             Pourquoi[i][1][0],
+    #             Pourquoi[i][2][0],
+    #             Pourquoi[i][3][0],
+    #             Pourquoi[i][4][0],
+    #             Pourquoi[i][5][0],
+    #             Action[i][2][0][0][0] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][1] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][2] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][3] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][4] if len(Action[i][2]) > 0 else ""
+    #         ])
+    #     except Exception as e:
+    #         print(e)
     df = pd.DataFrame(data[1:], columns=data[0])
     print("DataFrame :", df)
     try:

@@ -4,7 +4,8 @@
 
 <div class="jumbotron p-3 mb-2 mt-5 tx-center az-content-label">RECAPUTILATIF DES ACTIONS ANALYSE </div>
 <div class="recap p-3 shadow">
-    <table id="" class="display responsive nowrap" width="100%">
+    <input type="text" name="" id="" onkeyup="searchTable()"><button type="submit">rechercher</button>
+    <table id="myTable" class="display responsive nowrap" width="100%">
         <caption>Récap de l'analyse global</caption>
         <thead class="bg-primary">
             <tr class="tx-center fs-5">
@@ -159,4 +160,33 @@
     </div>
     {% endif %}    
 </div>
+<script>
+    function searchTable() {
+        // Récupérer l'entrée de l'utilisateur
+        var input = document.getElementById("search-input");
+        var filter = input.value.toUpperCase();
+
+        // Récupérer les lignes du tableau
+        var table = document.getElementById("myTable");
+        var rows = table.getElementsByTagName("tr");
+
+        // Parcourir les lignes et cacher celles qui ne correspondent pas à la recherche
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var showRow = false;
+            for (var j = 0; j < cells.length; j++) {
+                if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    showRow = true;
+                    break;
+                }
+            }
+            if (showRow) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+    // searchTable()
+</script>
 {% endblock content %}
