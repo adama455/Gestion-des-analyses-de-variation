@@ -1,18 +1,17 @@
 {% extends 'index.html' %}
 {% block content %}
 <div class="container-lg">
+  <h2 class="jumbotron p-2 tx-center">Informations données utilisateurs.</h2>
   <div class="row d-flex align-items-center">
-    <div class="col-4 imageProfi tx-center ">
-      <img class="col-12" src="{{ url_for('static', filename='img/profil.png') }}">
-      <span class="fs-3">{{ current_user.prenom }} {{ current_user.nom }}</span>
-      <div class="fs-3"><em> Role: {{ current_user.profil }} </em></div>
+    <div class="col-4 imageProfi tx-center d-flex flex-column align-items-center">
+      <img class="col-8" src="{{ url_for('static', filename='img/profil.png') }}" >
+      <span class="fs-4">{{ current_user.prenom }} {{ current_user.nom }}</span>
+      <div class="fs-4"><em> Role: {{ current_user.profil }} </em></div>
     </div>
     <div class="col-8 ">
-    {# <div class="az-content-label mg-b-5 "> MON PROFIL - {{ current_user.prenom }} {{ current_user.nom }}</div> #}
     <div class="card- bd-10 bg-white ">
       <div class="card-body ">
         <p>
-          <h2 class="jumbotron p-3 tx-center">Informations données utilisateurs.</h2>
           <div class="col-12 d-flex ">
             <div class="row border col-12 d-flex justify-content-around rounded-5">
               <div class="col-md-5 col-xl-5 p-4 mg-30 ">
@@ -53,7 +52,7 @@
                   </div> <!-- media-body -->
                 </div> <!-- media -->
                 <div class="media">
-                  <div class="media-logo bg-primary"><i class="fas fa-user-tie"></i></i></div>
+                  <div class="media-icon"><i class="fa-solid fa-phone"></i></i></div>
                   <div class="media-body">
                     <h6>Telephone </h6>
                     <div>77 *** ** **</div>

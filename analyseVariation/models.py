@@ -223,11 +223,10 @@ class ActionIndividuelle(UserMixin, db.Model):
             print('on a pas pu recuperer les infos correspondant a cette reference')
         return liste_action, nbre_act, table
 
-
 class Cause(db.Model):
     __table_args__ = {'extend_existing': True}
     __tablename__='causes'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True) 
     libelle = db.Column(db.String(80))
     description = db.Column(db.String(255))
     # pourquoi = db.Column(db.String(80))
@@ -346,7 +345,6 @@ class ValeursFichier(UserMixin, db.Model):
         self.fichier_id = fichier_id
     def Importer(self, ):
         pass
-
 
 class ValeursAberrante(UserMixin, db.Model):
     __table_args__ = {'extend_existing': True}

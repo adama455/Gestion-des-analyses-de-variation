@@ -6,16 +6,13 @@
 {% block content %}
 <div class="jumbotron p-3 mb-2 mt-5 tx-center az-content-label">SUIVI DES ACTIONS INDIVIDUELLES</div>
 <div class="card bg-gray-100 shadow">
-<div class="card-body">
+    <div class="card-body" id="result">
     {# <form method="post" class="my-3 float-right">
         <input type="text" name="search" class="p-2 live-search-box" required>
         <input type="submit" value="Search" class="p-2">
-    </form> #}
-    <input type="text" class="live-search-box p-2 my-3 float-right " placeholder="search here" />
-    {# {{ pagination.links | safe }}
-    {{ pagination.info | safe  }} #}
-    {# <h2>(Page {{ pagination.page }})</h2> #}
-    <table id="datatable1" class="display responsive nowrap table-sm" width="100%">
+    </form> #} 
+    <input class="form-control mb-2" id="search-input" type="text" placeholder="Search..">
+    <table id="example" class="display responsive nowrap table-sm" width="100%">
         <thead class="bg-primary">
             <tr class="tx-center py-2 fs-5">
                 <th class="wd-15p text-dark">
@@ -46,65 +43,61 @@
                 <th class="wd-5p text-dark">
                     Edit
                 </th>
-                {# <th class="wd-5p text-dark">
-                    Act prog
-                </th> #}
             </tr>
         </thead>
-        <tbody class="live-search-list">
-
-            {% for j in range(nbre_cc) %}
+        <tbody>
+            {% for j in range(nbre_cc) %} 
             {% for i in range(N[j]) %}
             <tr>
                 {% if i==0 %}
-                <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
+                <td rowspan="{{ N[j] }}" class="col-1 tx-center border border-dark border-2">
                     {{ Nom_cc[j] }}
                 </td>
-                <td rowspan="{{ N[j] }}" class="col-1 tx-center border">
+                <td rowspan="{{ N[j] }}" class="col-1 tx-center border border-dark border-2">
                     {{ Valeur_cc[j] }}
                 </td>
                 {%  endif %}
                 {%  for m in range(2) %}
                 {% if i==0 %}
-                <td rowspan="{{ nbre_act[j][0] }}" class="col-2 tx-center border">
+                <td rowspan="{{ nbre_act[j][0] }}" class="col-2 tx-center border border-dark border-2">
                     {{ table_pourquoi_axe[m][j][0] }}
                 </td>
                 {% elif i==nbre_act[j][0] %}
-                <td rowspan="{{ nbre_act[j][1] }}" class="col-2 tx-center border">
+                <td rowspan="{{ nbre_act[j][1] }}" class="col-2 tx-center border border-dark border-2">
                     {{ table_pourquoi_axe[m][j][1] }}
                 </td>
                 {% elif i==(nbre_act[j][0]+nbre_act[j][1]) %}
-                <td rowspan="{{ nbre_act[j][2] }}" class="col-2 tx-center border">
+                <td rowspan="{{ nbre_act[j][2] }}" class="col-2 tx-center border border-dark border-2">
                     {{ table_pourquoi_axe[m][j][2] }}
                 </td>
                 {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]) %}
-                <td rowspan="{{ nbre_act[j][3] }}" class="col-2 tx-center border">
+                <td rowspan="{{ nbre_act[j][3] }}" class="col-2 tx-center border border-dark border-2">
                     {{ table_pourquoi_axe[m][j][3] }}
                 </td>
                 {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]) %}
-                <td rowspan="{{ nbre_act[j][4] }}" class="col-2 tx-center border">
+                <td rowspan="{{ nbre_act[j][4] }}" class="col-2 tx-center border border-dark border-2">
                     {{ table_pourquoi_axe[m][j][4] }}
                 </td>
                 {% elif i==(nbre_act[j][0]+nbre_act[j][1]+nbre_act[j][2]+nbre_act[j][3]+nbre_act[j][4]) %}
-                <td rowspan="{{ nbre_act[j][5] }}" class="col-2 tx-center border">
+                <td rowspan="{{ nbre_act[j][5] }}" class="col-2 tx-center border border-dark border-2">
                     {{ table_pourquoi_axe[m][j][5] }}
                 </td>
                 {%  endif %}
                 {%  endfor %}
 
-                <td class="col-2 tx-center border">
+                <td class="col-2 tx-center border border-dark border-2">
                     {{ table_action[j][0][i] }}
                 </td>
-                <td class="col-1 tx-center border">
+                <td class="col-1 tx-center border border-dark border-2">
                     {{ table_action[j][1][i] }}
                 </td>
-                <td class="col-1 tx-center border">
+                <td class="col-1 tx-center border border-dark border-2">
                     {{ table_action[j][2][i] }}
                 </td>
-                <td class="col-1 tx-center border">
+                <td class="col-1 tx-center border border-dark border-2">
                     {{ table_action[j][4][i] }}
                 </td>
-                <td class="col-1 tx-center border">
+                <td class="col-1 tx-center border border-dark border-2">
                     <a href="{{ url_for('editpa', id_action=table_action[j][3][i]) }}" class="text-center"
                         title="edit" id="edituser" data-toggle="modal">
                         <i class="fa-solid fa-pen-to-square fs-4 me-3 text-info"></i>
@@ -144,28 +137,70 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
 crossorigin="anonymous"></script>
 
-<script type="text/javascript">
-jQuery(document).ready(function ($) {
-
-    $('.live-search-list tr').each(function () {
-        $(this).attr('data-search-term', $(this).text().toLowerCase());
-    });
-
-    $('.live-search-box').on('keyup', function () {
-
-        var searchTerm = $(this).val().toLowerCase();
-
-        $('.live-search-list tr').each(function () {
-
-            if ($(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 || searchTerm.length < 1) {
-                $(this).show();
+<script>
+    var rows = $('table tr');
+    var previousRow = null;
+    rows.each(function(){
+        
+    var currentRow = $(this);
+    if (previousRow) {
+        var cells1 = previousRow.children();
+        var cells2 = currentRow.children();
+        var isSame = true;
+        for (var i = 0; i < cells1.length; i++){
+            if ($(cells1[i]).text() !== $(cells2[i]).text()){
+                isSame = false;
+                break;
+            }
+        }
+        if (isSame) {
+        cells1.each(function(i) {
+            if (i === 0) {
+            $(this).attr('rowspan', 2);
             } else {
-                $(this).hide();
+            $(this).remove();
             }
         });
-    });
+        }
+    }
 
-});
+    previousRow = currentRow;
+    });
+    $('#search-input').on('keyup', function() {
+        var searchText = $(this).val().toLowerCase();
+        rows.show().filter(function() {
+        var text = $(this).text().toLowerCase();
+        return !~text.indexOf(searchText);
+        }).hide();
+    });
+    
 </script>
+
+{# <script>
+    $(document).ready(function(){
+      load_data();
+      function load_data(query)
+      {
+       $.ajax({
+        url:"/search",
+        method:"POST",
+        data:{query:query},
+        success:function(data)
+        {
+          $('#result').html(data);
+          $("#result").append(data.htmlresponse);
+        }
+       });
+      }
+      $('#search_text').keyup(function(){
+        var search = $(this).val();
+        if(search != ''){
+        load_data(search);
+       }else{
+        load_data();
+       }
+      });
+    });
+</script> #}
 
 {% endblock content %}

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import sys
+import sys     
 import datetime
 import subprocess
 sys.path.append('.')
 sys.path.append('..')
-from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask import Flask, render_template, url_for, request, redirect, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
 from analyseVariation.models import User, ValeursAberrante, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
@@ -24,11 +24,7 @@ from threading import Thread
 from flask_paginate import Pagination, get_page_parameter
 db_adapter = SQLAlchemyAdapter(db, User) # Register the User model
 user_manager = UserManager(db_adapter, app) # Initialize Flask-User
-# user_datastore = SQLAlchemyUserDatastore(db,User,Role)
-# security = Security(app,user_datastore)
 from werkzeug.utils import secure_filename
-
-
 
 #la racine ou page connexion des utilisateurs
 @app.route('/', methods=('GET', 'POST'))
@@ -127,8 +123,8 @@ def changepassword():
     return render_template('changepassword.html')    
 
 @app.route("/compte", methods=('GET', 'POST'))
-# @login_required
-# @roles_required('admin')
+@login_required
+@roles_required('admin')
 def compte():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -245,8 +241,8 @@ def supprimerCause(id):
 
 #C'est ici qu'on voit les plateaux
 @app.route("/plateau", methods=('GET', 'POST'))
-# @login_required
-# @roles_required('admin')
+@login_required
+@roles_required('admin')
 def plateau():
     form = PlateauForm()
     if request.method =='POST':
@@ -276,7 +272,7 @@ def editPlateau():
         return redirect(url_for('plateau'))
     return render_template('plateau.html', title='Plateau')
 
-#Permet de Supprimer une Cause
+#Permet de Supprimer une Cause................................
 @app.route("/supprimerPlateau/<id>/", methods=('GET', 'POST'))
 @login_required
 @roles_required('admin')
@@ -291,7 +287,7 @@ def supprimerPlateau(id):
     data = Plateau.query.all() #Récuperation de l'enssemble des utilisateurs::
     return render_template('plateau.html', title='Plateau', form=form, plateaux=data) 
 
-#Permet de visualiser la liste des Analyses de Variation
+#Permet de visualiser la liste des Analyses de Variation.......
 @app.route("/listeAv")
 @login_required
 def listeAv():
@@ -342,35 +338,35 @@ def fichiers():
         liste_fichier.append(champ_fichier)
     return render_template('fichiers.html', title='Register', form=form, liste_fichier=liste_fichier, nbre_av=nbre_av)
 
-#Permet de visualiser le fichier en global(nom cc et valeurs)
+#Permet de visualiser le fichier en global(nom cc et valeurs).....
 @app.route("/fichiers_global")
 @login_required
 def fichiers_global():
     return render_template('fichiers_global.html', title='fichier global')
     
-@app.route("/listepa")
+@app.route("/listepa") 
 @login_required
 def listepa():
     form = LoginForm()
-    return render_template('listepa.html', title='Register', form=form)
+    return render_template('listepa.html', title='Register', form=form) 
 
-@app.route("/editpa", methods=('GET', 'POST'))
+@app.route("/editpa", methods=('GET', 'POST')) 
 @login_required
 def editpa():
     form = LoginForm()
-    id_action=request.args.get('id_action')
+    id_action=request.args.get('id_action') 
     # fichier_id = request.args.get('fichier_id') 
-    action_indiv = ActionIndividuelle.query.filter_by(id=int(id_action)).first()
+    action_indiv = ActionIndividuelle.query.filter_by(id=int(id_action)).first() 
     id_va = Pourquoi5.query.filter_by(id=action_indiv.pourquoi5_id).first().valeur_aberrante_id
-    valeur_aberrante = ValeursAberrante.query.filter_by(id=id_va).first() 
+    valeur_aberrante = ValeursAberrante.query.filter_by(id=id_va).first()  
     fichier_id =Fichiers.query.filter_by(id=valeur_aberrante.fichier_id).first().id
-    print("fichier_id : ", fichier_id) 
+    print("fichier_id : ", fichier_id)
     # valeur_aberrante = ValeursAberrante.query.filter_by(fichier_id = fichier_id).first()
     user = User.query.filter_by(id=valeur_aberrante.user_id).first()
     if request.method=='POST':
         action_indiv.status = request.form.get('status')
         action_indiv.libelle_action = request.form.get('libelle_action')
-        action_indiv.porteur = request.form.get('porteur_action')
+        #action_indiv.porteur = request.form.get('porteur_action')
         action_indiv.echeance = request.form.get('echeance_action')
         action_indiv.commentaire = request.form.get('commentaire')
         db.session.commit()
@@ -395,7 +391,7 @@ def editact_prog():
     if request.method=='POST':
         action_prg.status = request.form.get('status')
         action_prg.libelle_action = request.form.get('libelle_action')
-        action_prg.porteur = request.form.get('porteur_action')
+        #action_prg.porteur = request.form.get('porteur_action')
         action_prg.echeance = request.form.get('echeance_action')
         action_prg.commentaire = request.form.get('commentaire')
         db.session.commit()
@@ -440,14 +436,14 @@ def analyseCause():
     form = RegistrationForm()
     return render_template('analyse-cause.html',title='Analyse Cause', form=form)
 
-#Permet de Méttre à jours une action :::::::::::::::::
+#Permet de Méttre à jours une action........................
 @app.route("/miseAjourAc")
 @login_required
 def miseAjourAc():
     form = RegistrationForm()
     return render_template('mise-a-jour-action.html', title='Analyse Cause', form=form)
 
-#Permet de Méttre à jours une action :::::::::::::::::::::::::::::
+#Permet de Méttre à jours une action........................
 @app.route("/rejeterAv")
 @login_required
 @roles_required('admin')
@@ -473,7 +469,7 @@ def rejeterAv():
     # agent = data.agent
     return render_template('rejeterAv.html',title='Analyse Cause', form=form, liste=liste, fichier_id=fichier_id,nbre_fichier=nbre_fichier)
 
-#Permet a tout utilisateur de verifier son profil
+#Permet a tout utilisateur de verifier son profil..................
 @app.route("/profil", methods=('GET', 'POST'))
 @login_required
 def profil():
@@ -481,7 +477,7 @@ def profil():
     #request_data = request.get_json()
     return render_template('profil.html',title='Analyse Cause', form=form)
 
-#enregistrement d'une AV par le MO
+#enregistrement d'une AV par le MO.........................
 @app.route("/analyse_agent", methods=('GET', 'POST'))
 @login_required
 def analyse_agent():
@@ -491,7 +487,7 @@ def analyse_agent():
         data_fichier = Fichiers.query.filter_by(id=fichier_id).first()
         cause = Cause.query.all()
         libelle = data_fichier.libelle
-        id_va = request.args.get('id_va') ### Il constitut l'id de la valeur aberrante
+        id_va = request.args.get('id_va') ## Il constitut l'id de la valeur aberrante
         print("id_va::",int(id_va))
         valeurs_aberante = ValeursAberrante.query.filter_by(id=int(id_va)).first()
         # nom_conseiller = valeurs_aberante.nom_cc
@@ -515,12 +511,12 @@ def analyse_agent():
         Pourquoi4.insert_p4(int(id_va)) 
         Pourquoi5.insert_p5(int(id_va)) 
         valeurs_aberante.statut = 'En cours'
-        probleme = request.form['probleme'] #recupération du probleme saisi
+        probleme = request.form['probleme'] #recupération du probleme saisi.........
         print("Le problémé saisie : ", probleme)
         valeurs_aberante.probleme = probleme
-        libelle_av = request.form['libelle_av'] #recupération du libelle de l'Analyse saisi
+        libelle_av = request.form['libelle_av'] #recupération du libelle de l'Analyse saisi....
         data_fichier.libelle = libelle_av
-        # update Pourquois................................................
+        # update Pourquois.....................................................................
         Pourquoi1.update_p1(int(id_va))
         Pourquoi2.update_p2(int(id_va))
         Pourquoi3.update_p3(int(id_va)) 
@@ -545,14 +541,14 @@ def analyse_agent():
 
 @app.route("/ajouter_action", methods=('GET', 'POST'))
 @login_required
-def ajouter_action():
+def ajouter_action():                                                     
     #recuperer la reference de l'AV au niveaude l'url et l'utiliser pour recuperer les infos corespondantes
     fichier_id = request.args.get('fichier_id')
     print(fichier_id)
     data_fichier = Fichiers.query.filter_by(id=int(fichier_id)).first()
     libelle = data_fichier.libelle #libelle de l'analyse de variation
     id_va= int(request.args.get('id_va'))
-    valeur_aberrante = ValeursAberrante.query.filter_by(id=id_va).first()
+    valeur_aberrante = ValeursAberrante.query.filter_by(id=id_va).first() 
     # nom_conseiller = valeur_aberrante.nom_cc
     # valeurs_aberante_cc = valeur_aberrante.valeurs
     # valeurs_aberante_probleme = valeur_aberrante.probleme
@@ -586,7 +582,7 @@ def ajouter_action():
                 db.session.add(action)
                 db.session.commit()
     except AttributeError:
-        print('echec de recuperation des elements, erreur attribut') 
+        print('echec de recuperation des elements, erreur attribut')
     if request.method=='POST':
         Pourquoi1.insert_p1(int(id_va))
         Pourquoi2.insert_p2(int(id_va))
@@ -595,7 +591,6 @@ def ajouter_action():
         Pourquoi5.insert_p5(int(id_va))
         valeur_aberrante.statut = 'Terminer'
         db.session.commit()
-        
         return redirect(url_for('listeVa', fichier_id=fichier_id))
     if datacc:
         data_pourquoi = Fichiers.traitement_data_pourquoi(id_va)
@@ -616,7 +611,7 @@ def ajouter_action():
 @app.route("/action_programme", methods=["GET", "POST"])
 @login_required
 def action_programme():
-    #Insertion des donnees action programme au niveau de la base de donnees
+    #Insertion des donnees action programme au niveau de la base de donnees....
     #On recupere les donnees poster par js sur l'url ajouter-action............
     fichier_id = request.args.get('fichier_id')
     id_va= request.args.get('id_va')
@@ -646,9 +641,7 @@ def action_programme():
         print('echec de recuperation des elements')
     return render_template('action_programme.html',fichier_id=fichier_id,id_va=id_va)
         
-
-
-@app.route("/recaputilatif", methods=('POST', 'GET'))
+@app.route("/recaputilatif", methods=('POST', 'GET')) 
 @login_required
 def recap_value():
     #all_data = AnalyseApporter.query.all()
@@ -703,7 +696,7 @@ def synthese_av():
             db.session.add(insert_fichier)
             db.session.commit()
         else:
-            flash('Ce fichier existe dejà, veuillez choisir un autre fichier.')
+            flash('Ce fichier existe dejà, veuillez choisir un autre fichier.',"warning")
     except:
         flash('Aucun fichier ou format non compatible','warning')
     try:
@@ -734,7 +727,6 @@ def synthese_av():
         return render_template('home.html')
     
 # # UPLOAD_FOLDER = "/home"
-
 # def CreateNewDir():
 #     print("I am being called")
 #     global UPLOAD_FOLDER
@@ -748,7 +740,6 @@ def synthese_av():
 #     else:
 #         print ("Failure: Failed to Create a Directory (or) Directory already Exists",UPLOAD_FOLDER)
 
-
 # UPLOAD_FOLDER = '/path/to/the/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','xsl'}
 
@@ -758,7 +749,7 @@ def allowed_file(filename):
 
 
 @app.route('/uploader', methods = ['GET', 'POST'])
-def upload_file () :
+def upload_file ():
     try:
         print(request.form['libelle_analyse'])
         print(request.form['kpi'])
@@ -773,8 +764,8 @@ def upload_file () :
             # # # If the user does not select a file, the browser submits an
             # # # empty file without a filename.
             # if file.filename == '':
-            #     flash('No selected file')
-            #     return redirect(request.url)
+            #    flash('No selected file')
+            #    return redirect(request.url)
             # if file and allowed_file(file.filename):
             file.save(secure_filename(file.filename))
             filename = secure_filename(file.filename)
@@ -821,9 +812,10 @@ def suivi_action():
             all_cause_racine.append(elem.details)
         nom_cc = ValeursAberrante.query.filter_by(id=element).first().nom_cc
         Nom_cc.append(nom_cc)
-        
+        print('Table_Nom_cc.......... ',Nom_cc)
         valeur_cc = ValeursAberrante.query.filter_by(id=element).first().valeurs
         Valeur_cc.append(valeur_cc)
+        print('Table_Valeur.......... ',Valeur_cc)
         # Pour chaque cause racine on recupere l'ensemble des actions definis 
         #liste_action = ActionIndividuelle.recup_action(all_pourquoi5)[0] #l'ensemble des actions par id
         table = ActionIndividuelle.recup_action(all_pourquoi5)[2] #l'ensemble des actions par id
@@ -833,41 +825,72 @@ def suivi_action():
         table_action.append(table) #l'ensemble des actions pour tous les conseillers
         nbre_act.append(act) # l'ensemble des liste de nombre d'actions pour tous les conseillers
         N.append(act[0]+act[1]+act[2]+act[3]+act[4]+act[5])# liste des nombre d'actions totale pour tous les conseillers
+        print('nbre_act.......... ',N)
         nbre_cc += 1
-    table_pourquoi_axe = [table_pourquoi, table_axe]
-    
-    # bar search............................................
-    q = request.args.get('q')
-    if q:
-        Cc = ValeursAberrante.query.filter(ValeursAberrante.nom_cc.contains(q) | ValeursAberrante.body.contains(q)) 
-        cd = Cc.count()
-        nbre=nbre_cc
-        print("Nom_cc : ",Cc)
-    else:
-        Cc = ValeursAberrante.query.order_by(ValeursAberrante.valeurs.desc())               
-        print("valeurs : ", Cc)
-        cd =Cc.count()
-        nbre=nbre_cc
-    
-    page = request.args.get('page')
-    if page and page.isdigit():
-        page = int(page)
-    else:
-        page = 1
-    pagination=Pagination(page=page,total=nbre)
         
-    # pagination = Pagination(page=page, total=nbre_cc, record_name='Valeur',css_framework='foundation')
-    # search = False
-    # q = request.args.get('q')
-    # if q:
-    #     search = True
-
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # cc = ValeursAberrante.query.filter(ValeursAberrante.nom_cc)
-    # pagination = Pagination(page=page, total=cc.count(), search=search, record_name='users')
-    return render_template('suivi_actions.html', N=N,  nbre_act=nbre_act, nbre_cc=nbre_cc, liste_identifiant=liste_identifiant,pagination=pagination,
+        # Recherche.....................................................................................................           
+    table_pourquoi_axe = [table_pourquoi, table_axe] 
+    
+    return render_template('suivi_actions.html', N=N,  nbre_act=nbre_act, nbre_cc=nbre_cc, liste_identifiant=liste_identifiant,
                            table_pourquoi_axe=table_pourquoi_axe, table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc, fichier_id=fichier_id)     
+
+@app.route('/search_results', methods=['GET','POST'])
+def search_results():
+    Nom_cc = []
+    Valeur_cc = []
+    table_pourquoi = []
+    table_axe = []
+    table_pourquoi_axe = []
+    table_action = []
+    N=[]
+    nbre_cc=0
+    nbre_act=[]
+    act=[]
+    fichier_id = request.args.get('fichier_id')
+    if request.method == 'POST':
+        search_query = request.form['search_query']
+        results = db.session.query(ValeursAberrante, Pourquoi5, Cause, ActionIndividuelle).\
+            select_from(ValeursAberrante).\
+            join(Pourquoi5).\
+            join(Cause).\
+            join(ActionIndividuelle).\
+            filter(db.or_(Pourquoi5.details.ilike('%{}%'.format(search_query)),
+                            ValeursAberrante.nom_cc.ilike('%{}%'.format(search_query)),
+                            Cause.libelle.ilike('%{}%'.format(search_query)),
+                            ActionIndividuelle.libelle_action.ilike('%{}%'.format(search_query)))).all()
+        for r in results:
+            print('LLLLLLLLL',r)
+            Nom_cc.append(r[0].nom_cc)
+            Valeur_cc.append(r[0].valeurs)
+            table_pourquoi.append(r[1].details)
+            table_axe.append(r[2].libelle)
+            table_pourquoi_axe = [table_pourquoi, table_axe] 
+            table_action.append(r[3].libelle_action)
+            table_action.append(r[3].porteur)
+            table_action.append(r[3].echeance)
+            table_action.append(r[3].status)
+            
+            act.append(len(table_action[0])) 
+            act.append(len(table_action[1])) 
+            act.append(len(table_action[2])) 
+            act.append(len(table_action[3]))   
+            N.append(act[0])
+            nbre_act.append(len(act))
+            
+            nbre_cc=len(Nom_cc)
+            print('N................. ',N)
+            print('Nbre_CC........... ',nbre_cc)
+            print('nbre_act.......... ',nbre_cc)
+
+            # nbre_act.append(act)
+            print('Table_Nom_cc............. ',Nom_cc)
+            print('Table_Valeur............. ',Valeur_cc)
+            print('Table_pourquoi_axe............. ',table_pourquoi_axe)
+            print('Table_action............. ',table_action)
+        print("results:", results)
+    return render_template('search_results.html', N=N,nbre_act=nbre_act,  nbre_cc=nbre_cc, fichier_id=fichier_id,
+                           table_pourquoi_axe=table_pourquoi_axe, table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc)
+   
 
 @app.route("/suivi_action_programme", methods=["GET", "POST"])
 @login_required

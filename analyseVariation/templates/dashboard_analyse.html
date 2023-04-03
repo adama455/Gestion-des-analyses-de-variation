@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-7 col-md-6">
+        <div class="az-content-label az-content-label-sm mg-b-15 text-dark">Suivi des derniers agents analysés</div>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-talk-time " >
+            <thead>
+      
+              <tr class="bg-primary">
+                <th class="text-white bg-dark text-left">Agent</th>
+                <th class="text-white bg-dark text-center">Plateau</th>
+                <th class="text-white bg-dark text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ele in derniers %}
+              <tr>
+                <td>{{ele.pourquoi_1}}</td>
+                <td>{{ele.agent}}</td> 
+                <td><a href="{% url 'editanalyse' ele.id %}">voir</a></td> 
+                
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div><!-- table-responsive -->
+    </div>
+    <div class="col-sm-7 col-md-6">
+        <div class="az-content-label az-content-label-sm mg-b-15 text-dark">Derniers fichiers importés</div>
+        <div class="table-responsive">
+            <table class="display responsive nowrap table-talk-time table-striped table-bordered bg-white" width="100%">
+            <thead>
+              <tr>
+                <th class=" bg-primary text-dark">Kpi analysé</th>
+                <th class=" bg-primary text-dark">Nom du fichier</th>
+                <th class=" bg-primary text-dark">Date d'ajout</th>
+                <th class=" bg-primary text-dark">Action</th>     
+              </tr>
+            </thead>
+            <tbody> 
+                {% for ele in imports %}
+                  <tr>
+                    <td>{{ele.metrique}}</td>
+                    <td>{{ele.fichier}}</td>
+                    <td>{{ele.date_chargement}}</td>
+                    
+                    <td class="text-center">
+                      <a href="{% url 'analyse-fichier' ele.id%}" 
+                      title="Voir les enregistrements" class="mx-2">
+                      Voir</a>
+            
+                    </td>            
+                  </tr>
+                {% endfor%}
+            </tbody>
+          </table>
+        </div><!-- table-responsive -->
+    </div>
+</div>
+{% endblock content %}

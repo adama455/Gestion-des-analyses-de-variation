@@ -38,14 +38,20 @@
   <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/orange.png') }}"
     rel="stylesheet">
   <!--Debut Link page not found -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}" rel="stylesheet">
   <!--Fin Link page not found -->
 
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
 
   <!-- link home  -->
 </head>
@@ -54,67 +60,68 @@
   <div class="wrapper d-flex align-items-stretch ">
 
     <!-- Le menu sidebar -->
-      {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
-        
-      <nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
-        <div class="p-4 pt-4">
-          <div class="az-sidebar-loggedin">
-            <div class="az-img-user online" data-toggle="tooltip" data-placement="top" title="{{session.matricule}} "><img
-                src="/static/img/perso.PNG" alt=""></div>
-            <div class="media-body">
-              <h6>Moussa Dembele</h6>
-              <span>GROUP1</span>
-            </div><!-- media-body -->
-          </div><!-- az-sidebar-loggedin -->
-          <ul class="nav">
-            <li class="nav-label">Menu Principal</li>
-            <li class="nav-item">
-              <a href="" class="nav-link with-sub text-red"><i class="typcn typcn-th-large"></i>Analyses</a>
-              <nav class="nav-sub">
-                <a href="#" class="nav-sub-link text-red">Importer des données</a>
-                <a href="#" class="nav-sub-link">Analyser les données</a>
-                <a href="#" class="nav-sub-link">Suivi plans d'actions</a>
-              </nav>
-            </li><!-- nav-item -->
-            <li class="nav-item">
-              <a href="#" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
-              <nav class="nav-sub">
-                <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
-                <a href="" class="nav-sub-link">Métriques</a>
-                <a href="{{ url_for('plateau') }}">Plateaux</a>
-              </nav>
-            </li><!-- nav-item -->
-            <li class="nav-item">
-              <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
-              <nav class="nav-sub">
-                <a href="{{ url_for('compte') }}" class="nav-sub-link">Comptes</a>
-                <a href="{{ url_for('profil') }}" class="nav-sub-link">Profils</a>
-                <a href="Logs utilisateurs" class="nav-sub-link"
-                  onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
-              </nav>
-            </li><!-- nav-item -->
-            <li class="nav-item"><a href="" class="nav-link with-sub"><i
-                  class="typcn typcn-clipboard"></i>Documentation</a>
-              <nav class="nav-sub">
-                <a href="Documentation" class="nav-sub-link"
-                  onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
-                <a href="Documentation" class="nav-sub-link"
-                  onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
-              </nav>
-            </li><!-- nav-item -->
-          </ul><!-- nav -->
-  
-          <div class="footer pt-5">
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-              Copyright &copy;
-              <script>document.write(new Date().getFullYear());</script> All rights reserved | This application is made with
-              <i class="icon-heart" aria-hidden="true"></i> by <a href="https://www.orange.sn"
-                target="_blank">www.orange.sn</a>
-              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            </p>
-          </div>
+    {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
+
+    <nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
+      <div class="p-4 pt-4">
+        <div class="az-sidebar-loggedin">
+          <div class="az-img-user online" data-toggle="tooltip" data-placement="top" title="{{session.matricule}} "><img
+              src="/static/img/perso.PNG" alt=""></div>
+          <div class="media-body">
+            <h6>Moussa Dembele</h6>
+            <span>GROUP1</span>
+          </div><!-- media-body -->
+        </div><!-- az-sidebar-loggedin -->
+        <ul class="nav">
+          <li class="nav-label">Menu Principal</li>
+          <li class="nav-item">
+            <a href="" class="nav-link with-sub text-red"><i class="typcn typcn-th-large"></i>Analyses</a>
+            <nav class="nav-sub">
+              <a href="#" class="nav-sub-link text-red">Importer des données</a>
+              <a href="#" class="nav-sub-link">Analyser les données</a>
+              <a href="#" class="nav-sub-link">Suivi plans d'actions</a>
+            </nav>
+          </li><!-- nav-item -->
+          <li class="nav-item">
+            <a href="#" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
+            <nav class="nav-sub">
+              <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
+              <a href="" class="nav-sub-link">Métriques</a>
+              <a href="{{ url_for('plateau') }}">Plateaux</a>
+            </nav>
+          </li><!-- nav-item -->
+          <li class="nav-item">
+            <a href="" class="nav-link with-sub"><i class="typcn typcn-group-outline"></i>Utilisateurs</a>
+            <nav class="nav-sub">
+              <a href="{{ url_for('compte') }}" class="nav-sub-link">Comptes</a>
+              <a href="{{ url_for('profil') }}" class="nav-sub-link">Profils</a>
+              <a href="Logs utilisateurs" class="nav-sub-link"
+                onClick="window.open('/transac', 'cadre2'); return false">Transactions</a>
+            </nav>
+          </li><!-- nav-item -->
+          <li class="nav-item"><a href="" class="nav-link with-sub"><i
+                class="typcn typcn-clipboard"></i>Documentation</a>
+            <nav class="nav-sub">
+              <a href="Documentation" class="nav-sub-link"
+                onClick="window.open('/documentation', 'cadre2'); return false">Méthodologie</a>
+              <a href="Documentation" class="nav-sub-link"
+                onClick="window.open('/documentation', 'cadre2'); return false">Guide Utilisateur</a>
+            </nav>
+          </li><!-- nav-item -->
+        </ul><!-- nav -->
+
+        <div class="footer pt-5">
+          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | This application is made
+            with
+            <i class="icon-heart" aria-hidden="true"></i> by <a href="https://www.orange.sn"
+              target="_blank">www.orange.sn</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
         </div>
-      </nav>
+      </div>
+    </nav>
     {% endif %}
 
     <!-- Page Content  -->
@@ -124,59 +131,69 @@
 
       <div class="sticky-top">
         <nav class=" navbar-expand-lg navbar-light bg-primary py-2 m-0">
-          <div class="d-flex flex-row col-12">
+          <div class="d-flex flex-row col-12 justify-content-between align-items-center">
 
             <!-- notre bouton toggle du menu sidebar -->
             {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
-              <button type="button" id="sidebarCollapse" class="btn btn-primary">
-                <i class="fa fa-bars"></i>
-                <span class="sr-only">Toggle Menu</span>
-              </button>
+            {# <button type="button" id="sidebarCollapse" class=""> #}
+            <i class="fa fa-bars fs-2 my-auto tx-white" role="button" id="sidebarCollapse"></i>
+            {# <span class="sr-only">Toggle Menu</span> #}
+            {# </button> #}
             {% endif %}
-            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+            {# <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
               data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
               aria-label="Toggle navigation">
               <i class="fa fa-bars"></i>
-            </button>
+            </button> #}
 
             <!-- le logo SO'VAR -->
 
-            <div class="div-logo col-2 d-flex align-items-center ">
+            <div class="div-logo col-2 d-flex align-items-center">
               <a href="{{ url_for('home')}}">
-                <h1 class="az-content-title mg-b-0 mg-b-lg-4 text-center" style="font-size: 0.7em;">
+                <h1 class="az-content-title mg-b-0 mg-b-lg-4 text-center" style="font-size: 0.6em;">
                   <i class="typcn typcn-chart-bar text-dark"></i>&nbsp;
                   <span class="text-white"> SO</span>'
                   <span style="color: #009088; ">VAR</span>
                 </h1>
               </a>
             </div>
-
             <!-- le menu -->
-
-            <div class="collapse navbar-collapse col-8 d-flex  justify-content-center mg-r-100"
+            <div class="collapse  navbar-collapse col-6 d-flex justify-content-center no-wrap"
               id="navbarSupportedContent">
-              <nav class="nav az-nav fs-4">
-                <a href="/home" class="nav-link  text-white" data-placement="top" title="Dashboard"> 
-                  <i class="fas fa-home me-1 fs-5"></i><strong>Dashboard</strong></a>
-                <a href="{{ url_for('upload_file') }}" class="nav-link text-white" title="Mes Donnees" id="demarrav"> <!-- id="demarrav" --> 
-                  <i class="fas fa-database me-1 fs-5 "></i><strong>Demarrer AV</strong></a>
+              <nav class="nav az-nav fs-5">
+                <a href="/home" class="nav-link  text-white" data-placement="top" title="Dashboard">
+                  <i class="fas fa-home  fs-5"></i><strong>Dashboard</strong></a>
+                <a href="{{ url_for('upload_file') }}" class="nav-link text-white" title="Mes Donnees" id="demarrav">
+                  <!-- id="demarrav" -->
+                  <i class="fas fa-database fs-5 "></i><strong>Demarrer AV</strong></a>
                 <a href="{{ url_for('listeAv') }}" class="nav-link text-white" title="Mes Donnees">
-                  <i class="fas fa-list me-1 fs-5"></i><strong>Liste AV</strong></a>
+                  <i class="fas fa-list fs-5"></i><strong>Liste AV</strong></a>
                 <a href="{{ url_for('fichiers') }}" class="nav-link text-white" title="Mes Donnees">
-                  <i class="fas fa-list me-1 fs-5"></i><strong>Fichiers</strong></a>
+                  <i class="fas fa-list fs-5"></i><strong>Fichiers</strong></a>
                 <a href="{{ url_for('profil') }}" class="nav-link text-white" title="Mon Profil">
-                  <i class="fas fa-user me-1 fs-5"></i><strong>Mon Profil</strong></a>
+                  <i class="fas fa-user fs-5"></i><strong>Mon Profil</strong></a>
               </nav>
             </div>
 
             <!-- les icones recherche deconnexion et notificqtion  -->
-            <div class="col-1" style="margin-right: 0; margin-top: 8px;">
-              <div class="az-header-message d-flex justify-content-end" style="width:100%">
-                <a href="" class="nav-sub-link" data-toggle="tooltip" data-placement="top" title="search"><i
-                    class="fa fa-search text-white me-3"></i></a>
-                <a href="{{ url_for('logout') }}" class="nav-sub-link" data-toggle="tooltip" data-placement="top"
+            <div class="col-3 p-0" style="margin-right: 0;">
+              <div class="az-header-message d-flex justify-content-between align-items-center"
+                style="width:100%">
+                <div class="input-group col-9 p-0">
+                  <input class="form-control border-end-0 border" type="search" value="search"
+                    id="example-search-input">
+                  <span class="input-group-append">
+                    <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
+                      type="button" style="margin-left: -40px;">
+                      <i class="fa fa-search "></i>
+                    </button>
+                  </span>
+                </div>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="nav-sub-link col-1" data-toggle="tooltip" data-placement="top"
                   title="logout"><i class="fa fa-sign-out text-white me-3"></i></a>
-                <a href="" class="new" data-toggle="tooltip" data-placement="top" title="Notifications"><i
+                {% endif %}
+                <a href="" class="new " data-toggle="tooltip" data-placement="top" title="Notifications"><i
                     class="fas fa-bell text-white "></i></a>
               </div><!-- az-header-message -->
               <div class="dropdown az-header-notification">
@@ -222,16 +239,16 @@
       <div class="az-content-body mx-5">
         <div class="container-lg">
           {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages  %}
-                <div class="alert alert-{{ category }} alert-dismissable fs-4" role="alert">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
-                  <span aria-hidden="true">x</span>
-                </button>
-                  {{ message }}
-                </div>
-              {% endfor %}
-            {% endif %}
+          {% if messages %}
+          {% for category, message in messages  %}
+          <div class="alert alert-{{ category }} alert-dismissable fs-4" role="alert">
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
+              <span aria-hidden="true">x</span>
+            </button>
+            {{ message }}
+          </div>
+          {% endfor %}
+          {% endif %}
           {% endwith %}
         </div>
         {% block content %}{% endblock content %}
@@ -268,11 +285,12 @@
           <div class="d-flex flex-column text-center ">
             <form action="{{ url_for('upload_file') }}" method="post" enctype=multipart/form-data>
               <div class="form-group">
-                <input type="text" class="form-control" name="libelle_analyse" id="libelle_analyse" value="libelle_analyse" placeholder="Libelle analyse">
+                <input type="text" class="form-control" name="libelle_analyse" id="libelle_analyse"
+                  value="libelle_analyse" placeholder="Libelle analyse">
               </div>
               <div class="form-group">
                 <select name="kpi" id="kpi" class="col-12 fs-5">
-                  <option label="choisir un KPI" ></option>
+                  <option label="choisir un KPI"></option>
                   <option value="DMT">DMT</option>
                   <option value="CSAT">CSAT</option>
                   <option value="DSAT">DSAT</option>

@@ -7,14 +7,13 @@
     <table id="" class="display responsive nowrap" width="100%">
         <caption>Récap de l'analyse global</caption>
         <thead class="bg-primary">
-            <tr class="tx-center fs-5">
-                <th class="py-2" >
+            <tr class="tx-center fs-5 border-2 border border-dark">
+                <th class="pt-2  pb-3" >
                     Conseiller
                 </th>
                 <th class="py-2" >
                     valeur
                 </th>
-                
                 <th class="py-2" >
                     Pourquoi1
                 </th>
@@ -45,90 +44,89 @@
                 <th class="py-2" >
                     Statut
                 </th>
-                
             </tr>
         </thead>
         {% for j in range(CC[0]) %}
-
             {% for i in range(Action[0][j]) %}
-                    <tr >
+                    <tr class="">
                         {% if i==0 %}
-                            <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
+                            <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border border-dark border-2">
                                 {{ CC[1][j] }}
                             </td>
-                            <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
+                            <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border border-dark border-2">
                                 {{ CC[2][j] }}
                             </td>
                         {%  endif %}
                         {% if Pourquoi[6][j]==3 %}
                             {% if i==0 %}
-                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[0][j][0] }}
                                 </td>
                             {% elif i==Action[1][j][0]+Action[1][j][1] %}
-                                <td rowspan="{{ Action[1][j][2]+Action[1][j][3] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][2]+Action[1][j][3] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[0][j][1] }} 
                                 </td>
                             {% elif i==Action[1][j][0]+Action[1][j][1]+Action[1][j][2]+Action[1][j][3] %}
-                                <td rowspan="{{ Action[1][j][4]+Action[1][j][5] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][4]+Action[1][j][5] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[0][j][2] }}
                                 </td>
                             {%  endif %}
                         {% elif Pourquoi[6][j]==2 %}
                             {% if i==0 %}
-                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][0]+Action[1][j][1] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[0][j][0] }}
                                 </td>
                             {% elif i==Action[1][j][0]+Action[1][j][1] %}
-                                <td rowspan="{{ Action[1][j][3]+Action[1][j][2] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][3]+Action[1][j][2] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[0][j][1] }} 
                                 </td>
                             {%  endif %}
                         {% elif Pourquoi[6][j]==1 %}
                             {% if i==0 %}
-                                <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[0][j] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[0][j][0] }}
                                 </td>
                             {%  endif %}
                         {%  endif %}
                         {%  for m in range(1,6) %}
                             {% if i==0 %}
-                                <td rowspan="{{ Action[1][j][0] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][0] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[m][j][0] }}
                                 </td>
                                 {% elif i==Action[1][j][0] %}
-                                <td rowspan="{{ Action[1][j][1] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][1] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[m][j][1] }}
                                 </td>
                                 {% elif i==(Action[1][j][0]+Action[1][j][1]) %}
-                                <td rowspan="{{ Action[1][j][2] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][2] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[m][j][2] }}
                                 </td>
                                 {% elif i==(Action[1][j][0]+Action[1][j][1]+Action[1][j][2]) %}
-                                <td rowspan="{{ Action[1][j][3] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][3] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[m][j][3] }}
                                 </td>
                                 {% elif i==(Action[1][j][0]+Action[1][j][1]+Action[1][j][2]+Action[1][j][3]) %}
-                                <td rowspan="{{ Action[1][j][4] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][4] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[m][j][4] }}
                                 </td>
                                 {% elif i==(Action[1][j][0]+Action[1][j][1]+Action[1][j][2]+Action[1][j][3]+Action[1][j][4]) %}
-                                <td rowspan="{{ Action[1][j][5] }}" class="col-1 tx-center border">
+                                <td rowspan="{{ Action[1][j][5] }}" class="col-1 tx-center border border-dark border-2">
                                     {{ Pourquoi[m][j][5] }}
                                 </td>
                             {%  endif %}
                         {%  endfor %}
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark border-2">
                             {{ Action[2][j][0][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark border-2">
                             {{ Action[2][j][1][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark border-2">
                             {{ Action[2][j][2][i] }}
                         </td>
-                        <td class="col-1 tx-center border">
+                        <td class="col-1 tx-center border border-dark border-2">
                             {{ Action[2][j][4][i] }}
+                        </td>
                     </tr>
             {%  endfor %}
         {%  endfor %}
