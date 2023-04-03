@@ -719,7 +719,8 @@ def export():
     ]
 
     # for i in range(len(CC)):
-    data.append([CC[0][1][0], CC[0][2][0], Pourquoi[0][0][0][0],Pourquoi[0][1][0][0],Pourquoi[0][2][0][0],Pourquoi[0][3][0][0],Pourquoi[0][4][0][0],Pourquoi[0][5][0][0],Action[0][2][0][0][0],Action[0][2][0][1][0],Action[0][2][0][2][0],Action[0][2][0][4][0]])
+    data.append([CC[0][1][0], CC[0][2][0], Pourquoi[0][0][0][0],Pourquoi[0][1][0][0],Pourquoi[0][2][0][0],Pourquoi[0][3][0][0],Pourquoi[0][4][0][0],Pourquoi[0][5][0][0],Action[0][2][0][0][0],Action[0][2][0][1][0],Action[0][2][0][2],Action[0][2][0][4]])
+
 
     # for i in range(len(CC)):
     #     try:
@@ -862,7 +863,10 @@ def synthese_av():
         r = dataset(l, mesures)
 
         # Extraire les données non aberrantes
-        valeursNonAberrants = r[(r["Mesures"]>650) | (r['Mesures']<1000)] # Les valeurs non aberrantes
+        try:
+            valeursNonAberrants = r[(r["Mesures"]>650) & (r['Mesures']<1000)] # Les valeurs non aberrantes
+        except Exception as e:
+            print(e)
         
         print('VNA : ', valeursNonAberrants)
         print('Troisieme etape de calcul')
