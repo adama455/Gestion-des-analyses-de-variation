@@ -340,11 +340,11 @@ class ValeursFichier(UserMixin, db.Model):
     conseiller = db.Column(db.String(100))
     valeur = db.Column(db.Float)
     fichier_id = db.Column(db.Integer, db.ForeignKey('fichiers.id', ondelete='CASCADE'))
-    def __init__(self, valeur, conseiller, fichier_id):
-        self.Valeur = valeur
+    def __init__(self,  conseiller,valeur, fichier_id):
         self.conseiller = conseiller
+        self.valeur = valeur
         self.fichier_id = fichier_id
-    def Importer(self, ):
+    def Importer(self):
         pass
 
 

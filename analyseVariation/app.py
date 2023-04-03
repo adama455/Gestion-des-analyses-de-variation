@@ -566,6 +566,8 @@ def analyse_agent():
     except UnboundLocalError:
         flash('Erreur de referencement.')
         return render_template('analyse-agent.html')
+    
+########################################### Ajout Actions ########################################
 
 @app.route("/ajouter_action", methods=('GET', 'POST'))
 @login_required
@@ -746,7 +748,7 @@ def export():
         df.to_excel(writer, sheet_name='Sheet1', index=False)
         writer.save()
         response = make_response(output.getvalue())
-        response.headers['Content-Disposition'] = 'attachment; filename=export.xlsx'
+        response.headers['Content-Disposition'] = 'attachment; filename=RECAPITULATIF.xlsx'
         response.headers['Content-Type'] = 'application/vnd.ms-excel'
     except Exception as e:
         print('echec de recuperation des elements',e)
@@ -754,7 +756,7 @@ def export():
 
 
 
-###################""
+################################# Deconnection
 @app.route("/logout")
 def logout():
     logout_user()
@@ -784,6 +786,7 @@ def preprocess_data(data):
     # Eliminer les observations ayant des valeurs manquantes
     data = data.dropna()
     return data
+
 
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
@@ -822,17 +825,17 @@ def synthese_av():
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
             data = data[(data["Mesures"]<650)|(data['Mesures']> 1000)]
             print('present etape de calcul')
-            ## Traitement des valeurs non aberrantes
-            copy = preprocess_data(copy)
-            mesures = list(copy['Mesures'])
-            l = list(copy['Nom'])
-            print('deuxieme etape de calcul')
-            # Construire un nouveau dataset
-            r = dataset(l, mesures)
+            # ## Traitement des valeurs non aberrantes
+            # copy = preprocess_data(copy)
+            # mesures = list(copy['Mesures'])
+            # l = list(copy['Nom'])
+            # print('deuxieme etape de calcul')
+            # # Construire un nouveau dataset
+            # r = dataset(l, mesures)
 
-            valeursNonAberrants = r[(r["Mesures"]>650) | (r['Mesures']<1000)] # Les valeurs non aberrantes
-            print('VNA : ', valeursNonAberrants)
-            print('Troisieme etape de calcul')
+            # valeursNonAberrants = r[(r["Mesures"]>650) | (r['Mesures']<1000)] # Les valeurs non aberrantes
+            # print('VNA : ', valeursNonAberrants)
+            # print('Troisieme etape de calcul')
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
         paramettre_analyse_variation = [ limite_ctrl_sup, limite_ctrl_inf, VSF, nbre_mesure, mesures_a_objectif]
@@ -850,18 +853,40 @@ def synthese_av():
     except:
         flash('Aucun fichier ou format non compatible','warning')
     try:
+        ## Traitement des valeurs non aberrantes
+        copy = preprocess_data(copy)
+        mesures = list(copy['Mesures'])
+        l = list(copy['Nom'])
+        print('deuxieme etape de calcul')
+        # Construire un nouveau dataset
+        r = dataset(l, mesures)
+
+        # Extraire les données non aberrantes
+        valeursNonAberrants = r[(r["Mesures"]>650) | (r['Mesures']<1000)] # Les valeurs non aberrantes
+        
+        print('VNA : ', valeursNonAberrants)
+        print('Troisieme etape de calcul')
+
+        # requêtes pour recuperer les fichiers fichiers correspondants
         fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         valeur_exist = ValeursAberrante.query.filter_by(fichier_id=fichier.id).first()
         exist = ValeursFichier.query.filter_by(fichier_id=fichier.id).first()
+
+        # verifier l'existance de la requête
         if not valeur_exist and not exist:
             for i in range(data.shape[0]):
-                print('Valeurs :',data['Mesures'][data.index[i]])
-                print('Nom :',data['Nom'][data.index[i]])
+                print('Valeurs :',valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]])
+                # print('Nom :',valeursNonAberrants['Nom'])
+
+                # Charger les données aberrantes 
                 valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], ' ', 'En attente', fichier.id, int(current_user.id))
-                valeur = ValeursFichier(valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]],valeursNonAberrants['Nom'][valeursNonAberrants.index[i]], fichier.id)
-                
-                db.session.add(valeur_aberante)
+                try:
+                    valeur = ValeursFichier(valeursNonAberrants['Nom'][valeursNonAberrants.index[i]],valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]], fichier.id)
+                except IndexError as e:
+                    print('Error', e.message)
                 db.session.add(valeur)
+                db.session.add(valeur_aberante)
+                
                 try:
                     print('Onnnnnnnnnnnnnn')
                     db.session.commit()
