@@ -48,6 +48,7 @@ def login():
 @app.route("/home")
 @login_required
 def home():
+     
     form = RegistrationForm()
     return render_template('home.html', title='Régister', form=form)    
 
