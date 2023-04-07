@@ -7,7 +7,7 @@ sys.path.append('..')
 from flask import Flask, render_template, url_for, request, redirect, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
-from analyseVariation.models import User, ValeursAberrante, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
+from analyseVariation.models import User,ValeursFichier, ValeursAberrante, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
 from analyseVariation import app, db, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_user import login_required, UserManager, SQLAlchemyAdapter
@@ -659,17 +659,41 @@ def logout():
     logout_user()
     return redirect('login')
 
+def replace_comma_with_dot(lst):
+    """Replace commas whith dots in all element of a list."""
+    new_lst = []
+    for element in lst:
+        if isinstance(element, str) and ',' in element:
+            element = element.replace(',', '.').split('.')[0]
+        new_lst.append(element).append(int(element))
+    return new_lst
+def dataset(list1,liste2):
+    d = list(zip(list1,replace_comma_with_dot(liste2) ))
+    new_df = pd.DataFrame(d, column=['Nom', 'Mesures'])
+    return new_df
+def preprocess_data(data):
+    # Remplacer les valeurs manquantes par la médiane de la
+    data = data.fillna(data.median())
+    # Eliminer les observations ayant des valeurs manquantes
+    data = data.dropna()
+    return data
+
 @app.route("/synthese-av", methods=('POST', 'GET'))
 def synthese_av():
     try :
+        info = request.arg
+        print("==================>>",info)
         nom_fichier = request.args.get('filename')
+        print("==========TEST========>>",pd.read_excel(nom_fichier))
         kpi = request.args.get('kpi')
         libelle_analyse = request.args.get('libelle_analyse')
         equipe = request.args.get('equipe')
         #reference = '000012'
-        data = pd.read_excel(nom_fichier)
-        #mesures = data.Mesures.dropna()
-        data = data.dropna()
+        data = pd.read_excel(os.path.join('Imports',nom_fichier))
+        print("===============copycopy=================",data)
+        copy = data.copy()
+        data = preprocess_data(data)
+        
         Date = date.today()
         effectif = data["Mesures"].count()
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
@@ -684,12 +708,23 @@ def synthese_av():
         if kpi == 'DMT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
-            data = data[(data["Mesures"]<650)|(data['Mesures']> 1000)]
+            data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
+        elif kpi == 'CSAT':
+            nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
+            nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
+            data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
+            kpi_id = Kpi.query.filter_by(libelle='csat').first().id
+        elif kpi == 'DSAT':
+            nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
+            nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
+            data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
+            kpi_id = Kpi.query.filter_by(libelle='dsat').first().id
+        
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
         paramettre_analyse_variation = [ limite_ctrl_sup, limite_ctrl_inf, VSF, nbre_mesure, mesures_a_objectif]
         prenom = current_user.prenom
-        nom = current_user.nom
+        nom = current_user.nom 
         insert_fichier = Fichiers(nom_fichier, libelle_analyse, effectif, Date, ' ', 'Equipe', VSF, limite_ctrl_sup, 
                                   limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
                                   int(current_user.id))
@@ -701,13 +736,39 @@ def synthese_av():
     except:
         flash('Aucun fichier ou format non compatible','warning')
     try:
+        # Traitement des valeurs non aberrantes d'un fichier:::::::::::::::::
+        copy = preprocess_data(copy)
+        mesures = list(copy['Mesures'])
+        l = list(copy['Nom'])
+        # Constuction d'un nouveau dataset.........
+        r = dataset(l, mesures)
+        try:
+            # Extraire les données non aberrantes.........
+            valeurNonAberantes = r[(r["Mesures"]>limite_ctrl_inf) & (r["Mesures"]<limite_ctrl_sup)]
+        except Exception as e:
+            print(e)
+            
+        # requet de recupération des fichiers correspondant.....
+        
         fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         valeur_exist = ValeursAberrante.query.filter_by(fichier_id=fichier.id).first()
-        if not valeur_exist:
+        exist = ValeursFichier.query.filter_by(fichier_id=fichier.id).first()
+        if not valeur_exist and exist:
             for i in range(data.shape[0]):
                 valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], ' ', 'En attente', fichier.id, int(current_user.id))
                 db.session.add(valeur_aberante)
-                db.session.commit()
+                try:
+                    db.session.commit()
+                except Exception as e:
+                    print(e)
+                
+            for j in range(valeurNonAberantes.shape[0]):
+                valeur_non_aberante = valeurNonAberantes (data['Nom'][data.index[j]], data['Mesures'][data.index[j]], fichier.id)
+                db.session.add(valeur_non_aberante)
+                try:
+                    db.session.commit()
+                except Exception as e:
+                    print(e)
     except AttributeError:
         print("Erreur d'atribut")
     if request.method=='POST':
@@ -719,13 +780,14 @@ def synthese_av():
         Fichiers.date = Date
         Fichiers.statut_analyse = statut
         db.session.commit()
-        return redirect(url_for('listeVa', fichier_id=fichier.id)) 
+        return redirect(url_for('listeVa', fichier_id=fichier.id))
     try:
         return render_template('synthese-av.html', fichier_id=fichier.id, nbr_va_sou_perf=nbre_va_sous_perf, 
                                nbr_va_sur_perf=nbre_va_sur_perf, prenom=prenom, nom=nom, Date=Date, kpi=kpi, 
                                libelle_analyse=libelle_analyse, paramettre_analyse_variation=paramettre_analyse_variation)  
     except:
-        return render_template('home.html')
+        return render_template('home.html',nbre_va_sous_perf=nbre_va_sous_perf,
+                               nbre_va_sur_perf=nbre_va_sur_perf)
     
 # # UPLOAD_FOLDER = "/home"
 # def CreateNewDir():
@@ -768,10 +830,10 @@ def upload_file ():
             #    flash('No selected file')
             #    return redirect(request.url)
             # if file and allowed_file(file.filename):
-            file.save(secure_filename(file.filename))
+            # file.save(secure_filename(file.filename))
             filename = secure_filename(file.filename)
+            file.save(os.path.join('Imports',filename))
             print('filename : ', filename)
-            # file.save(os.path.join(UPLOAD_FOLDER, filename))
             return redirect(url_for('synthese_av', filename=filename, kpi=kpi, libelle_analyse=libelle_analyse))
         # filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
         #                                      filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
