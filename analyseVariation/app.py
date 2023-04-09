@@ -4,7 +4,7 @@ import datetime
 import subprocess
 sys.path.append('.')
 sys.path.append('..')
-from flask import Flask, render_template, url_for, request, redirect, flash, session,make_response
+from flask import Flask, render_template, url_for, request, redirect, flash, session,make_response,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from io import BytesIO
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
@@ -18,7 +18,7 @@ import os
 # from tkinter import filedialog
 # from tkinter import *
 from openpyxl import load_workbook,Workbook
-
+import uuid
 import csv
 import pandas as pd
 from datetime import date
@@ -29,32 +29,321 @@ user_manager = UserManager(db_adapter, app) # Initialize Flask-User
 # user_datastore = SQLAlchemyUserDatastore(db,User,Role)
 # security = Security(app,user_datastore)
 from werkzeug.utils import secure_filename
+import logging
+from datetime import datetime
+from datetime import timedelta
+from collections import Counter
+
+user_sessions = {}
+user_sessions_info = {}
+
+##############################################################################
+# # Créer un objet logger
+# logger = logging.getLogger(__name__)
+
+# # Définir le niveau de journalisation
+# logger.setLevel(logging.INFO)
+
+# # Créer un gestionnaire de fichier pour enregistrer les fichiers journaux
+# file_handler = logging.FileHandler('app.log')
+# file_handler.setLevel(logging.INFO)
+
+# # Créer un formatteur pour définir le format du message de journalisation
+# formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+# file_handler.setFormatter(formatter)
+
+# # Ajouter le gestionnaire de fichier à l'objet logger
+# logger.addHandler(file_handler)
+
+#====================
 
 
-#la racine ou page connexion des utilisateurs
+
+
+# Fonction pour enregistrer les informations de session
+def log_session_info(session_id, user_id, start_time):
+    session_info = user_sessions_info.get(session_id)
+    if session_info:
+        # Enregistrer les informations de session
+        session_start = session_info['session_start']
+        session_duration = start_time - session_start
+        logger.info(f"Session de l'utilisateur {user_id} terminée. Durée : {session_duration}")
+
+# Fonction pour enregistrer les informations de page visitée
+def log_page_visit(session_id, user_id, page_url, visit_time):
+    # Récupérer les informations de session
+    session_info = user_sessions_info.get(session_id)
+    if not session_info:
+        return
+
+    # Ajouter les informations de page visitée à la session
+    session_info['last_page'] = page_url
+    session_info['last_page_start'] = visit_time
+
+    # Mettre à jour la liste des pages visitées et la durée de chaque visite
+    if session_info['pages_visited']:
+        last_page_visited = session_info['pages_visited'][-1]
+        last_page_duration = visit_time - session_info['last_page_start']
+        session_info['time_on_pages'][last_page_visited] += last_page_duration
+
+    session_info['pages_visited'].append(page_url)
+    session_info['time_on_pages'][page_url] = 0
+
+    # Enregistrer les informations de session mises à jour
+    log_session_info(session_id, user_id, session_info['session_start'])
+
+
+# Fonction pour enregistrer les erreurs et les messages d'avertissement
+def log_error(error_message):
+    logger.error(error_message)
+
+# Fonction pour enregistrer les activités
+def log_user_activity(session_id, user_id, activity_message):
+    session_info = user_sessions_info.get(session_id)
+    if session_info:
+        # Enregistrer l'activité de l'utilisateur
+        logger.info(f"Activité de l'utilisateur {user_id} : {activity_message}")
+
+########################################### TEMPS #########################################
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        user_id = current_user.get_id()
+        session_id = session.get('sid')
+        if session_id in user_sessions_info:
+            session_info = user_sessions_info[session_id]
+            last_page = session_info.get('last_page')
+            last_page_start = session_info.get('last_page_start')
+            if last_page and last_page_start:
+                # Calculer le temps écoulé depuis la dernière page visitée
+                elapsed_time = datetime.utcnow() - last_page_start
+                # Ajouter la durée au temps total passé sur les pages
+                session_info['time_on_pages'] += elapsed_time.total_seconds()
+            # Mettre à jour les informations de session
+            session_info['last_page'] = request.path
+            session_info['last_page_start'] = datetime.utcnow()
+
+################################ FIN ################################# 
+
 @app.route('/', methods=('GET', 'POST'))
 @app.route("/login", methods=('GET', 'POST'))
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = LoginForm()
-    if request.method=='POST':
-    #if form.validate_on_submit():
-        print(form.password.data)
+    if request.method == 'POST':
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            # Vérifier si l'utilisateur a déjà une session active
+            if user.id in user_sessions_info:
+                flash(f"Vous êtes déjà en session dans un autre endroit {user.email}.", "warning")
+                return redirect(url_for('login'))
+            
+            # Générer un ID de session aléatoire et l'ajouter à la liste des sessions
+            session_id = str(uuid.uuid4())
+            session['sid'] = session_id
+            user_sessions[user.id] = session_id
+
+            # Ajouter les informations de session pour l'utilisateur connecté
+            session_start = datetime.utcnow()
+            user_sessions_info[user.id] = {
+                'session_id': session_id,
+                'session_start': session_start,
+                'last_seen': session_start,
+                'pages_visited': []
+            }
+            print('user_sessions_info :',user_sessions_info)
+
             login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
-            flash(f'Une erreur s est produit, veillez verifier les information que vous avez saisi', 'danger')
-    return render_template('login.html', title='Login', form=form)    
+            flash("Nom d'utilisateur ou mot de passe invalide.", "danger")
+            return redirect(url_for('login'))
+    return render_template('login.html', title='Login', form=form)
 
-#La page acceuil de notre application
-@app.route("/home")
+@app.route('/logout')
+@login_required
+def logout():
+    # Calculer la durée de la session
+    session_id = session.pop('sid', None)
+    session_info = user_sessions_info.pop(current_user.id, None)
+    if session_info:
+        session_start = session_info['session_start']
+        session_end = datetime.utcnow()
+        session_duration = session_end - session_start
+        logging.info(f"Session de l'utilisateur {current_user.email} terminée. Durée : {session_duration}")
+    logout_user()
+    return redirect(url_for('login'))
+  
+
+#######################################################################
+def create_session_info(session_id, user_id, start_time):
+    """
+    Crée un dictionnaire contenant les informations de la session utilisateur.
+    """
+    return {
+        'user_id': user_id,
+        'session_start': start_time,
+        'last_seen': start_time,
+        'last_page': None,
+        'last_page_start': None,
+        'pages_visited': [request.path],
+        'time_on_pages': 0
+    }
+
+
+@app.context_processor
+def inject_session_info():
+
+    # créer un logger
+    logger = logging.getLogger('mon_logger')
+    logger.setLevel(logging.DEBUG)
+
+    # créer un gestionnaire de fichier pour écrire les logs dans un fichier
+    log_file = 'logs.log'
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.DEBUG)
+
+    # créer un formatteur pour formater les logs
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(user)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+    # ajouter le formatteur au gestionnaire de fichier
+    file_handler.setFormatter(formatter)
+
+    # ajouter le gestionnaire de fichier au logger
+    logger.addHandler(file_handler)
+
+    # utiliser le logger pour écrire les logs et verifié si current_user à un attribut email
+    if current_user.is_authenticated and hasattr(current_user, 'email'):
+        email = current_user.email
+        logger.info(request.url,extra={'user': email })
+    else:
+        email = None
+    
+
+    session_id = current_user.get_id()
+    session_info = user_sessions_info.get(session_id)
+
+    num_pages_visited = 0
+    pages_visited = []
+    session_start_time = None
+    session_end_time = None
+
+    if session_info:
+        # num_pages_visited = len(session_info['pages_visited'])
+        # pages_visited = session_info['pages_visited']
+        session_start_time = session_info['session_start']
+        session_end_time = session_info['last_seen']
+    
+    with open('logs.log', 'r') as f:
+        lines = f.readlines()
+
+    urls = []
+    for line in lines:
+        l = line.split()[3]+' => '+line.split()[-1].split('/')[-1]
+        url = line.split()[-1].split('/')[-1]
+        urls.append(l)
+    user = line.split()[3]
+    #======================================================
+    filtered_lst = [elem for elem in urls if not elem.endswith('.js')]
+    freq = Counter(filtered_lst).most_common(1)[0][0]
+
+    print('Le plus frequent :',freq)
+    #=====================  
+    unique_urls = list(set(urls))
+    # Permet de supprimer tout ce qui termine par .js
+    unique_url = [x for x in unique_urls if not x.endswith('.js')]
+    unique_uls = [x for x in unique_url if not x.endswith('.css')]
+    unique_urls = [x for x in unique_uls if not x.endswith(' ')]
+    print(unique_urls)
+    unique_urls.sort(reverse=True)
+    nbre_pages = len(unique_urls)
+
+    
+    session_duration = None
+    if session_start_time and session_end_time:
+        session_duration = session_end_time - session_start_time
+
+    return dict(freq=freq,user=user,nbre_pages=nbre_pages, pages_visited=unique_urls, session_start_time=session_start_time, session_end_time=session_end_time, session_duration=session_duration)
+
+
+# print(inject_session_info())
+@app.route('/logs', methods=['GET', 'POST'])
+def logs():
+    # Assuming the current user's username is stored in a variable called 'current_user'
+    # You can replace this with whatever method you're using to authenticate users
+
+    with open('pages_visited.log', 'r') as f:
+        lines = f.readlines()
+
+    urls = []
+    for line in lines:
+        url = line.split()[-1].split('/')[-1]
+        urls.append(url)
+
+    unique_urls = list(set(urls))
+    unique_urls.sort(reverse=True)
+
+    maintenant = datetime.now()
+
+    
+    return render_template('logs.html',maintenant=maintenant)
+
+
+@app.route('/home')
 @login_required
 def home():
-    form = RegistrationForm()
-    return render_template('home.html', title='Régister', form=form)    
+    session_id = current_user.get_id()
+    session_info = user_sessions_info.get(session_id)
+
+    if not session_info:
+        start_time = datetime.utcnow()
+        user_id = current_user.get_id()
+        session_info = create_session_info(session_id, user_id, start_time)
+
+    current_time = datetime.utcnow()
+    page_visited = request.path
+    session_info['pages_visited'].append(page_visited)
+    print("path/: ",page_visited)
+    print("static/: ",session_info)
+    # Ajouter la page actuelle à la liste des pages visitées
+    session_info['pages_visited'].append(request.path)
+
+    # Mettre à jour la dernière page visitée et la dernière heure de début de visite de page
+    if 'last_page' in session_info:
+        session_info['last_page'] = request.path
+    if 'last_page_start' in session_info:
+        session_info['last_page_start'] = datetime.utcnow()
+
+    # Mettre à jour le temps de la dernière visite
+    session_info['last_seen'] = current_time
+
+    # Enregistrer les informations de session
+    if 'session_start' not in session_info:
+        session_info['session_start'] = current_time
+    log_session_info(session_id, current_user.id, session_info['session_start'])
+
+    # Enregistrer les informations de page visitée
+    log_page_visit(session_id, current_user.id, request.url, current_time)
+
+    # Calculer la durée de la session
+    session_start_time = session_info['session_start']
+    session_duration = current_time - session_start_time
+
+    # Afficher le nombre de pages visitées et la durée de la session
+    print('s =>: ',request)
+    session_duration_str = str(timedelta(seconds=session_duration.total_seconds()).microseconds)
+
+    # les valeurs aberrantes
+    v_a = ValeursAberrante.query.count()
+    vna = ValeursFichier.query.count()
+    en_cours = ValeursAberrante.query.filter_by(statut='En cours').count()
+    terminer = ValeursAberrante.query.filter_by(statut='Terminer').count()
+    attente = ValeursAberrante.query.filter_by(statut='En attente').count()
+
+    return render_template('home.html', title='Home',en_cours=en_cours,terminer=terminer,attente=attente,v_a=v_a,vna=vna,session_info=session_info, session_duration=session_duration_str)
+
+
+
+  
 
 #Cette page permet a l'administrateur d'ajouter de users
 @app.route("/addUser", methods=('GET', 'POST'))
@@ -758,10 +1047,10 @@ def export():
 
 
 ################################# Deconnection
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect('login')
+# @app.route("/logout")
+# def logout():
+#     logout_user()
+#     return redirect('login')
 
 
 # Faire une fonction qui extrait les chaines de caractères et les convertissent en entier
@@ -816,28 +1105,33 @@ def synthese_av():
         #print(current_user.id)
         #intervale_analyse = request.form.get('date1') + '-'+request.form.get('date2')
         data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
-        limite_ctrl_sup = round(data['Mesures'].std() + data['Mesures'].mean(), 2)
-        limite_ctrl_inf = round(data['Mesures'].mean() - data['Mesures'].std(), 2)
+        # Définir le facteur de proportionnalité k en fonction du nombre d'observations
+        k = 1.96  # pour un niveau de confiance de 95% et n > 30
+        limite_ctrl_sup = round(data['Mesures'].std() + k*data['Mesures'].mean(), 2)
+        limite_ctrl_inf = round(data['Mesures'].mean() - k*data['Mesures'].std(), 2)
         VSF = round((data['Mesures'].std()*6)/data['Mesures'].mean(), 2)
         nbre_mesure = data.Nom.count()
         #print( limite_ctrl_sup, data['Mesures'].std(), data['Mesures'].mean())
-        if kpi == 'DMT' or kpi == 'CSAT' or kpi == 'DSAT' :
+        if kpi == 'DMT' :
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
-            data = data[(data["Mesures"]<650)|(data['Mesures']> 1000)]
-            print('present etape de calcul')
-            # ## Traitement des valeurs non aberrantes
-            # copy = preprocess_data(copy)
-            # mesures = list(copy['Mesures'])
-            # l = list(copy['Nom'])
-            # print('deuxieme etape de calcul')
-            # # Construire un nouveau dataset
-            # r = dataset(l, mesures)
-
-            # valeursNonAberrants = r[(r["Mesures"]>650) | (r['Mesures']<1000)] # Les valeurs non aberrantes
-            # print('VNA : ', valeursNonAberrants)
-            # print('Troisieme etape de calcul')
+            data = data[(data["Mesures"]>650)|(data['Mesures']< 1000)]
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
+            print('present etape de calcul')
+        elif kpi == 'CSAT':
+            nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
+            nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
+            data = data[(data["Mesures"]>650)|(data['Mesures']< 1000)]
+            kpi_id = Kpi.query.filter_by(libelle='csat').first().id
+        elif kpi == 'DSAT':
+            nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
+            nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
+            data = data[(data["Mesures"]>650)|(data['Mesures']< 1000)]
+            kpi_id = Kpi.query.filter_by(libelle='dsat').first().id
+        
+        non_aberrant_values = data[(data <= 650) & (data >= 1000)]
+        n_lcs = len(data)
+        n_lci = len(non_aberrant_values)
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
         paramettre_analyse_variation = [ limite_ctrl_sup, limite_ctrl_inf, VSF, nbre_mesure, mesures_a_objectif]
         prenom = current_user.prenom
@@ -1133,4 +1427,4 @@ def page_not_found(e):
     
 if __name__=='__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.run()
+    app.run(debug=True)

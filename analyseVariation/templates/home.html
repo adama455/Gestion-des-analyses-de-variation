@@ -4,23 +4,52 @@
 <br>
         <div class="az-content-label mg-b-5">DASHBOARD</div>
         <p class="mg-b-20"></p>
-
+       
         <div class="row row-sm">
           <div class="col-sm-5 col-md-5 col-xl-5 mg-t-20 mg-md-t-0">
 
             <div class="az-content-label az-content-label-sm mg-b-15 text-dark">Répartition des événements par statut</div>
-            <div class="card-body row pd-25">
+            <div class="card-body row pd-25"> 
+              <div class="card-body">
+                <!-- {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
+
+                  <p>Profile :<strong>{{ current_user.email }}</strong></p>
+                  <p>La page la plus visitée: {{ freq }}</p>
+
+                  <p>Nombre de pages visitées : {{ nbre_pages }}</p>
+                  <p>Liste des pages visitées :</p>
+                  <ul>
+                  {% for page in pages_visited %}
+                      <li>{{ page }}</li>
+                  {% endfor %}
+                  </ul>
+                  <p>Début de la session : {{ session_start_time }}</p>
+                  <p>Durée de la session : {{ session_duration }}</p>
+                  <p>Temps actuel : {{ maintenant }}</p>
+                  <p>Les logs: {{ log_info }}</p>
+                  <p id="date"></p>
+                  <hr>
+
+                  
+                  <ul>
+                    {% for log in logs %}
+                    <li>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} - {{ log.message }}</li>
+                    {% endfor %}
+                
+                  </ul> 
+                {% endif %} -->
+            </div>
               <div class="col-sm-6 col-md-6">
                 <div id="flotPie" class="wd-100p ht-200"></div>
               </div><!-- col -->
               <div class="col-sm-6 col-md-6 mg-t-30 mg-sm-t-0">
                 <ul class="list-unstyled">
-                  <li class="d-flex align-items-center"><span class="d-inline-block wd-10 ht-10 bg-purple mg-r-10"></span>55
-                    Complets</li>
-                  <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-pink mg-r-10"></span>
-                    24 Ouverts</li>
                   <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-teal mg-r-10"></span>
-                    34 Abandonnés</li>
+                    {{ terminer }} Terminer</li>
+                    <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-pink mg-r-10"></span>
+                      {{ attente }} En attente</li>
+                    <li class="d-flex align-items-center"><span class="d-inline-block wd-10 ht-10 bg-purple mg-r-10"></span>{{ en_cours }}
+                      En cours</li>
                 
                 </ul>
                 <br><br><br>
@@ -221,7 +250,6 @@
 <script src="../static/lib/chart.js/Chart.bundle.min.js"></script>
 
 <script>
-
     $(function () {
       'use strict'
   
@@ -305,9 +333,9 @@
   
   
       $.plot('#flotPie', [
-        { label: 'Complets', data: [[1, 50]], color: '#29cc39' },
-        { label: 'Ouverts', data: [[1, 25]], color: '#ffc107' },
-        { label: 'Abandonnés', data: [[1, 25]], color: '#e62e2e' },
+        { label: 'Complets', data: [[12, {{ terminer }}]], color: '#29cc39' },
+        { label: 'Valeurs Non Aberrantes', data: [[12,{{ attente }}]], color: '#e62e2e' },
+        { label: 'Valeurs Aberrantes', data: [[12,{{ en_cours }}]], color: '#ffc107' },
   
       ], {
         series: {

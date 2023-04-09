@@ -80,7 +80,7 @@
               <a href="#" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
               <nav class="nav-sub">
                 <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
-                <a href="" class="nav-sub-link">Métriques</a>
+                <a href="{{ url_for('logs') }}" class="nav-sub-link">Métriques</a>
                 <a href="{{ url_for('plateau') }}">Plateaux</a>
               </nav>
             </li><!-- nav-item -->
@@ -202,6 +202,7 @@
             </div>
           </div>
         </nav>
+        
 
         <!-- l'image de fond contsnant le titre -->
 
@@ -774,6 +775,7 @@
 
       });
     </script>
+    
     {% endblock javascript %}
 
 </body>

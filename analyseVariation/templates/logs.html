@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br>
+<center >
+    <h1>Gestions logs</h1>
+    
+</center>
+<div class="container">
+    {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
+
+        <p>Profile :<strong>{{ current_user.email }}</strong></p>
+        <p>La page la plus visitée: {{ freq }}</p>
+
+        <p>Nombre de pages visitées : {{ nbre_pages }}</p>
+        <p>Liste des pages visitées :</p>
+        <ul>
+        {% for page in pages_visited %}
+            <li>{{ page }}</li>
+        {% endfor %}
+        </ul>
+        <p>Début de la session : {{ session_start_time }}</p>
+        <p>Durée de la session : {{ session_duration }}</p>
+        <p>Temps actuel : {{ maintenant }}</p>
+        <!-- <p>Les logs: {{ log_info }}</p> -->
+        <h1 id="chrono">00:00:00</h1>
+        <button onclick="demarrer()">Démarrer</button>
+        <button onclick="arreter()">Arrêter</button>
+        <button onclick="remettreAZero()">Remettre à zéro</button>
+        <script>
+
+            
+            var temps = 0;
+            var intervalID;
+
+            function demarrer() {
+                intervalID = setInterval(function() {
+                    temps++;
+                    majChrono();
+                }, 1000);
+            }
+
+            function arreter() {
+                clearInterval(intervalID);
+            }
+
+            function remettreAZero() {
+                temps = 0;
+                majChrono();
+            }
+
+            function majChrono() {
+                var heures = Math.floor(temps / 3600);
+                var minutes = Math.floor((temps % 3600) / 60);
+                var secondes = temps % 60;
+
+                var heuresStr = (heures < 10 ? "0" : "") + heures;
+                var minutesStr = (minutes < 10 ? "0" : "") + minutes;
+                var secondesStr = (secondes < 10 ? "0" : "") + secondes;
+
+                document.getElementById("chrono").innerHTML = heuresStr + ":" + minutesStr + ":" + secondesStr;
+            }
+        </script>
+
+
+
+        <ul>
+        {% for log in logs %}
+        <li>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} - {{ log.message }}</li>
+        {% endfor %}
+
+        </ul> 
+    {% endif %}
+</div>
+        
+    
+{% endblock %}
