@@ -15,12 +15,12 @@
               </div><!-- col -->
               <div class="col-sm-6 col-md-6 mg-t-30 mg-sm-t-0">
                 <ul class="list-unstyled">
-                  <li class="d-flex align-items-center"><span class="d-inline-block wd-10 ht-10 bg-purple mg-r-10"></span>55
-                    Complets</li>
+                  {# <li class="d-flex align-items-center"><span class="d-inline-block wd-10 ht-10 bg-purple mg-r-10"></span>55
+                    Complets</li> #}
+                  <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-success mg-r-10"></span>
+                    {{val_ab}} Valeurs abérrantes</li>
                   <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-pink mg-r-10"></span>
-                    24 Ouverts</li>
-                  <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-teal mg-r-10"></span>
-                    34 Abandonnés</li>
+                    {{val_non_ab}} Valeurs non abérrantes</li>
                 
                 </ul>
                 <br><br><br>
@@ -45,7 +45,7 @@
 
           <div class="col-sm-8 col-md-6">
 
-            <div class="az-content-label az-content-label-sm mg-b-15 text-dark">Répartition des évéments par Domaine - {{annee}}</div>
+            <div class="az-content-label az-content-label-sm mg-b-15 text-dark">Répartition des Analyses par Etat - {{annee}}</div>
           <div class="card-body">
             
           
@@ -57,13 +57,13 @@
 
           <ul class="list-unstyled">
             <li class="d-flex align-items-center"><span class="d-inline-block wd-10 ht-10 bg-secondary mg-r-10"></span>
-              {{it}} Incidents IT </li>
+              {{attente}} En Attente </li>
             <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-secondary mg-r-10"></span>
-              {{rx}} Incidents Rx</li>
+              {{cours}}  En cours</li>
             <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-secondary mg-r-10"></span>
-              {{mark}} Marketing</li>
-              <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-secondary mg-r-10"></span>
-                {{com}} Commercial</li>
+              {{termine}} Terminé</li>
+              {# <li class="d-flex align-items-center mg-t-5"><span class="d-inline-block wd-10 ht-10 bg-secondary mg-r-10"></span>
+                {{com}} Commercial</li> #}
           
           </ul>
           </div><!-- col-6 -->
@@ -190,8 +190,8 @@
           
             <div class="col-sm-7 col-md-5">
           
-              <div class="az-content-label az-content-label-sm mg-b-15 text-dark text-right">Suivi des Top 5 ressources fréquentes</div>
-              <div class="card-body">
+              <div class="az-content-label az-content-label-sm mg-b-15 text-dark text-right">Suivi des Top KPI fréquentes</div>
+              <div class="card-body"> 
                 <div class="dashboard-five-stacked-chart"><canvas id="chartStacked111"></canvas></div>
               </div><!-- card-body -->
             </div><!-- col-6 -->
@@ -305,9 +305,9 @@
   
   
       $.plot('#flotPie', [
-        { label: 'Complets', data: [[1, 50]], color: '#29cc39' },
-        { label: 'Ouverts', data: [[1, 25]], color: '#ffc107' },
-        { label: 'Abandonnés', data: [[1, 25]], color: '#e62e2e' },
+        //{ label: 'Complets', data: [[1, 50]], color: '#29cc39' },
+        { label: 'Ouverts', data: [[25, {{val_ab}}]], color: '#29cc39' },
+        { label: 'Abandonnés', data: [[25, {{val_non_ab}}]], color: '#e62e2e' },
   
       ], {
         series: {
@@ -385,9 +385,9 @@
       new Chart(ctx7, {
         type: 'bar',
         data: {
-          labels: ['Incidents IT', 'Incidents Rx', 'Marketing', 'Commercial'],
+          labels: ['En Attente', 'En cours', 'Terminé'],
           datasets: [{
-            data: [4, 5, 6,1],
+            data: [{{attente}}, {{cours}}, {{termine}}],
             backgroundColor: '#009088',
   
             borderWidth: 1,
@@ -423,9 +423,9 @@
       new Chart(ctx8, {
         type: 'horizontalBar',
         data: {
-          labels: ['dmt','csat',],
+          labels: ['dmt', 'csat', 'dsat'],
       datasets: [{
-        data: [6,64,64,6],
+        data: [{{ dmt }}, {{ csat }}, {{ dsat }},0],
       backgroundColor: '#FF7900',
       borderWidth: 1,
       fill: true

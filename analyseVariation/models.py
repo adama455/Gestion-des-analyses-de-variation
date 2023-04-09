@@ -337,12 +337,15 @@ class ValeursFichier(UserMixin, db.Model):
     __tablename__='valeurs_fichier'
     id = db.Column(db.Integer, primary_key=True)
     conseiller = db.Column(db.String(100))
-    valeur = db.Column(db.Float)
+    valeur = db.Column(db.Integer)
     fichier_id = db.Column(db.Integer, db.ForeignKey('fichiers.id', ondelete='CASCADE'))
-    def __init__(self, valeur, conseiller, fichier_id):
-        self.valeur = valeur
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    
+    def __init__(self, conseiller, valeur, fichier_id,user_id):
         self.conseiller = conseiller
+        self.valeur = valeur
         self.fichier_id = fichier_id
+        self.user_id = user_id
     def Importer(self, ):
         pass
 
