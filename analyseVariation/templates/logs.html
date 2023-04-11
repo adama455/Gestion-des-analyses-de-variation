@@ -3,75 +3,392 @@
 {% block content %}
 <br>
 <center >
-    <h1>Gestions logs</h1>
-    
+    <h1 >Gestions logs</h1>
+    <h1 id="horloge"></h1>
 </center>
+<hr>
 <div class="container">
-    {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
+    <div class="row">
+        <div class="col-sm-7">
+            <!-- <h1 id="horloge"></h1> -->
+            {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
 
-        <p>Profile :<strong>{{ current_user.email }}</strong></p>
-        <p>La page la plus visitée: {{ freq }}</p>
+                <p style="font-size: 20px;">Votre Profile :<strong>{{ current_user.email }}</strong></p>
+                <p><strong>La page la plus visitée: </strong> {{'/'+freq.split('=>')[1] }} par {{ freq.split('=>')[0] }}</p>
 
-        <p>Nombre de pages visitées : {{ nbre_pages }}</p>
-        <p>Liste des pages visitées :</p>
-        <ul>
-        {% for page in pages_visited %}
-            <li>{{ page }}</li>
-        {% endfor %}
-        </ul>
-        <p>Début de la session : {{ session_start_time }}</p>
-        <p>Durée de la session : {{ session_duration }}</p>
-        <p>Temps actuel : {{ maintenant }}</p>
-        <!-- <p>Les logs: {{ log_info }}</p> -->
-        <h1 id="chrono">00:00:00</h1>
-        <button onclick="demarrer()">Démarrer</button>
-        <button onclick="arreter()">Arrêter</button>
-        <button onclick="remettreAZero()">Remettre à zéro</button>
-        <script>
+                <p>Nombre de pages visitées : {{ nbre_pages }}</p>
+                <p><strong> Liste des pages visitées :</strong></p>
+                <ul class="liste">
+                {% for page in pages_visited %}
+                    <li>{{ page }}</li>
+                {% endfor %}
+                </ul>
+                <button id="bouton-voir-plus" class="btn btn-primary">Voir plus ...</button>
+                <p>Début de la session : {{ session_start_time }}</p>
+                <p>Durée de la session : {{ session_duration }}</p>
+                <p>Temps actuel : {{ maintenant }}</p>
+                <!-- <p>Les logs: {{ log_info }}</p> -->
+                <!-- <h1 id="chrono">00:00:00</h1>
+                <button onclick="demarrer()">Démarrer</button>
+                <button onclick="arreter()">Arrêter</button>
+                <button onclick="remettreAZero()">Remettre à zéro</button> -->
+                <ul>
+                {% for log in logs %}
+                <li>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} - {{ log.message }}</li>
+                {% endfor %}
 
+                </ul> 
+            {% endif %}
+        </div>
+        <div class="col-sm-5">
+            <strong>Synthèse de Variation :</strong>
+            <ul id="visited-pages">
+                {% for page in pages_visited %}
+                  {% if '&kpi=DMT&libelle_analyse=' in page or '&kpi=CSAT&libelle_analyse=' in page or '&kpi=DSAT&libelle_analyse=' in page %}
+                    <li class="li">{{ page.split('=>')[0] }} - <span>a fait une <strong>Synthèse de variation</strong></span></li>
+                  
+                  {% endif %}
+                  
+                {% endfor %}
+              </ul>
+              <button id="show-more" class="btn btn-primary">Voir plus...</button>
+            <button id="show-less" class="btn btn-primary">Voir moins...</button>
+            <hr>
+            <strong>Analyse de Variation :</strong>
+            <ul id="variation">
+              {% for page in pages_visited %}
+                {% if 'listeVa?fichier_id=' in page %}
+                  <li class="li">{{ page.split('=>')[0] }} - <span>a fait une <strong>Tentative Analyse de Cause</strong></span></li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <button id="plus" class="btn btn-primary">Voir plus</button>
+            <button id="masque" class="hidden btn btn-primary">Masquer</button>
+              <hr>
+            <strong>Qui a analyser une valeur ? :</strong>
+            <ul id="valeur">
+              {% set li_count = 0 %}
+              {% for page in pages_visited %}
+                {% if 'analyse_agent?fichier_id=' in page %}
+                  {% if li_count < 1 %}
+                    <li class="li">{{ page.split('=>')[0] }} - <span>a <strong>Analyser de Valeur</strong></span></li>
+                    {% set li_count = li_count + 1 %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <button id="p" class="btn btn-primary">Voir plus</button>
+            <button id="m" class="hidden btn btn-primary">Masquer</button>
+            <hr>
+            <strong>Date Consulté :</strong>
+            <ul id="pages">
+              {% for page in liste_finale %}
+                  <li class="li">{{ page }}</li>
+              {% endfor %}
+            </ul>
             
-            var temps = 0;
-            var intervalID;
+            <!-- Boutons pour afficher/masquer les éléments -->
+            <button id="voir-plus" class="btn btn-primary">Voir plus</button>
+            <button id="masquer" class="hidden btn btn-primary">Masquer</button>
+            <style>
+                .li{
+                    list-style: none;
+                }
+                .hidden {
+                  display: none;
+                }
+              </style>
+        </div>
+    </div>
 
-            function demarrer() {
-                intervalID = setInterval(function() {
-                    temps++;
-                    majChrono();
-                }, 1000);
-            }
-
-            function arreter() {
-                clearInterval(intervalID);
-            }
-
-            function remettreAZero() {
-                temps = 0;
-                majChrono();
-            }
-
-            function majChrono() {
-                var heures = Math.floor(temps / 3600);
-                var minutes = Math.floor((temps % 3600) / 60);
-                var secondes = temps % 60;
-
-                var heuresStr = (heures < 10 ? "0" : "") + heures;
-                var minutesStr = (minutes < 10 ? "0" : "") + minutes;
-                var secondesStr = (secondes < 10 ? "0" : "") + secondes;
-
-                document.getElementById("chrono").innerHTML = heuresStr + ":" + minutesStr + ":" + secondesStr;
-            }
-        </script>
-
-
-
-        <ul>
-        {% for log in logs %}
-        <li>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} - {{ log.message }}</li>
-        {% endfor %}
-
-        </ul> 
-    {% endif %}
 </div>
-        
+<script>
+  // Qui a analyser une valeur 
+  const valeur = document.getElementById('valeur');
+  const p = document.getElementById('p');
+  const m = document.getElementById('m');
+
+  // Ajouter la classe 'hidden' à tous les éléments de la liste sauf les deux premiers
+  for (let i = 2; i < valeur.children.length; i++) {
+    valeur.children[i].classList.add('hidden');
+  }
+
+  // Cacher le bouton 'p m' au départ
+  m.classList.add('hidden');
+
+  // Ajouter un écouteur d'événements pour le bouton 'p p'
+  p.addEventListener('click', function() {
+    // Afficher tous les éléments masqués
+    for (let i = 2; i < valeur.children.length; i++) {
+      valeur.children[i].classList.remove('hidden');
+    }
+
+    // Cacher le bouton 'p p'
+    p.classList.add('hidden');
+    // Afficher le bouton 'p m'
+    m.classList.remove('hidden');
+  });
+
+  // Ajouter un écouteur d'événements pour le bouton 'p m'
+  m.addEventListener('click', function() {
+    // mr tous les éléments sauf les deux premiers
+    for (let i = 2; i < valeur.children.length; i++) {
+      valeur.children[i].classList.add('hidden');
+    }
+
+    // Afficher le bouton 'p p'
+    p.classList.remove('hidden');
+    // Cacher le bouton 'Voir m'
+    m.classList.add('hidden');
+  });
+
+
+  // Les analyses de variation
+  const variation = document.getElementById('variation');
+  const plus = document.getElementById('plus');
+  const masque = document.getElementById('masque');
+
+  // Ajouter la classe 'hidden' à tous les éléments de la liste sauf les deux premiers
+  for (let i = 2; i < variation.children.length; i++) {
+    variation.children[i].classList.add('hidden');
+  }
+
+  // Cacher le bouton 'plus masque' au départ
+  masque.classList.add('hidden');
+
+  // Ajouter un écouteur d'événements pour le bouton 'plus plus'
+  plus.addEventListener('click', function() {
+    // Afficher tous les éléments masqués
+    for (let i = 2; i < variation.children.length; i++) {
+      variation.children[i].classList.remove('hidden');
+    }
+
+    // Cacher le bouton 'plus plus'
+    plus.classList.add('hidden');
+    // Afficher le bouton 'plus masque'
+    masque.classList.remove('hidden');
+  });
+
+  // Ajouter un écouteur d'événements pour le bouton 'plus masque'
+  masque.addEventListener('click', function() {
+    // Masquer tous les éléments sauf les deux premiers
+    for (let i = 2; i < variation.children.length; i++) {
+      variation.children[i].classList.add('hidden');
+    }
+
+    // Afficher le bouton 'plus plus'
+    plus.classList.remove('hidden');
+    // Cacher le bouton 'Voir masque'
+    masque.classList.add('hidden');
+  });
+
+
+
+
+
+
+  // voir ou masquer les elements
+
+  const pages = document.getElementById('pages');
+  const voir = document.getElementById('voir-plus');
+  const moins = document.getElementById('masquer');
+
+  // Ajouter la classe 'hidden' à tous les éléments de la liste sauf les deux premiers
+  for (let i = 2; i < pages.children.length; i++) {
+    pages.children[i].classList.add('hidden');
+  }
+
+  // Cacher le bouton 'Voir moins' au départ
+  moins.classList.add('hidden');
+
+  // Ajouter un écouteur d'événements pour le bouton 'Voir plus'
+  voir.addEventListener('click', function() {
+    // Afficher tous les éléments masqués
+    for (let i = 2; i < pages.children.length; i++) {
+      pages.children[i].classList.remove('hidden');
+    }
+
+    // Cacher le bouton 'Voir plus'
+    voir.classList.add('hidden');
+    // Afficher le bouton 'Voir moins'
+    moins.classList.remove('hidden');
+  });
+
+  // Ajouter un écouteur d'événements pour le bouton 'Voir moins'
+  moins.addEventListener('click', function() {
+    // Masquer tous les éléments sauf les deux premiers
+    for (let i = 2; i < pages.children.length; i++) {
+      pages.children[i].classList.add('hidden');
+    }
+
+    // Afficher le bouton 'Voir plus'
+    voir.classList.remove('hidden');
+    // Cacher le bouton 'Voir moins'
+    moins.classList.add('hidden');
+  });
+    // Initialiser les valeurs dans le localStorage
+    // localStorage.setItem('duration', 0);
+    // localStorage.setItem('buttonName', '');
+    // localStorage.setItem('url', '');
+
+    // // Temps de début de la navigation
+    // var startTime = performance.now();
+
+    // // Ajouter un écouteur d'événements de clic à tous les boutons
+    // var buttons = document.querySelectorAll('button');
+    // buttons.forEach(function(button) {
+    // button.addEventListener('click', function(event) {
+    //     console.log('Bouton cliqué : ' + event.target.name);
+    // });
+    // });
+
+    // // Afficher l'URL consultée
+    // console.log('URL consultée : ' + window.location.href);
+
+    // // Écouteur d'événements pour mettre à jour le localStorage avec les nouvelles valeurs
+    // window.addEventListener('beforeunload', function(event) {
+    // var endTime = performance.now();
+    // var duration = endTime - startTime;
+    // localStorage.setItem('duration', duration);
+    // localStorage.setItem('buttonName', event.target.name);
+    // localStorage.setItem('url', window.location.href);
+    // console.log('Durée de navigation : ' + duration + ' ms');
+    // });
+
+    // // Mettre à jour le paragraphe avec les valeurs stockées dans le localStorage
+    // var paragraph = document.querySelector('h5');
+    // setInterval(function() {
+    // var duration = localStorage.getItem('duration');
+    // var buttonName = localStorage.getItem('buttonName');
+    // var url = localStorage.getItem('url');
+    // paragraph.textContent = 'Durée de navigation : ' + duration + ' ms | Bouton cliqué : ' + buttonName + ' | URL consultée : ' + url;
+    // }, 1000);
+
+
+
+
+    // var temps = 0;
+    // var intervalID;
+
+    // function demarrer() {
+    //     intervalID = setInterval(function() {
+    //         temps++;
+    //         majChrono();
+    //     }, 1000);
+    // }
+
+    // function arreter() {
+    //     clearInterval(intervalID);
+    // }
+
+    // function remettreAZero() {
+    //     temps = 0;
+    //     majChrono();
+    // }
+  const pagesList = document.getElementById('visited-pages');
+  const showMoreButton = document.getElementById('show-more');
+  const showLessButton = document.getElementById('show-less');
+
+  // Ajouter la classe 'hidden' à tous les éléments de la liste sauf les deux premiers
+  for (let i = 2; i < pagesList.children.length; i++) {
+    pagesList.children[i].classList.add('hidden');
+  }
+
+  // Cacher le bouton 'Voir moins' au départ
+  showLessButton.classList.add('hidden');
+
+  // Ajouter un écouteur d'événements pour le bouton 'Voir plus'
+  showMoreButton.addEventListener('click', function() {
+    // Afficher tous les éléments masqués
+    for (let i = 2; i < pagesList.children.length; i++) {
+      pagesList.children[i].classList.remove('hidden');
+    }
+
+    // Cacher le bouton 'Voir plus'
+    showMoreButton.classList.add('hidden');
+    // Afficher le bouton 'Voir moins'
+    showLessButton.classList.remove('hidden');
+  });
+
+  // Ajouter un écouteur d'événements pour le bouton 'Voir moins'
+  showLessButton.addEventListener('click', function() {
+    // Masquer tous les éléments sauf les deux premiers
+    for (let i = 2; i < pagesList.children.length; i++) {
+      pagesList.children[i].classList.add('hidden');
+    }
+
+    // Afficher le bouton 'Voir plus'
+    showMoreButton.classList.remove('hidden');
+    // Cacher le bouton 'Voir moins'
+    showLessButton.classList.add('hidden');
+  });
+
+    // function majChrono() {
+    //     var heures = Math.floor(temps / 3600);
+    //     var minutes = Math.floor((temps % 3600) / 60);
+    //     var secondes = temps % 60;
+
+    //     var heuresStr = (heures < 10 ? "0" : "") + heures;
+    //     var minutesStr = (minutes < 10 ? "0" : "") + minutes;
+    //     var secondesStr = (secondes < 10 ? "0" : "") + secondes;
+
+    //     document.getElementById("chrono").innerHTML = heuresStr + ":" + minutesStr + ":" + secondesStr;
+    // }
+    // Heure
+    function actualiserHorloge() {
+        // Obtenir l'heure actuelle
+        let date = new Date();
+
+        // Extraire les heures, minutes et secondes
+        let heures = date.getHours();
+        let minutes = date.getMinutes();
+        let secondes = date.getSeconds();
+
+        // Ajouter un zéro devant les chiffres si nécessaire
+        heures = ajouterZero(heures);
+        minutes = ajouterZero(minutes);
+        secondes = ajouterZero(secondes);
+
+        // Afficher l'heure dans la balise <h1>
+        document.getElementById("horloge").textContent = heures + ":" + minutes + ":" + secondes;
+    }
+
+    function ajouterZero(nombre) {
+        if (nombre < 10) {
+            return "0" + nombre;
+        } else {
+            return nombre;
+        }
+    }
+
+    // Actualiser l'horloge toutes les secondes
+    setInterval(actualiserHorloge, 1000);
+
+    // Voir plus les listes
+    // Récupérer le bouton "Voir plus" et la liste
+    let boutonVoirPlus = document.getElementById("bouton-voir-plus");
+    let liste = document.querySelector(".liste");
+
+      // Masquer tous les éléments de la liste sauf le premier
+      for (let i = 1; i < liste.children.length; i++) {
+        liste.children[i].style.display = "none";
+      }
+
+      // Ajouter un événement "click" sur le bouton "Voir plus"
+      boutonVoirPlus.addEventListener("click", function() {
+        // Afficher les éléments suivants de la liste
+        for (let i = 1; i < liste.children.length; i++) {
+          if (liste.children[i].style.display === "none") {
+            liste.children[i].style.display = "list-item";
+          }
+        }
+
+        // Masquer le bouton "Voir plus" si tous les éléments ont été affichés
+        if (liste.lastElementChild.style.display !== "none") {
+          boutonVoirPlus.style.display = "none";
+        }
+      });
+
+</script>
     
 {% endblock %}

@@ -235,25 +235,62 @@ def inject_session_info():
     
     with open('logs.log', 'r') as f:
         lines = f.readlines()
+        # print(lines)
 
     urls = []
+    alls = []
     for line in lines:
+        tab = line.split()[0]+' - '+line.split()[1]+'-'+line.split()[3]+' - '+line.split()[-1].split('/')[-1]
         l = line.split()[3]+' => '+line.split()[-1].split('/')[-1]
         url = line.split()[-1].split('/')[-1]
         urls.append(l)
+        alls.append(tab)
     user = line.split()[3]
+    print(tab)
     #======================================================
-    filtered_lst = [elem for elem in urls if not elem.endswith('.js')]
+    filtered = [elem for elem in urls if not elem.endswith('.js')]
+    filtered_lst = [elem for elem in filtered if not elem.endswith('logs')]
     freq = Counter(filtered_lst).most_common(1)[0][0]
 
-    print('Le plus frequent :',freq)
+    # print('Le plus frequent :',freq)
     #=====================  
     unique_urls = list(set(urls))
     # Permet de supprimer tout ce qui termine par .js
     unique_url = [x for x in unique_urls if not x.endswith('.js')]
     unique_uls = [x for x in unique_url if not x.endswith('.css')]
     unique_urls = [x for x in unique_uls if not x.endswith(' ')]
-    print(unique_urls)
+
+    #=====================  Je voudrais analyser ici les logs avec le user le plus recent avec son heure
+    #===================== Essayer de ne payer repeter le même user mais prendre le plus recent avec son heure
+    unique_alls = list(set(alls))
+    # Permet de supprimer tout ce qui termine par .js
+    unique_all = [x for x in unique_alls if not x.endswith('.js')]
+    unique_als = [x for x in unique_all if not x.endswith('.css')]
+
+    unique = [x for x in unique_als if not x.endswith(' ')]
+    unique_alls = [x for x in unique if not x.endswith('logs')]
+
+    # heure = []
+    # for i in range(len(unique_alls)-1):
+    #     # print(unique_alls[i].split('=>')[1])
+    #     heure.append(unique_alls[i].split('=>'))
+
+    # print('times: ',heure)
+    # print('==>',alls)
+    # Diviser chaque élément de la liste en utilisant le séparateur "-"
+    liste_sep = [x.split('-') for x in alls]
+
+    # Supprimer les doublons en utilisant le dernier élément après la séparation "-"
+    liste_uniques = list({x[-1]: x for x in liste_sep}.values())
+
+    # Trier la liste par ordre décroissant de date
+    liste_triee = sorted(liste_uniques, key=lambda x: x[1], reverse=True)
+
+    # Combiner les éléments de chaque sous-liste en une chaîne de caractères
+    liste_finales = ['-'.join(x) for x in liste_triee]
+    liste_finale = [x for x in liste_finales if not x.split('-')[-1].endswith('logs')]
+    print('la listes normale : ',liste_finale)
+    # print(unique_alls.sort(reverse=True))
     unique_urls.sort(reverse=True)
     nbre_pages = len(unique_urls)
 
@@ -262,7 +299,7 @@ def inject_session_info():
     if session_start_time and session_end_time:
         session_duration = session_end_time - session_start_time
 
-    return dict(freq=freq,user=user,nbre_pages=nbre_pages, pages_visited=unique_urls, session_start_time=session_start_time, session_end_time=session_end_time, session_duration=session_duration)
+    return dict(liste_finale=liste_finale,freq=freq,user=user,nbre_pages=nbre_pages, pages_visited=unique_urls, session_start_time=session_start_time, session_end_time=session_end_time, session_duration=session_duration)
 
 
 # print(inject_session_info())
@@ -271,7 +308,7 @@ def logs():
     # Assuming the current user's username is stored in a variable called 'current_user'
     # You can replace this with whatever method you're using to authenticate users
 
-    with open('pages_visited.log', 'r') as f:
+    with open('logs.log', 'r') as f:
         lines = f.readlines()
 
     urls = []
@@ -286,6 +323,7 @@ def logs():
 
     
     return render_template('logs.html',maintenant=maintenant)
+
 
 
 @app.route('/home')
@@ -1091,9 +1129,10 @@ def synthese_av():
         print('le libelle_analyse',libelle_analyse) 
         equipe = request.args.get('equipe')
         data = pd.read_excel(nom_fichier)
+        print('init',data)
         copy = data.copy()
         data = preprocess_data(data)
-        
+        print(data)
         
         # print(df['Mesures'])
         #mesures = data.Mesures.dropna()
@@ -1104,39 +1143,37 @@ def synthese_av():
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         #print(current_user.id)
         #intervale_analyse = request.form.get('date1') + '-'+request.form.get('date2')
-        data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
+        # data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
+        data['Mesures'] = replace_comma_with_dot(data['Mesures'])
+        print('ttttttttttttttttttt',data['Mesures'])
         # Définir le facteur de proportionnalité k en fonction du nombre d'observations
         k = 1.96  # pour un niveau de confiance de 95% et n > 30
-        limite_ctrl_sup = round(data['Mesures'].std() + k*data['Mesures'].mean(), 2)
-        limite_ctrl_inf = round(data['Mesures'].mean() - k*data['Mesures'].std(), 2)
+        limite_ctrl_sup = round(data['Mesures'].std() + data['Mesures'].mean(), 2)
+        limite_ctrl_inf = round(data['Mesures'].mean() - data['Mesures'].std(), 2)
         VSF = round((data['Mesures'].std()*6)/data['Mesures'].mean(), 2)
         nbre_mesure = data.Nom.count()
         #print( limite_ctrl_sup, data['Mesures'].std(), data['Mesures'].mean())
-        if kpi == 'DMT' :
+        if kpi == 'DMT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
-            data = data[(data["Mesures"]>650)|(data['Mesures']< 1000)]
+            data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
+            print("======OUI========>",data)
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
-            print('present etape de calcul')
         elif kpi == 'CSAT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
-            data = data[(data["Mesures"]>650)|(data['Mesures']< 1000)]
+            data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             kpi_id = Kpi.query.filter_by(libelle='csat').first().id
         elif kpi == 'DSAT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
-            data = data[(data["Mesures"]>650)|(data['Mesures']< 1000)]
+            data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             kpi_id = Kpi.query.filter_by(libelle='dsat').first().id
         
-        non_aberrant_values = data[(data <= 650) & (data >= 1000)]
-        n_lcs = len(data)
-        n_lci = len(non_aberrant_values)
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
         paramettre_analyse_variation = [ limite_ctrl_sup, limite_ctrl_inf, VSF, nbre_mesure, mesures_a_objectif]
         prenom = current_user.prenom
-        nom = current_user.nom
-        
+        nom = current_user.nom 
         insert_fichier = Fichiers(nom_fichier, libelle_analyse, effectif, Date, ' ', 'Equipe', VSF, limite_ctrl_sup, 
                                   limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
                                   int(current_user.id))
@@ -1150,18 +1187,21 @@ def synthese_av():
     try:
         ## Traitement des valeurs non aberrantes
         copy = preprocess_data(copy)
+        # print('copy',copy)
         mesures = list(copy['Mesures'])
         l = list(copy['Nom'])
         print('deuxieme etape de calcul')
         # Construire un nouveau dataset
         r = dataset(l, mesures)
+        print('dataset',r)
 
         # Extraire les données non aberrantes
-        try:
-            valeursNonAberrants = r[(r["Mesures"]>650) & (r['Mesures']<1000)] # Les valeurs non aberrantes
-        except Exception as e:
-            print(e)
-        
+        # if len(r)>0:
+            # try:
+        valeursNonAberrants = r[(r["Mesures"] >= 650) & (r['Mesures'] <= 1000)]
+            # except Exception as e:
+            #     print(e)
+            
         print('VNA : ', valeursNonAberrants)
         print('Troisieme etape de calcul')
 
@@ -1173,23 +1213,23 @@ def synthese_av():
         # verifier l'existance de la requête
         if not valeur_exist and not exist:
             for i in range(data.shape[0]):
-                print('Valeurs :',valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]])
                 # print('Nom :',valeursNonAberrants['Nom'])
 
                 # Charger les données aberrantes 
                 valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], ' ', 'En attente', fichier.id, int(current_user.id))
+                
+                db.session.add(valeur_aberante)
+
+            for i in range(valeursNonAberrants.shape[0]):
+                print('Valeurs :',valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]])
                 try:
                     valeur = ValeursFichier(valeursNonAberrants['Nom'][valeursNonAberrants.index[i]],valeursNonAberrants['Mesures'][valeursNonAberrants.index[i]], fichier.id)
                 except IndexError as e:
                     print('Error', e.message)
                 db.session.add(valeur)
-                db.session.add(valeur_aberante)
+
+            db.session.commit()
                 
-                try:
-                    print('Onnnnnnnnnnnnnn')
-                    db.session.commit()
-                except:
-                    db.session.rollback()
     except AttributeError as e:
         print("Erreur d'atribut : ",e)
     if request.method=='POST':
@@ -1220,7 +1260,7 @@ def synthese_av():
 #     output = subprocess.Popen([cmd], shell=True,  stdout = subprocess.PIPE).communicate()[0]
 
 #     if "total 0" in output:
-#         print ("Success: Created Directory %s"%(UPLOAD_FOLDER)) 
+#         print ("Success: Created Directory %s"%(UPLOAD_FOLDER))
 #     else:
 #         print ("Failure: Failed to Create a Directory (or) Directory already Exists",UPLOAD_FOLDER)
 
@@ -1418,7 +1458,7 @@ def suivi_action_programme():
     #                         table_liste_causes=table_liste_causes,table_liste_action=table_liste_action,
     #                         table_liste_porteur=table_liste_porteur,table_liste_echeance=table_liste_echeance
     #                     )
-
+###############################################################
 
 @app.errorhandler(404)
 def page_not_found(e):
