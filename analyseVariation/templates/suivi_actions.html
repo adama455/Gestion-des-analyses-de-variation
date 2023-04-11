@@ -12,7 +12,7 @@
         <input type="submit" value="Search" class="p-2">
     </form> #} 
     <input class="form-control mb-2" id="search-input" type="text" placeholder="Search..">
-    <table id="example" class="display responsive nowrap table-sm" width="100%">
+    <table id="example" class="display responsive nowrap table-sm mb-2" width="100%">
         <thead class="bg-primary">
             <tr class="tx-center py-2 fs-5">
                 <th class="wd-15p text-dark">
@@ -109,27 +109,10 @@
         </tbody>
     </table>
     {# {{ pagination.links | safe }} #}
-    <div class="d-flex justify-content-between">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-            </nav>
-        <div class="col-2 d-flex justify-content-end p-0 mg-r-40">
-            <a href="{{ url_for('suivi_action_programme', fichier_id=fichier_id) }}">
-                <button type="submit" class="btn  bouton rounded" id="enregistrement_de_detail">Suivi A.P</button>
-            </a>
-        </div>
+    <div class="col-12 d-flex justify-content-end p-0 ">
+        <a href="{{ url_for('suivi_action_programme', fichier_id=fichier_id) }}">
+            <button type="submit" class="btn  bouton rounded" id="enregistrement_de_detail">Suivi A.P</button>
+        </a>
     </div>
 </div>
 </div>
@@ -175,32 +158,5 @@ crossorigin="anonymous"></script>
     });
     
 </script>
-
-{# <script>
-    $(document).ready(function(){
-      load_data();
-      function load_data(query)
-      {
-       $.ajax({
-        url:"/search",
-        method:"POST",
-        data:{query:query},
-        success:function(data)
-        {
-          $('#result').html(data);
-          $("#result").append(data.htmlresponse);
-        }
-       });
-      }
-      $('#search_text').keyup(function(){
-        var search = $(this).val();
-        if(search != ''){
-        load_data(search);
-       }else{
-        load_data();
-       }
-      });
-    });
-</script> #}
 
 {% endblock content %}

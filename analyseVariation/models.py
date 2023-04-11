@@ -337,7 +337,7 @@ class ValeursFichier(UserMixin, db.Model):
     __tablename__='valeurs_fichier'
     id = db.Column(db.Integer, primary_key=True)
     conseiller = db.Column(db.String(100))
-    valeur = db.Column(db.Integer)
+    valeur = db.Column(db.Float)
     fichier_id = db.Column(db.Integer, db.ForeignKey('fichiers.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     

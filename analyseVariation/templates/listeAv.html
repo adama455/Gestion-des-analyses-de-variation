@@ -28,15 +28,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in range(nbre_valeurs_ab) %}
+                    {% for i in nbre_ligne %}
                     <tr>
-                        <td>{{ liste[i][0] }}</td>
-                        <td>{{ liste[i][1] }}</td>
-                        <td>{{ liste[i][2] }}</td>
-                        <td>{{ liste[i][3] }}</td>
-                        <td>{{ liste[i][4] }}</td> 
+                        <td>{{ i.id }}</td>  
+                        <td>{{ i.libelle }}</td>
+                        <td>{{ agent }}</td>
+                        <td>{{ i.date }}</td>
+                        <td>{{ i.statut}}</td>
                         <td>
-                            <a href="{{ url_for('recap_value', fichier_id = liste[i][0])}}"
+                            <a href="{{ url_for('recap_value', fichier_id = i.id)}}"
                                 class="text-center" title="edit" id="edituser" data-toggle="modal">
                                 <i class="fa-solid fa-pen-to-square fs-4 me-3 tx-primary"></i>
                             </a>

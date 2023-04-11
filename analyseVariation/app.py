@@ -333,36 +333,30 @@ def supprimerPlateau(id):
 @login_required
 def listeAv():
     form = LoginForm()
-    try:
-        liste = []
-        nbre_valeurs = []
-        nbre_valeurs_unique = []
-        nbre_valeurs_ab = 0
-        valeur_ab = ValeursAberrante.query.all()
-        pr_5 = Pourquoi5.query.all()
-        for p_5 in pr_5:
-            va = ValeursAberrante.query.filter_by(id=p_5.valeur_aberrante_id, user_id=current_user.id).first()
-            prenom_agent = User.query.filter_by(id=va.user_id).first().prenom
-            nom_agent = User.query.filter_by(id=va.user_id).first().nom
-            statut = Fichiers.query.filter_by(id=va.fichier_id).first().statut
-            date = Fichiers.query.filter_by(id=va.fichier_id).first().date
-            libelle = Fichiers.query.filter_by(id=va.fichier_id).first().libelle
-            id = Fichiers.query.filter_by(id=va.fichier_id).first().id
-            agent = prenom_agent + ' ' + nom_agent
-            valeur = va.valeurs
-            data = [id, libelle, agent, date, statut]
-            liste.append(data)
-            nbre_valeurs.append(va.id)
-            for unique in nbre_valeurs:
-                if unique not in nbre_valeurs_unique:
-                    nbre_valeurs_unique.append(unique) # chaque est ajouter une seule fois dans le tableau
-                    nbre_valeurs_ab = len(nbre_valeurs_unique)
-            print('nom_agent :', liste)  
-            print("valeur_ab:::", nbre_valeurs_unique) 
-    except:
-        print('Un probleme est survenu sur la recuperation des données.')
+    try:    
+        N =[]
+        nbre_N_unique= []
+        #===========================================================================
+        analyses = db.session.query(Pourquoi5,ValeursAberrante,User,Fichiers).all()
+        for an in analyses:
+            if an[1].user_id == an[3].user_id == current_user.id:
+                if an[0].valeur_aberrante_id == an[1].id:
+                    # id = an[3].query.filter_by(id=an[1].fichier_id).first().id
+                    prenom_agent = an[2].query.filter_by(id=current_user.id).first().prenom
+                    nom_agent = an[2].query.filter_by(id=current_user.id).first().nom
+                    agent = prenom_agent + ' ' + nom_agent # l'utilisateur en question qui est en cours
+                    fichier = an[3].query.filter_by(id=an[1].fichier_id).first()
+                    N.append(fichier)
+                    # On supprime les occurrences(répetition) de ligne de fichier:::::::::::::
+                    for N_uniq in N:
+                        if N_uniq not in nbre_N_unique:
+                            nbre_N_unique.append(N_uniq)
+                            nbre_N = len(nbre_N_unique)
+                    print("nbre_Nnbre_N=====,",nbre_N_unique)
+    except Exception as e:  
+        print(e)
 
-    return render_template('listeAv.html', title='liste analyse', form=form, liste=liste,nbre_valeurs_ab=nbre_valeurs_ab)  
+    return render_template('listeAv.html', title='liste analyse', form=form, agent=agent,nbre_ligne=nbre_N_unique)  
 
 #Permet de visualiser la liste des Analyses de Variation
 @app.route("/fichiers")
@@ -456,8 +450,7 @@ def editact_prog():
     return render_template('editact_prog.html', title='Register', form=form, action_prg=action_prg, user=user, 
                            valeur_aberrante=valeur_aberrante, fichier_id=fichier_id)
 
-
-#Permet de visualiser la liste des Valeurs Aberantes
+#Permet de visualiser la liste des Valeurs Aberantes.....................
 @app.route("/listeVa", methods=('GET', 'POST' ))
 @login_required
 def listeVa():
@@ -755,7 +748,8 @@ def synthese_av():
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         #print(current_user.id)
         #intervale_analyse = request.form.get('date1') + '-'+request.form.get('date2')
-        data['Mesures'] = pd.to_numeric(data['Mesures'], errors='coerce')
+        data['Mesures'] = replace_comma_with_dot(data['Mesures'])
+        print("======OUI========>",data['Mesures'])
         limite_ctrl_sup = round(data['Mesures'].std() + data['Mesures'].mean(), 2)
         limite_ctrl_inf = round(data['Mesures'].mean() - data['Mesures'].std(), 2)
         VSF = round((data['Mesures'].std()*6)/data['Mesures'].mean(), 2)
@@ -765,7 +759,6 @@ def synthese_av():
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
             data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
-            print("======OUI========>",data)
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
         elif kpi == 'CSAT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
