@@ -336,16 +336,16 @@ def listeAv():
     try:    
         N =[]
         nbre_N_unique= []
-        #===========================================================================
+        #==========================================================================
         analyses = db.session.query(Pourquoi5,ValeursAberrante,User,Fichiers).all()
         for an in analyses:
             if an[1].user_id == an[3].user_id == current_user.id:
+                # id = an[3].query.filter_by(id=an[1].fichier_id).first().id
+                prenom_agent = an[2].query.filter_by(id=current_user.id).first().prenom
+                nom_agent = an[2].query.filter_by(id=current_user.id).first().nom
+                agent = prenom_agent + ' ' + nom_agent # l'utilisateur en question qui est en cours
+                fichier = an[3].query.filter_by(id=an[1].fichier_id).first()
                 if an[0].valeur_aberrante_id == an[1].id:
-                    # id = an[3].query.filter_by(id=an[1].fichier_id).first().id
-                    prenom_agent = an[2].query.filter_by(id=current_user.id).first().prenom
-                    nom_agent = an[2].query.filter_by(id=current_user.id).first().nom
-                    agent = prenom_agent + ' ' + nom_agent # l'utilisateur en question qui est en cours
-                    fichier = an[3].query.filter_by(id=an[1].fichier_id).first()
                     N.append(fichier)
                     # On supprime les occurrences(répetition) de ligne de fichier:::::::::::::
                     for N_uniq in N:
@@ -353,7 +353,7 @@ def listeAv():
                             nbre_N_unique.append(N_uniq)
                             nbre_N = len(nbre_N_unique)
                     print("nbre_Nnbre_N=====,",nbre_N_unique)
-    except Exception as e:  
+    except Exception as e:
         print(e)
 
     return render_template('listeAv.html', title='liste analyse', form=form, agent=agent,nbre_ligne=nbre_N_unique)  
@@ -512,13 +512,12 @@ def rejeterAv():
            elem.id, elem.libelle, agent
         ]
         liste.append(info)
-    
     # data = Enregistrement_AV.query.filter_by(reference_av=reference).first()
     # libelle = data.libelle_av
     # agent = data.agent
     return render_template('rejeterAv.html',title='Analyse Cause', form=form, liste=liste, fichier_id=fichier_id,nbre_fichier=nbre_fichier)
 
-#Permet a tout utilisateur de verifier son profil..................
+#Permet a tout utilisateur de verifier son profil.........................
 @app.route("/profil", methods=('GET', 'POST'))
 @login_required
 def profil():
@@ -526,7 +525,7 @@ def profil():
     #request_data = request.get_json()
     return render_template('profil.html',title='Analyse Cause', form=form)
 
-#enregistrement d'une AV par le MO.........................
+#enregistrement d'une AV par le MO.........................................
 @app.route("/analyse_agent", methods=('GET', 'POST'))
 @login_required
 def analyse_agent():
@@ -776,27 +775,27 @@ def synthese_av():
         prenom = current_user.prenom
         nom = current_user.nom 
         insert_fichier = Fichiers(nom_fichier, libelle_analyse, effectif, Date, ' ', 'Equipe', VSF, limite_ctrl_sup, 
-                                  limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
-                                  int(current_user.id))
+                                limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
+                                int(current_user.id)) 
         if not exist_file:
             db.session.add(insert_fichier)
             db.session.commit()
         else:
             flash('Ce fichier existe dejà, veuillez choisir un autre fichier.',"warning")
-    except:
-        flash('Aucun fichier ou format non compatible','warning')
+    except Exception as e:
+        print( e)
     try:
         # Traitement des valeurs non aberrantes d'un fichier:::::::::::::::::
-        
+    
         copy = preprocess_data(copy)
         mesures = list(copy['Mesures'])
         print("===============mesures=================",mesures) 
         l = list(copy['Nom'])
-        print("===============llllllll=================", l) 
+        print("===============lllllll=================", l) 
         print('deuxieme etape de calcul')
         # Construire un nouveau dataset
         r = dataset(l,mesures)
-        print("===============rrrrrrrrrrrr=================", r) 
+        print("===============rrrrrrr=================", r) 
         
         print("copy===========>", copy)
         try:
@@ -806,8 +805,7 @@ def synthese_av():
         except Exception as e:
             print(e)
             
-        # requet de recupération des fichiers correspondant.....
-        
+        # requet de recupération des fichiers correspondant................
         fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         valeur_exist = ValeursAberrante.query.filter_by(fichier_id=fichier.id).first()
         exist = ValeursFichier.query.filter_by(fichier_id=fichier.id).first()
@@ -887,11 +885,11 @@ def upload_file ():
             # if file.filename == '':
             #    flash('No selected file')
             #    return redirect(request.url)
-            # if file and allowed_file(file.filename):
-            # file.save(secure_filename(file.filename))
-            filename = secure_filename(file.filename)
-            file.save(os.path.join('Imports',filename))
-            print('filename : ', filename)
+            if file:
+                # file.save(secure_filename(file.filename))
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('Imports',filename))
+                print('filename : ', filename)
             return redirect(url_for('synthese_av', filename=filename, kpi=kpi, libelle_analyse=libelle_analyse))
         # filename = filedialog.askopenfilename(initialdir='/home', title="Selectionner le fichier",
         #                                      filetypes=(("Tous les fichiers","*.*"), ("Fichier texte","*.txt"), ("Fichier excel","*.xsl")))
@@ -1011,7 +1009,6 @@ def search_results():
     return render_template('search_results.html', N=N,nbre_act=nbre_act,  nbre_cc=nbre_cc, fichier_id=fichier_id,
                            table_pourquoi_axe=table_pourquoi_axe, table_action=table_action, Nom_cc=Nom_cc, Valeur_cc=Valeur_cc)
    
-
 @app.route("/suivi_action_programme", methods=["GET", "POST"])
 @login_required
 def suivi_action_programme():
@@ -1089,7 +1086,7 @@ def suivi_action_programme():
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
-    
-if __name__=='__main__':
-    app.config['SESSION_TYPE'] = 'filesystem'
+
+if __name__=='__main__':  
+    app.config['SESSION_TYPE'] = 'filesystem'                 
     app.run()

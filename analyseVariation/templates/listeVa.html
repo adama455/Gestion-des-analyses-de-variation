@@ -103,24 +103,25 @@
         </div>
     </div>
 </div>
-<script>
+<script> 
     var liste_element_statut = ['']
     var lien = document.querySelectorAll('.lien_analyse')
     var exist
     //sessionStorage.removeItem('liste_element_statut')
     lien.forEach((elem)=>{
         elem.addEventListener('click', (e)=>{
-            //e.preventDefault()
+            e.preventDefault()
             liste_element_statut = sessionStorage.getItem('liste_element_statut')
             if (liste_element_statut){
                 liste_element_statut = liste_element_statut.split(',')
                 liste_element_statut.forEach((element)=>{
                     id = elem.parentNode.parentNode.nextElementSibling.firstElementChild.id
+                    console.log(elem)
                     if (element==`${id}:En cours`){
                         exist = 1
                     }
                 })
-            }else {
+            }else{
                 liste_element_statut = ['']
             }
             if (exist!=1){
