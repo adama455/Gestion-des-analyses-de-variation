@@ -110,7 +110,7 @@
     //sessionStorage.removeItem('liste_element_statut')
     lien.forEach((elem)=>{
         elem.addEventListener('click', (e)=>{
-            e.preventDefault()
+            //e.preventDefault()
             liste_element_statut = sessionStorage.getItem('liste_element_statut')
             if (liste_element_statut){
                 liste_element_statut = liste_element_statut.split(',')

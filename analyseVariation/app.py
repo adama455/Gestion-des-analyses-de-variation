@@ -631,7 +631,7 @@ def listeAv():
                     for N_uniq in N:
                         if N_uniq not in nbre_N_unique:
                             nbre_N_unique.append(N_uniq)
-                            nbre_N = len(nbre_N_unique)
+                            # nbre_N = len(nbre_N_unique)
                     print("nbre_Nnbre_N=====,",nbre_N_unique)
     except Exception as e:
         print(e)
@@ -817,7 +817,7 @@ def analyse_agent():
     #recuperer la reference de l'AV au niveaude l'url et l'utiliser pour recuperer les infos corespondantes
     fichier_id = request.args.get('fichier_id')
     try:
-        data_fichier = Fichiers.query.filter_by(id=fichier_id).first()
+        data_fichier = Fichiers.query.filter_by(id=fichier_id,user_id=current_user.id).first()
         cause = Cause.query.all()
         libelle = data_fichier.libelle
         id_va = request.args.get('id_va') ## Il constitut l'id de la valeur aberrante
@@ -828,7 +828,7 @@ def analyse_agent():
         nom = User.query.filter_by(id=data_fichier.user_id).first().nom
         prenom = User.query.filter_by(id=data_fichier.user_id).first().prenom
         agent = prenom + ' '+ nom
-        liste = [valeurs_aberante.nom_cc, valeurs_aberante.valeurs, valeurs_aberante.probleme ,agent]
+        liste = [valeurs_aberante.nom_cc, valeurs_aberante.valeurs, valeurs_aberante.probleme ,agent, valeurs_aberante.id]
         initial =prenom[0] + nom[0]
         id = valeurs_aberante.nom_cc+initial
         data_exist = 0
@@ -1117,8 +1117,8 @@ def synthese_av():
         # print("==================>>",info)
         nom_fichier = request.args.get('filename')
         # print("==========TEST========>>",pd.read_excel(nom_fichier))
-        kpi = request.args.get('kpi')
-        print('le kpi',kpi)
+        kpii = request.args.get('kpi')
+        print('le kpi',kpii)
         libelle_analyse = request.args.get('libelle_analyse')
         print('le libelle_analyse',libelle_analyse) 
         equipe = request.args.get('equipe')
@@ -1129,6 +1129,8 @@ def synthese_av():
         data = preprocess_data(data)
         
         Date = date.today()
+        copy = preprocess_data(copy)
+
         # print("debug :",Date)
         effectif = data["Mesures"].count()
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
@@ -1141,26 +1143,28 @@ def synthese_av():
         VSF = round((data['Mesures'].std()*6)/data['Mesures'].mean(), 2)
         nbre_mesure = data.Nom.count()
         #print( limite_ctrl_sup, data['Mesures'].std(), data['Mesures'].mean())
-        if kpi == 'DMT':
+        if kpii == 'DMT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
             data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             kpi_id = Kpi.query.filter_by(libelle='dmt').first().id
-        elif kpi == 'CSAT':
+        elif kpii == 'CSAT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
             data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             kpi_id = Kpi.query.filter_by(libelle='csat').first().id
-        elif kpi == 'DSAT':
+        elif kpii == 'DSAT':
             nbre_va_sous_perf = data[data["Mesures"]<limite_ctrl_inf].Nom.count()
             nbre_va_sur_perf = data[data["Mesures"]> limite_ctrl_sup].Nom.count()
             data = data[(data["Mesures"]<limite_ctrl_inf)|(data['Mesures']> limite_ctrl_sup)]
             kpi_id = Kpi.query.filter_by(libelle='dsat').first().id
-        
+            
         mesures_a_objectif = nbre_mesure-(nbre_va_sur_perf + nbre_va_sous_perf)
         paramettre_analyse_variation = [ limite_ctrl_sup, limite_ctrl_inf, VSF, nbre_mesure, mesures_a_objectif]
         prenom = current_user.prenom
         nom = current_user.nom 
+        libelle_analyse = libelle_analyse + '_'+kpii+ '_' + Date.strftime("%d/%m/%Y")
+        print("libelle_kpi==>",libelle_analyse)
         insert_fichier = Fichiers(nom_fichier, libelle_analyse, effectif, Date, ' ', 'Equipe', VSF, limite_ctrl_sup, 
                                 limite_ctrl_inf, nbre_va_sur_perf, nbre_va_sous_perf, 'En attente', kpi_id,  
                                 int(current_user.id)) 
@@ -1173,8 +1177,6 @@ def synthese_av():
         print( e)
     try:
         # Traitement des valeurs non aberrantes d'un fichier:::::::::::::::::
-    
-        copy = preprocess_data(copy)
         mesures = list(copy['Mesures'])
         print("===============mesures=================",mesures) 
         l = list(copy['Nom'])
@@ -1185,12 +1187,9 @@ def synthese_av():
         print("===============rrrrrrr=================", r) 
         
         print("copy===========>", copy)
-        try:
-            # Extraire les données non aberrantes.........
-            valeurNonAberantes = r[(r['Mesures'] > 600) & (r['Mesures'] < 1000)]
-            print("valeurNonAberantes======NON========>",valeurNonAberantes)
-        except Exception as e:
-            print(e)
+        # Extraire les données non aberrantes.........
+        valeurNonAberantes = r[(r['Mesures'] > 600) & (r['Mesures'] < 1000)]
+        print("valeurNonAberantes======NON========>",valeurNonAberantes)
             
         # requet de recupération des fichiers correspondant................
         fichier = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
@@ -1228,7 +1227,7 @@ def synthese_av():
         return redirect(url_for('listeVa', fichier_id=fichier.id))
     try:
         return render_template('synthese-av.html', fichier_id=fichier.id, nbr_va_sou_perf=nbre_va_sous_perf, 
-                               nbr_va_sur_perf=nbre_va_sur_perf, prenom=prenom, nom=nom, Date=Date, kpi=kpi, 
+                               nbr_va_sur_perf=nbre_va_sur_perf, prenom=prenom, nom=nom, Date=Date, kpi=kpii, 
                                libelle_analyse=libelle_analyse, paramettre_analyse_variation=paramettre_analyse_variation)  
     except:
         return render_template('home.html')
