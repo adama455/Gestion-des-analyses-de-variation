@@ -986,11 +986,11 @@ def recap_value():
     Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
     CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
     
-    try:
-        # return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
-        return render_template('recap.html',fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
-    except:
-        return export(data)
+    # try:
+    # return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+    return render_template('recap.html',fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+    # except:
+        # return export(data)
 
 ############################ Fonction d'exportation ###############################
 @app.route("/export", methods=['GET','POST'])
