@@ -45,9 +45,9 @@
             <ul id="visited-pages">
               {% for key in pages_visited%}
                 {% if '&kpi=DMT&libelle_analyse=' in key or '&kpi=CSAT&libelle_analyse=' in key or '&kpi=DSAT&libelle_analyse=' in key %}
-                  {% if %}
-                
-                  <li class="li">{{ key.split('=>')[0] }} - <span>a fait une <strong>Synthèse de variation</strong></span> ({{ count }})</li>
+                  {% if key.split('=>')[0]|length >1 %}
+                    <li class="li">{{ key.split('=>')[0] }} - <span>a fait une <strong>Synthèse de variation</strong></span> ({{ count }})</li>
+                  {% else %}
                 {% endif %}
               {% endfor %}
             
@@ -58,9 +58,7 @@
             <strong>Analyse de Variation :</strong>
             <ul id="variation">
               {% for page in pages_visited %}
-                {% if 'listeVa?fichier_id=' in page %}
                   <li class="li">{{ page.split('=>')[0] }} - <span>a fait une <strong>Tentative Analyse de Cause</strong></span></li>
-                {% endif %}
               {% endfor %}
             </ul>
             <button id="plus" class="btn btn-primary">Voir plus</button>
