@@ -43,13 +43,14 @@
         <div class="col-sm-5">
             <strong>Synthèse de Variation :</strong>
             <ul id="visited-pages">
-                {% for page in pages_visited %}
-                  {% if '&kpi=DMT&libelle_analyse=' in page or '&kpi=CSAT&libelle_analyse=' in page or '&kpi=DSAT&libelle_analyse=' in page %}
-                    <li class="li">{{ page.split('=>')[0] }} - <span>a fait une <strong>Synthèse de variation</strong></span></li>
-                  
-                  {% endif %}
-                  
-                {% endfor %}
+              {% for key in pages_visited%}
+                {% if '&kpi=DMT&libelle_analyse=' in key or '&kpi=CSAT&libelle_analyse=' in key or '&kpi=DSAT&libelle_analyse=' in key %}
+                  {% if %}
+                
+                  <li class="li">{{ key.split('=>')[0] }} - <span>a fait une <strong>Synthèse de variation</strong></span> ({{ count }})</li>
+                {% endif %}
+              {% endfor %}
+            
               </ul>
               <button id="show-more" class="btn btn-primary">Voir plus...</button>
             <button id="show-less" class="btn btn-primary">Voir moins...</button>
