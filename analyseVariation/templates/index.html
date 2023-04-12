@@ -58,10 +58,8 @@
 
 <body>
   <div class="wrapper d-flex align-items-stretch ">
-
     <!-- Le menu sidebar -->
     {% if current_user.is_authenticated and (current_user.profil)=='ADMIN' %}
-
     <nav id="sidebar" class="az-sidebar az-sidebar-body bg-gray-300 ">
       <div class="p-4 pt-4">
         <div class="az-sidebar-loggedin">
@@ -86,7 +84,7 @@
             <a href="#" class="nav-link with-sub"><i class="typcn typcn-cog-outline"></i>Pararmétrage</a>
             <nav class="nav-sub">
               <a href="{{ url_for('cause') }}" class="nav-sub-link">Causes</a>
-              <a href="" class="nav-sub-link">Métriques</a>
+              <a href="{{ url_for('logs') }}" class="nav-sub-link">Métriques</a>
               <a href="{{ url_for('plateau') }}">Plateaux</a>
             </nav>
           </li><!-- nav-item -->
@@ -176,8 +174,7 @@
             </div>
             <!-- les icones recherche deconnexion et notificqtion  -->
             <div class="col-3 p-0" style="margin-right: 0;">
-              <div class="az-header-message d-flex justify-content-between align-items-center"
-                style="width:100%">
+              <div class="az-header-message d-flex justify-content-between align-items-center" style="width:100%">
                 <div class="input-group col-9 p-0">
                   <input class="form-control border-end-0 border" type="search" value="search"
                     id="example-search-input">
@@ -218,6 +215,7 @@
             </div>
           </div>
         </nav>
+
 
         <!-- l'image de fond contsnant le titre -->
 
@@ -791,6 +789,7 @@
 
       });
     </script>
+
     {% endblock javascript %}
 
 </body>

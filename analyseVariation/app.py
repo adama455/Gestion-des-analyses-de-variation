@@ -2,10 +2,12 @@
 import sys     
 import datetime
 import subprocess
+from venv import logger
 sys.path.append('.')
 sys.path.append('..')
-from flask import Flask, render_template, url_for, request, redirect, flash, session, jsonify
+from flask import Flask, render_template, url_for, request, redirect, flash, session,make_response,jsonify
 from flask_sqlalchemy import SQLAlchemy
+from io import BytesIO
 from analyseVariation.forms import  RegistrationForm, LoginForm, CausesForm, PlateauForm, RequestResetForm, ResetPasswordForm
 from analyseVariation.models import User,Plateau,ValeursFichier, ValeursAberrante, Cause, Plateau,Role, ActionIndividuelle,ActionProgramme, Fichiers, Pourquoi1, Pourquoi2, Pourquoi3, Pourquoi4, Pourquoi5, Kpi
 from analyseVariation import app, db, bcrypt
@@ -14,9 +16,10 @@ from flask_user import login_required, UserManager, SQLAlchemyAdapter
 from flask_user import roles_required
 from functools import wraps
 import os
-from tkinter import filedialog
-from tkinter import *
-from openpyxl import load_workbook
+# from tkinter import filedialog
+# from tkinter import *
+from openpyxl import load_workbook,Workbook
+import uuid
 import csv
 import pandas as pd
 from datetime import date
@@ -25,27 +28,304 @@ from flask_paginate import Pagination, get_page_parameter
 db_adapter = SQLAlchemyAdapter(db, User) # Register the User model
 user_manager = UserManager(db_adapter, app) # Initialize Flask-User
 from werkzeug.utils import secure_filename
+import logging
+from datetime import datetime
+from datetime import timedelta
+from collections import Counter
 
-#la racine ou page connexion des utilisateurs
+user_sessions = {}
+user_sessions_info = {}
+
+##############################################################################
+# # Créer un objet logger
+# logger = logging.getLogger(__name__)
+
+# # Définir le niveau de journalisation
+# logger.setLevel(logging.INFO)
+
+# # Créer un gestionnaire de fichier pour enregistrer les fichiers journaux
+# file_handler = logging.FileHandler('app.log')
+# file_handler.setLevel(logging.INFO)
+
+# # Créer un formatteur pour définir le format du message de journalisation
+# formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+# file_handler.setFormatter(formatter)
+
+# # Ajouter le gestionnaire de fichier à l'objet logger
+# logger.addHandler(file_handler)
+
+#====================
+
+
+
+
+# Fonction pour enregistrer les informations de session
+def log_session_info(session_id, user_id, start_time):
+    session_info = user_sessions_info.get(session_id)
+    if session_info:
+        # Enregistrer les informations de session
+        session_start = session_info['session_start']
+        session_duration = start_time - session_start
+        logger.info(f"Session de l'utilisateur {user_id} terminée. Durée : {session_duration}")
+
+# Fonction pour enregistrer les informations de page visitée
+def log_page_visit(session_id, user_id, page_url, visit_time):
+    # Récupérer les informations de session
+    session_info = user_sessions_info.get(session_id)
+    if not session_info:
+        return
+
+    # Ajouter les informations de page visitée à la session
+    session_info['last_page'] = page_url
+    session_info['last_page_start'] = visit_time
+
+    # Mettre à jour la liste des pages visitées et la durée de chaque visite
+    if session_info['pages_visited']:
+        last_page_visited = session_info['pages_visited'][-1]
+        last_page_duration = visit_time - session_info['last_page_start']
+        session_info['time_on_pages'][last_page_visited] += last_page_duration
+
+    session_info['pages_visited'].append(page_url)
+    session_info['time_on_pages'][page_url] = 0
+
+    # Enregistrer les informations de session mises à jour
+    log_session_info(session_id, user_id, session_info['session_start'])
+
+
+# Fonction pour enregistrer les erreurs et les messages d'avertissement
+def log_error(error_message):
+    logger.error(error_message)
+
+# Fonction pour enregistrer les activités
+def log_user_activity(session_id, user_id, activity_message):
+    session_info = user_sessions_info.get(session_id)
+    if session_info:
+        # Enregistrer l'activité de l'utilisateur
+        logger.info(f"Activité de l'utilisateur {user_id} : {activity_message}")
+
+########################################### TEMPS #########################################
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        user_id = current_user.get_id()
+        session_id = session.get('sid')
+        if session_id in user_sessions_info:
+            session_info = user_sessions_info[session_id]
+            last_page = session_info.get('last_page')
+            last_page_start = session_info.get('last_page_start')
+            if last_page and last_page_start:
+                # Calculer le temps écoulé depuis la dernière page visitée
+                elapsed_time = datetime.utcnow() - last_page_start
+                # Ajouter la durée au temps total passé sur les pages
+                session_info['time_on_pages'] += elapsed_time.total_seconds()
+            # Mettre à jour les informations de session
+            session_info['last_page'] = request.path
+            session_info['last_page_start'] = datetime.utcnow()
+
+################################ FIN ################################# 
+
 @app.route('/', methods=('GET', 'POST'))
 @app.route("/login", methods=('GET', 'POST'))
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = LoginForm()
-    if request.method=='POST':
-    #if form.validate_on_submit():
-        print(form.password.data)
+    if request.method == 'POST':
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            # Vérifier si l'utilisateur a déjà une session active
+            if user.id in user_sessions_info:
+                flash(f"Vous êtes déjà en session dans un autre endroit {user.email}.", "warning")
+                return redirect(url_for('login'))
+            
+            # Générer un ID de session aléatoire et l'ajouter à la liste des sessions
+            session_id = str(uuid.uuid4())
+            session['sid'] = session_id
+            user_sessions[user.id] = session_id
+
+            # Ajouter les informations de session pour l'utilisateur connecté
+            session_start = datetime.utcnow()
+            user_sessions_info[user.id] = {
+                'session_id': session_id,
+                'session_start': session_start,
+                'last_seen': session_start,
+                'pages_visited': []
+            }
+            print('user_sessions_info :',user_sessions_info)
+
             login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
-            flash(f'Une erreur s est produit, veillez verifier les information que vous avez saisi', 'danger')
-    return render_template('login.html', title='Login', form=form)    
+            flash("Nom d'utilisateur ou mot de passe invalide.", "danger")
+            return redirect(url_for('login'))
+    return render_template('login.html', title='Login', form=form)
 
-#La page acceuil de notre application
-@app.route("/home")
+@app.route('/logout')
+@login_required
+def logout():
+    # Calculer la durée de la session
+    session_id = session.pop('sid', None)
+    session_info = user_sessions_info.pop(current_user.id, None)
+    if session_info:
+        session_start = session_info['session_start']
+        session_end = datetime.utcnow()
+        session_duration = session_end - session_start
+        logging.info(f"Session de l'utilisateur {current_user.email} terminée. Durée : {session_duration}")
+    logout_user()
+    return redirect(url_for('login'))
+  
+
+#######################################################################
+def create_session_info(session_id, user_id, start_time):
+    """
+    Crée un dictionnaire contenant les informations de la session utilisateur.
+    """
+    return {
+        'user_id': user_id,
+        'session_start': start_time,
+        'last_seen': start_time,
+        'last_page': None,
+        'last_page_start': None,
+        'pages_visited': [request.path],
+        'time_on_pages': 0
+    }
+
+
+@app.context_processor
+def inject_session_info():
+
+    # créer un logger
+    logger = logging.getLogger('mon_logger')
+    logger.setLevel(logging.DEBUG)
+
+    # créer un gestionnaire de fichier pour écrire les logs dans un fichier
+    log_file = 'logs.log'
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.DEBUG)
+
+    # créer un formatteur pour formater les logs
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(user)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+    # ajouter le formatteur au gestionnaire de fichier
+    file_handler.setFormatter(formatter)
+
+    # ajouter le gestionnaire de fichier au logger
+    logger.addHandler(file_handler)
+
+    # utiliser le logger pour écrire les logs et verifié si current_user à un attribut email
+    if current_user.is_authenticated and hasattr(current_user, 'email'):
+        email = current_user.email
+        logger.info(request.url,extra={'user': email })
+    else:
+        email = None
+    
+
+    session_id = current_user.get_id()
+    session_info = user_sessions_info.get(session_id)
+
+    num_pages_visited = 0
+    pages_visited = []
+    session_start_time = None
+    session_end_time = None
+
+    if session_info:
+        # num_pages_visited = len(session_info['pages_visited'])
+        # pages_visited = session_info['pages_visited']
+        session_start_time = session_info['session_start']
+        session_end_time = session_info['last_seen']
+    
+    with open('logs.log', 'r') as f:
+        lines = f.readlines()
+        # print(lines)
+
+    urls = []
+    alls = []
+    for line in lines:
+        tab = line.split()[0]+' - '+line.split()[1]+'-'+line.split()[3]+' - '+line.split()[-1].split('/')[-1]
+        l = line.split()[3]+' => '+line.split()[-1].split('/')[-1]
+        url = line.split()[-1].split('/')[-1]
+        urls.append(l)
+        alls.append(tab)
+    user = line.split()[3]
+    print(tab)
+    #======================================================
+    filtered = [elem for elem in urls if not elem.endswith('.js')]
+    filtered_lst = [elem for elem in filtered if not elem.endswith('logs')]
+    freq = Counter(filtered_lst).most_common(1)[0][0]
+
+    # print('Le plus frequent :',freq)
+    #=====================  
+    unique_urls = list(set(urls))
+    # Permet de supprimer tout ce qui termine par .js
+    unique_url = [x for x in unique_urls if not x.endswith('.js')]
+    unique_uls = [x for x in unique_url if not x.endswith('.css')]
+    unique_urls = [x for x in unique_uls if not x.endswith(' ')]
+
+    #=====================  Je voudrais analyser ici les logs avec le user le plus recent avec son heure
+    #===================== Essayer de ne payer repeter le même user mais prendre le plus recent avec son heure
+    unique_alls = list(set(alls))
+    # Permet de supprimer tout ce qui termine par .js
+    unique_all = [x for x in unique_alls if not x.endswith('.js')]
+    unique_als = [x for x in unique_all if not x.endswith('.css')]
+
+    unique = [x for x in unique_als if not x.endswith(' ')]
+    unique_alls = [x for x in unique if not x.endswith('logs')]
+
+    # heure = []
+    # for i in range(len(unique_alls)-1):
+    #     # print(unique_alls[i].split('=>')[1])
+    #     heure.append(unique_alls[i].split('=>'))
+
+    # print('times: ',heure)
+    # print('==>',alls)
+    # Diviser chaque élément de la liste en utilisant le séparateur "-"
+    liste_sep = [x.split('-') for x in alls]
+
+    # Supprimer les doublons en utilisant le dernier élément après la séparation "-"
+    liste_uniques = list({x[-1]: x for x in liste_sep}.values())
+
+    # Trier la liste par ordre décroissant de date
+    liste_triee = sorted(liste_uniques, key=lambda x: x[1], reverse=True)
+
+    # Combiner les éléments de chaque sous-liste en une chaîne de caractères
+    liste_finales = ['-'.join(x) for x in liste_triee]
+    liste_finale = [x for x in liste_finales if not x.split('-')[-1].endswith('logs')]
+    print('la listes normale : ',liste_finale)
+    # print(unique_alls.sort(reverse=True))
+    unique_urls.sort(reverse=True)
+    nbre_pages = len(unique_urls)
+
+    
+    session_duration = None
+    if session_start_time and session_end_time:
+        session_duration = session_end_time - session_start_time
+
+    return dict(liste_finale=liste_finale,freq=freq,user=user,nbre_pages=nbre_pages, pages_visited=unique_urls, session_start_time=session_start_time, session_end_time=session_end_time, session_duration=session_duration)
+
+
+# print(inject_session_info())
+@app.route('/logs', methods=['GET', 'POST'])
+def logs():
+    # Assuming the current user's username is stored in a variable called 'current_user'
+    # You can replace this with whatever method you're using to authenticate users
+
+    with open('logs.log', 'r') as f:
+        lines = f.readlines()
+
+    urls = []
+    for line in lines:
+        url = line.split()[-1].split('/')[-1]
+        urls.append(url)
+
+    unique_urls = list(set(urls))
+    unique_urls.sort(reverse=True)
+
+    maintenant = datetime.now()
+
+    
+    return render_template('logs.html',maintenant=maintenant)
+
+
+
+@app.route('/home')
 @login_required
 def home():
     form = RegistrationForm()
@@ -456,11 +736,16 @@ def editact_prog():
 def listeVa():
     form = RegistrationForm()
     infos_fichier = []
-    fichier_id = int(request.args.get('fichier_id')) 
+    fichier_id = int(request.args.get('fichier_id'))
     liste = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
-    n = len(liste) 
+    
+    # On recupere tous les valeurs valeurs non-aberrantes correspondantes selon fichier_id correspond
+    liste1 = ValeursFichier.query.filter_by(fichier_id=fichier_id).all()
+
+    # Calcule de la longueur correspond de m et n
+    n = len(liste)
     data = Fichiers.query.filter_by(id=fichier_id).all()
-    nbre_fichier = len(data) 
+    nbre_fichier = len(data)
     print ("Liste va :", data) 
     for elem in data:
         nom = User.query.filter_by(id=elem.user_id).first().nom
@@ -476,7 +761,7 @@ def listeVa():
         print("info : ", infos_fichier)
     statut_action = 'En attente'
     return render_template('listeVa.html',title='liste VA', form=form, liste=liste, n=n, fichier_id=fichier_id, 
-                           statut_action=statut_action, nbre_fichier=nbre_fichier, infos_fichier=infos_fichier)
+                        statut_action=statut_action, nbre_fichier=nbre_fichier, infos_fichier=infos_fichier)
 
 #Permet d'enregistrer une cause
 @app.route("/analyseCause")
@@ -530,7 +815,7 @@ def profil():
 @login_required
 def analyse_agent():
     #recuperer la reference de l'AV au niveaude l'url et l'utiliser pour recuperer les infos corespondantes
-    fichier_id = int(request.args.get('fichier_id'))
+    fichier_id = request.args.get('fichier_id')
     try:
         data_fichier = Fichiers.query.filter_by(id=fichier_id).first()
         cause = Cause.query.all()
@@ -578,13 +863,15 @@ def analyse_agent():
         data_exist = 1
         liste_pourquoi = Fichiers.traitement_data_pourquoi(id_va)[0]
         
-        return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi, 
+        return render_template('analyse-agent.html', data_exist=data_exist, liste_pourquoi=liste_pourquoi,
                                fichier_id=fichier_id, libelle=libelle, cause=cause, liste=liste)
     try:
         return render_template('analyse-agent.html', fichier_id=id, libelle=libelle, cause=cause, liste=liste)   
     except UnboundLocalError:
         flash('Erreur de referencement.')
         return render_template('analyse-agent.html')
+    
+########################################### Ajout Actions ########################################
 
 @app.route("/ajouter_action", methods=('GET', 'POST'))
 @login_required
@@ -698,12 +985,109 @@ def recap_value():
     Pourquoi = Pourquoi5.recup_all_pourquoi(all_va)[0]
     Action = Pourquoi5.recup_all_pourquoi(all_va)[1]
     CC = Pourquoi5.recup_all_pourquoi(all_va)[2]
-    return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+    
+    try:
+        # return render_template('recap.html', N=N,  fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+        return render_template('recap.html',fichier_id=fichier_id, Action=Action, CC=CC, Pourquoi=Pourquoi)
+    except:
+        return export(data)
 
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect('login')
+############################ Fonction d'exportation ###############################
+@app.route("/export", methods=['GET','POST'])
+@login_required
+def export():
+    fichier_id=request.args.get('fichier_id')
+    print("fichier_id ===============: ", fichier_id)
+    
+    all_va = ValeursAberrante.query.filter_by(fichier_id=fichier_id).all()
+
+    Pourquoi = []
+    Action = []
+    CC = []
+
+    for va in all_va:
+        Pourquoi.append(Pourquoi5.recup_all_pourquoi([va])[0])
+        Action.append(Pourquoi5.recup_all_pourquoi([va])[1])
+        CC.append(Pourquoi5.recup_all_pourquoi([va])[2])
+
+    print("CC:", CC)
+    print("Pourquoi:", Pourquoi)
+    print("Action:", Action)
+
+    data = [
+        ["Conseiller", "Valeurs", "Pourquoi1","Pourquoi2","Pourquoi3","Pourquoi4","Pourquoi5","Famille-cause","Action","Porteurs","Echeances","Status"]
+    ]
+
+    # for i in range(len(CC)):
+    data.append([CC[0][1][0], CC[0][2][0], Pourquoi[0][0][0][0],Pourquoi[0][1][0][0],Pourquoi[0][2][0][0],Pourquoi[0][3][0][0],Pourquoi[0][4][0][0],Pourquoi[0][5][0][0],Action[0][2][0][0][0],Action[0][2][0][1][0],Action[0][2][0][2],Action[0][2][0][4]])
+
+
+    # for i in range(len(CC)):
+    #     try:
+    #         data.append([
+    #             CC[i][1][0],
+    #             CC[i][2][0],
+    #             Pourquoi[i][0][0],
+    #             Pourquoi[i][1][0],
+    #             Pourquoi[i][2][0],
+    #             Pourquoi[i][3][0],
+    #             Pourquoi[i][4][0],
+    #             Pourquoi[i][5][0],
+    #             Action[i][2][0][0][0] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][1] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][2] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][3] if len(Action[i][2]) > 0 else "",
+    #             Action[i][2][0][0][4] if len(Action[i][2]) > 0 else ""
+    #         ])
+    #     except Exception as e:
+    #         print(e)
+    df = pd.DataFrame(data[1:], columns=data[0])
+    print("DataFrame :", df)
+    try:
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        df.to_excel(writer, sheet_name='Sheet1', index=False)
+        writer.save()
+        response = make_response(output.getvalue())
+        response.headers['Content-Disposition'] = 'attachment; filename=RECAPITULATIF.xlsx'
+        response.headers['Content-Type'] = 'application/vnd.ms-excel'
+    except Exception as e:
+        print('echec de recuperation des elements',e)
+    return response
+
+
+
+################################# Deconnection
+# @app.route("/logout")
+# def logout():
+#     logout_user()
+#     return redirect('login')
+
+
+# Faire une fonction qui extrait les chaines de caractères et les convertissent en entier
+
+def replace_comma_with_dot(lst):
+    """Replace commas with dots in all elements of a list."""
+    new_lst = []
+    for element in lst:
+        if isinstance(element, str) and ',' in element:
+            element = element.replace(',', '.').split('.')[0]
+        new_lst.append(int(element))
+    return new_lst
+
+
+def dataset(list1,liste2):
+    d = list(zip(list1,replace_comma_with_dot(liste2)))
+    new_df = pd.DataFrame(d, columns=['Nom', 'Mesures'])
+    return new_df
+
+def preprocess_data(data):
+    # Remplacer les valeurs manquantes par la médiane de la colonne
+    data = data.fillna(data.median())
+    # Eliminer les observations ayant des valeurs manquantes
+    data = data.dropna()
+    return data
+
 
 def replace_comma_with_dot(lst):
     """Replace commas whith dots in all element of a list."""
@@ -734,7 +1118,9 @@ def synthese_av():
         nom_fichier = request.args.get('filename')
         # print("==========TEST========>>",pd.read_excel(nom_fichier))
         kpi = request.args.get('kpi')
+        print('le kpi',kpi)
         libelle_analyse = request.args.get('libelle_analyse')
+        print('le libelle_analyse',libelle_analyse) 
         equipe = request.args.get('equipe')
         #reference = '000012'
         data = pd.read_excel(os.path.join('Imports',nom_fichier))
@@ -743,6 +1129,7 @@ def synthese_av():
         data = preprocess_data(data)
         
         Date = date.today()
+        # print("debug :",Date)
         effectif = data["Mesures"].count()
         exist_file = Fichiers.query.filter_by(nom_fichier=nom_fichier).first()
         #print(current_user.id)
@@ -813,6 +1200,7 @@ def synthese_av():
             for i in range(data.shape[0]):
                 # print('RASSS :',data['Mesures'][data.index[i]])
                 valeur_aberante = ValeursAberrante(data['Nom'][data.index[i]], data['Mesures'][data.index[i]], ' ', 'En attente', fichier.id, int(current_user.id))
+                
                 db.session.add(valeur_aberante)
                 try:
                     db.session.commit()
@@ -855,7 +1243,7 @@ def synthese_av():
 #     output = subprocess.Popen([cmd], shell=True,  stdout = subprocess.PIPE).communicate()[0]
 
 #     if "total 0" in output:
-#         print ("Success: Created Directory %s"%(UPLOAD_FOLDER)) 
+#         print ("Success: Created Directory %s"%(UPLOAD_FOLDER))
 #     else:
 #         print ("Failure: Failed to Create a Directory (or) Directory already Exists",UPLOAD_FOLDER)
 
@@ -1082,6 +1470,8 @@ def suivi_action_programme():
     #                         table_liste_causes=table_liste_causes,table_liste_action=table_liste_action,
     #                         table_liste_porteur=table_liste_porteur,table_liste_echeance=table_liste_echeance
     #                     )
+###############################################################
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly

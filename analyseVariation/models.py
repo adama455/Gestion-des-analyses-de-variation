@@ -9,7 +9,7 @@ from analyseVariation import db, init_base, login_manager
 from sqlalchemy.orm import *
 from flask_login import UserMixin
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
-
+from datetime import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -26,6 +26,7 @@ class User(UserMixin, db.Model):
     profil=db.Column(db.String(150), unique=False, nullable=False)
     # plateau=db.Column(db.String(150), unique=True, nullable=True)
     plateau_id = db.Column(db.Integer, db.ForeignKey('plateaux.id', ondelete='CASCADE'))
+    # last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     
     password = db.Column(db.String(120), nullable=False)
     roles = db.relationship('Role', secondary='user_roles',

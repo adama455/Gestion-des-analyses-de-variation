@@ -4,7 +4,8 @@
 
 <div class="jumbotron p-3 mb-2 mt-5 tx-center az-content-label">RECAPUTILATIF DES ACTIONS ANALYSE </div>
 <div class="recap p-3 shadow">
-    <table id="" class="display responsive nowrap" width="100%">
+    <!-- <input type="text" name="" id="" onkeyup="searchTable()"><button type="submit">rechercher</button> -->
+    <table id="myTable" class="display responsive nowrap" width="100%">
         <caption>Récap de l'analyse global</caption>
         <thead class="bg-primary">
             <tr class="tx-center fs-5 border-2 border border-dark">
@@ -141,17 +142,47 @@
     {% endif %}
     
     {% if current_user.is_authenticated and (current_user.profil)!='MANAGER_OPERATIONNEL' %}
-    <div class="detail-analyse d-flex row">
-        <a href="#" id="action_programme" class="w-100 fs-5 col-3">
-        <button type="button" class="btn bouton rounded my-3 float-left" id="exporter-an">Exporter</button>
+    <div class="detail-analyse d-flex row"> 
+        <a href="{{ url_for('export', fichier_id=fichier_id) }}" id="action_programme" class="w-100 fs-5 col-3">
+            <button type="button" class="btn bouton rounded my-3 float-left" id="exporter-an">Exporter</button>
         </a>
         <a href="{{ url_for('rejeterAv', fichier_id=fichier_id) }}" id="action_programme" class="w-100 fs-5 col-8">
             <button type="button" class="btn btn-danger tx-white rounded my-3 float-right" id="rejet-av">Rejeter</button>
         </a>
-        <a href="#" id="action_programme" class="w-100 fs-5 col-1 ">
+        <a href="#" id="action_programme" class="w-100 fs-5 col-1">
+            
             <button type="button" class="btn btn-success tx-white rounded my-3 float-right" id="valider-av">Valider</button>
         </a>
     </div> 
     {% endif %}
 </div>
+<!-- <script>
+    function searchTable() {
+        // Récupérer l'entrée de l'utilisateur
+        var input = document.getElementById("search-input");
+        var filter = input.value.toUpperCase();
+
+        // Récupérer les lignes du tableau
+        var table = document.getElementById("myTable");
+        var rows = table.getElementsByTagName("tr");
+
+        // Parcourir les lignes et cacher celles qui ne correspondent pas à la recherche
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var showRow = false;
+            for (var j = 0; j < cells.length; j++) {
+                if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    showRow = true;
+                    break;
+                }
+            }
+            if (showRow) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+    // searchTable()
+</script> -->
 {% endblock content %}
